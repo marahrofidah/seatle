@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.112.4",
     "canvas-confetti": "^1.9.4",
     "include": "^1.1.0",
+    "lucide-react": "^1.39.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
