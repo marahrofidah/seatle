@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft, LoaderCircle, LogOut, RefreshCw } from 'lucide-react';
 import loginBackground from '../assets/images/tanpa_penyu.png';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import BubbleEffects from '../components/BubbleEffects';
 
 const teacherEmail = import.meta.env.VITE_TEACHER_EMAIL || 'guru@seatle.local';
 
@@ -75,8 +76,9 @@ export default function TeacherLogin({ onBack }) {
 
   if (loggedIn) {
     return (
-      <main className="min-h-screen bg-sky-100 p-4 text-sky-950 sm:p-7">
-        <div className="mx-auto max-w-5xl">
+      <main className="relative min-h-screen overflow-x-hidden bg-gradient-to-b from-sky-100 to-cyan-200 p-4 text-sky-950 sm:p-7">
+        <BubbleEffects />
+        <div className="relative z-10 mx-auto max-w-5xl">
           <header className="flex flex-col gap-4 rounded-3xl bg-gradient-to-r from-sky-700 to-cyan-500 p-5 text-white shadow-xl sm:flex-row sm:items-center sm:justify-between sm:p-7">
             <div>
               <p className="text-sm font-bold text-cyan-100">Dashboard Guru</p>
@@ -118,6 +120,7 @@ export default function TeacherLogin({ onBack }) {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-sky-600 bg-cover bg-center px-4 py-8" style={{ backgroundImage: `url(${loginBackground})` }}>
+      <BubbleEffects />
       <div className="absolute inset-0 bg-sky-950/10" />
       <button type="button" onClick={onBack} className="absolute left-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/70 bg-white/50 text-sky-950 shadow-lg backdrop-blur-md transition hover:-translate-x-1" aria-label="Kembali"><ArrowLeft className="h-6 w-6 stroke-[3]" /></button>
       <section className="relative z-10 w-full max-w-md rounded-[2rem] border-4 border-emerald-200 bg-emerald-50/90 p-6 text-center shadow-[0_22px_55px_rgba(7,89,133,.35)] backdrop-blur-md sm:p-8">

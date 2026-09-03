@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import bgSeatle from '../assets/images/bg_seatle.png';
+import BubbleEffects from '../components/BubbleEffects';
 
 const titleLetters = [
   { letter: 'S', color: '#fef08a', rotate: '-6deg' },
@@ -33,6 +34,7 @@ export default function Home({ onStart }) {
         backgroundRepeat: 'no-repeat'
       }}
     >
+      <BubbleEffects ambient={false} />
       {/* SOFT OVERLAY FOR OPTIMAL READABILITY */}
       <div className="absolute inset-0 bg-sky-900/10 pointer-events-none" />
 
