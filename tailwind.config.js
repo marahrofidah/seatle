@@ -29,7 +29,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        sans: ['Nunito', 'sans-serif'],
+        heading: ['Fredoka', 'sans-serif'],
+        brand: ['Fredoka', 'sans-serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
