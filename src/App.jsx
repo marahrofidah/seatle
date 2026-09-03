@@ -1,14 +1,36 @@
-import React from 'react';
+import { useState } from 'react';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import StudentLogin from './pages/StudentLogin';
+import TeacherLogin from './pages/TeacherLogin';
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+
+  const handleStart = () => {
+    setCurrentPage('login');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentPage('home');
+  };
+
+  if (currentPage === 'home') {
+    return <Home onStart={handleStart} />;
+  }
+
+  if (currentPage === 'student-login') {
+    return <StudentLogin onBack={() => setCurrentPage('login')} />;
+  }
+
+  if (currentPage === 'teacher-login') {
+    return <TeacherLogin onBack={() => setCurrentPage('login')} />;
+  }
+
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-md text-center max-w-md space-y-4">
-        <h1 className="text-2xl font-bold text-sky-950 font-brand">SEATLE</h1>
-        <p className="text-sm text-slate-600 font-sans">
-          KODE TELAH DIHAPUS &amp; SIAP DIMULAI DARI AWAL.
-        </p>
-      </div>
-    </div>
+    <Login
+      onBack={handleBackToHome}
+      onSelectRole={(role) => setCurrentPage(role === 'murid' ? 'student-login' : 'teacher-login')}
+    />
   );
 }

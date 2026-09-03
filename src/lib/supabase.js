@@ -48,7 +48,7 @@ export const fetchUserData = async (table) => {
   // LocalStorage Fallback
   try {
     return JSON.parse(localStorage.getItem(`seatle_${table}`) || '[]');
-  } catch (e) {
+  } catch {
     return [];
   }
 };
