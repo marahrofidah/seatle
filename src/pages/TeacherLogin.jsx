@@ -7,7 +7,7 @@ import BubbleEffects from '../components/BubbleEffects';
 const teacherEmail = import.meta.env.VITE_TEACHER_EMAIL || 'guru@seatle.local';
 
 export default function TeacherLogin({ onBack }) {
-  const [teacherName, setTeacherName] = useState('');
+  const [teacherName, setTeacherName] = useState(() => sessionStorage.getItem('seatle_teacher_name') || '');
   const [password, setPassword] = useState('');
   const [students, setStudents] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);

@@ -27,10 +27,5 @@ export default function App() {
     return <TeacherLogin onBack={() => setCurrentPage('login')} />;
   }
 
-  return (
-    <Login
-      onBack={handleBackToHome}
-      onSelectRole={(role) => setCurrentPage(role === 'murid' ? 'student-login' : 'teacher-login')}
-    />
-  );
+  return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} />;
 }
