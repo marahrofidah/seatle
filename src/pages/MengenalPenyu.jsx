@@ -1294,7 +1294,6 @@ export default function MengenalPenyu({ onBack }) {
                   </article>
                   );
                 })}
-                {draggedCyclePosition !== null && <div className="pointer-events-none fixed z-[100] -translate-x-1/2 -translate-y-1/2 rounded-xl border-2 border-amber-300 bg-sky-950/90 px-5 py-3 font-brand text-sm font-black text-white shadow-2xl backdrop-blur-md" style={{ left: cycleDragPoint.x, top: cycleDragPoint.y }}>{LIFE_CYCLES[cycleOrder[draggedCyclePosition]].stage.replace(/^\d+\.\s*/, '')}</div>}
                 </div>
 
                 <div className="relative z-30 mt-8 flex flex-col items-center gap-3">
