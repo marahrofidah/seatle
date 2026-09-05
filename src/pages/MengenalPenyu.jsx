@@ -18,7 +18,8 @@ import {
   Fish,
   Layers,
   Activity,
-  Award
+  Award,
+  ChevronDown
 } from 'lucide-react';
 import dashboardBackground from '../assets/images/tanpa_penyu.png';
 import BubbleEffects from '../components/BubbleEffects';
@@ -228,7 +229,7 @@ const TURTLE_SPECIES = [
     number: 1,
     name: 'Penyu Hijau',
     latin: 'Chelonia mydas',
-    imageName: 'penyu_hijau.png',
+    imageName: 'anatomi_penyu.jpeg',
     habitat: 'Perairan dangkal, padang lamun, dan terumbu karang.',
     food: 'Lamun, Alga, dan Rumput Laut',
     status: 'Resiko Rendah (Least Concern/LC)',
@@ -239,7 +240,7 @@ const TURTLE_SPECIES = [
     number: 2,
     name: 'Penyu Pipih',
     latin: 'Natator depressus',
-    imageName: 'penyu_pipih.png',
+    imageName: 'penyu_pipih.webp',
     habitat: 'Perairan dangkal berpasir di dekat pantai.',
     food: 'Ubur-ubur, Pena Laut, dan Teripang',
     status: 'Data Kurang (Data Deficient/DD)',
@@ -250,7 +251,7 @@ const TURTLE_SPECIES = [
     number: 3,
     name: 'Penyu Belimbing',
     latin: 'Dermochelys coriacea',
-    imageName: 'penyu_belimbing.png',
+    imageName: 'penyu_belimbing.webp',
     habitat: 'Laut lepas dan samudra terbuka.',
     food: 'Ubur-ubur dan hewan bertubuh lunak',
     status: 'Rentan (Vulnerable/VU)',
@@ -261,7 +262,7 @@ const TURTLE_SPECIES = [
     number: 4,
     name: 'Penyu Lekang',
     latin: 'Lepidochelys olivacea',
-    imageName: 'penyu_lekang.png',
+    imageName: 'penyu_lekang.jpeg',
     habitat: 'Perairan pantai hingga laut lepas.',
     food: 'Alga, lobster, kepiting, tunikata, ubur-ubur, udang, ikan, dan telur ikan',
     status: 'Rentan (Vulnerable/VU)',
@@ -283,7 +284,7 @@ const TURTLE_SPECIES = [
     number: 6,
     name: 'Penyu Sisik',
     latin: 'Eretmochelys imbricata',
-    imageName: 'penyu_sisik.png',
+    imageName: 'penyu_sisik.jpeg',
     habitat: 'Terumbu karang di perairan tropis.',
     food: 'Spons, anemon, karang lunak, landak laut, ubur-ubur, cumi-cumi, dan udang',
     status: 'Kritis (Critically Endangered/CR)',
@@ -395,6 +396,9 @@ export default function MengenalPenyu({ onBack }) {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
 
+  // Section 4 State: Species cards
+  const [expandedSpecies, setExpandedSpecies] = useState(null);
+
   // Toggle Hypothesis checkbox
   const toggleHypothesis = (option) => {
     if (selectedHypotheses.includes(option)) {
@@ -426,6 +430,9 @@ export default function MengenalPenyu({ onBack }) {
         <defs>
           <clipPath id="mengenal-organic-wave" clipPathUnits="objectBoundingBox">
             <path d="M .075,.035 C .16,.005 .245,.075 .34,.045 C .43,.015 .515,.005 .605,.04 C .7,.075 .79,.005 .895,.03 C .96,.045 .99,.085 .985,.15 C .975,.225 1,.29 .985,.37 C .97,.45 1,.525 .985,.605 C .97,.69 1,.77 .975,.855 C .955,.925 .91,.97 .84,.975 C .755,.985 .68,.95 .59,.975 C .5,1 .42,.955 .33,.975 C .24,.995 .17,.955 .09,.97 C .035,.95 .015,.905 .02,.845 C .03,.77 .005,.7 .02,.62 C .035,.535 .005,.46 .02,.38 C .035,.295 .005,.225 .02,.145 C .025,.09 .045,.055 .075,.035 Z" />
+          </clipPath>
+          <clipPath id="mengenal-organic-wave-mobile" clipPathUnits="objectBoundingBox">
+            <path d="M .075,.012 C .16,.004 .245,.025 .34,.015 C .43,.006 .515,.004 .605,.014 C .7,.025 .79,.004 .895,.01 C .96,.014 .99,.035 .985,.075 C .975,.18 1,.29 .985,.37 C .97,.45 1,.525 .985,.605 C .97,.69 1,.82 .985,.925 C .99,.965 .96,.985 .91,.988 C .82,.994 .74,.982 .65,.991 C .56,1 .47,.984 .38,.992 C .28,1 .19,.984 .09,.99 C .04,.985 .015,.965 .02,.925 C .03,.82 .005,.7 .02,.62 C .035,.535 .005,.46 .02,.38 C .035,.295 .005,.18 .02,.075 C .025,.035 .045,.018 .075,.012 Z" />
           </clipPath>
         </defs>
       </svg>
@@ -682,7 +689,7 @@ export default function MengenalPenyu({ onBack }) {
                         <button
                           type="button"
                           onClick={() => setSelectedOrganId(isActive ? null : hotspot.id)}
-                          className={`relative flex h-8 w-8 sm:h-10 sm:w-10 md:h-11 md:w-11 items-center justify-center rounded-full font-brand text-xs sm:text-sm md:text-base font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${
+                          className={`relative flex h-6 w-6 sm:h-9 sm:w-9 md:h-11 md:w-11 items-center justify-center rounded-full font-brand text-[10px] sm:text-sm md:text-base font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${
                             isActive
                               ? `${organ.numberBg} scale-125 ring-4 ${organ.ringColor} shadow-xl animate-pulse`
                               : `${organ.numberBg} opacity-90 hover:opacity-100 hover:scale-110`
@@ -803,7 +810,7 @@ export default function MengenalPenyu({ onBack }) {
               <button
                 type="button"
                 onClick={() => setActiveSectionIndex(2)}
-                className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
+                className="flex items-center gap-2.5 rounded-full bg-yellow-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
               >
                 <span>Selanjutnya</span>
                 <ArrowRight className="h-5 w-5 stroke-[3]" />
@@ -818,7 +825,7 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 2 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Unified Single Wavy Organic Card */}
-            <section className="relative bg-white/85 px-8 sm:px-14 md:px-18 py-10 sm:py-16 md:py-20 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+            <section className="relative bg-white/85 px-8 sm:px-14 md:px-18 py-10 sm:py-16 md:py-20 shadow-lg [clip-path:url(#mengenal-organic-wave-mobile)] sm:[clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
               <div className="px-4 sm:px-8 md:px-12 pt-12 sm:pt-16 md:pt-20 pb-4 sm:pb-8">
                 {/* Header Kuis */}
                 
@@ -946,7 +953,7 @@ export default function MengenalPenyu({ onBack }) {
                         disabled={Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length}
                         className={`flex items-center gap-2 rounded-full px-8 py-3.5 font-brand text-sm sm:text-base font-black shadow-lg border-2 border-white transition cursor-pointer ${
                           Object.keys(quizAnswers).length === QUIZ_QUESTIONS.length
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:scale-105'
+                            ? 'bg-green-700 text-white hover:scale-105'
                             : 'bg-slate-300 text-slate-500 cursor-not-allowed'
                         }`}
                       >
@@ -970,7 +977,7 @@ export default function MengenalPenyu({ onBack }) {
                         <button
                           type="button"
                           onClick={() => setActiveSectionIndex(3)}
-                          className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
+                          className="flex items-center gap-2.5 rounded-full bg-yellow-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
                         >
                           <span>Selanjutnya</span>
                           <ArrowRight className="h-5 w-5 stroke-[3]" />
@@ -1002,11 +1009,16 @@ export default function MengenalPenyu({ onBack }) {
             </section>
 
             {/* 6 Grid Species Cards dengan padding lega */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid items-start gap-6 md:grid-cols-2 lg:grid-cols-3">
               {TURTLE_SPECIES.map((turtle) => (
-                <section 
+                <button
+                  type="button"
                   key={turtle.number}
-                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-10 py-12 sm:px-11 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)] transition duration-300 hover:-translate-y-1.5"
+                  onClick={() => setExpandedSpecies(
+                    expandedSpecies === turtle.number ? null : turtle.number
+                  )}
+                  aria-expanded={expandedSpecies === turtle.number}
+                  className="relative w-full overflow-hidden bg-white/90 px-10 py-12 text-left sm:px-11 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave-mobile)] sm:[clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)] transition duration-300 hover:-translate-y-1.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-300 cursor-pointer"
                 >
                   <div className="px-2 sm:px-3">
                     {/* Gambar Spesies */}
@@ -1025,39 +1037,47 @@ export default function MengenalPenyu({ onBack }) {
                       </span>
                     </div>
 
-                    <p className="text-[11px] font-mono font-bold text-sky-600 mb-2">
-                      Aset: <code>{turtle.imageName}</code>
-                    </p>
-
-                    <h2 className="font-brand text-xl sm:text-2xl font-black text-sky-950">
-                      {turtle.name}
-                    </h2>
-                    <p className="text-xs sm:text-sm italic font-bold text-sky-700 mb-4">
-                      {turtle.latin}
-                    </p>
-
-                    <div className="space-y-2.5 text-xs sm:text-sm font-semibold text-sky-900">
+                    <div className="flex items-center justify-between gap-4">
                       <div>
-                        <span className="font-black text-sky-950">Habitat: </span>
-                        {turtle.habitat}
+                        <h2 className="font-brand text-xl sm:text-2xl font-black text-sky-950">
+                          {turtle.name}
+                        </h2>
+                        <p className="text-xs sm:text-sm italic font-bold text-sky-700">
+                          {turtle.latin}
+                        </p>
                       </div>
-                      <div>
-                        <span className="font-black text-sky-950">Makanan: </span>
-                        {turtle.food}
-                      </div>
-                      <div>
-                        <span className="font-black text-sky-950">Persebaran: </span>
-                        {turtle.distribution}
-                      </div>
+                      <ChevronDown
+                        className={`h-6 w-6 shrink-0 text-sky-700 transition-transform duration-300 ${
+                          expandedSpecies === turtle.number ? 'rotate-180' : ''
+                        }`}
+                        aria-hidden="true"
+                      />
                     </div>
-                  </div>
 
-                  <div className="mt-5 pt-4 border-t border-sky-100 px-2 sm:px-3">
-                    <span className={`inline-block rounded-full px-3.5 py-1.5 text-xs font-black border ${turtle.statusColor}`}>
-                      Status: {turtle.status}
-                    </span>
+                    {expandedSpecies === turtle.number && (
+                      <div className="mt-5 animate-fadeIn border-t border-sky-100 pt-4">
+                        <div className="space-y-2.5 text-xs sm:text-sm font-semibold text-sky-900">
+                          <div>
+                            <span className="font-black text-sky-950">Habitat: </span>
+                            {turtle.habitat}
+                          </div>
+                          <div>
+                            <span className="font-black text-sky-950">Makanan: </span>
+                            {turtle.food}
+                          </div>
+                          <div>
+                            <span className="font-black text-sky-950">Persebaran: </span>
+                            {turtle.distribution}
+                          </div>
+                        </div>
+
+                        <span className={`mt-5 inline-block rounded-full px-3.5 py-1.5 text-xs font-black border ${turtle.statusColor}`}>
+                          Status: {turtle.status}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </section>
+                </button>
               ))}
             </div>
 
@@ -1074,9 +1094,9 @@ export default function MengenalPenyu({ onBack }) {
               <button
                 type="button"
                 onClick={() => setActiveSectionIndex(4)}
-                className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
+                className="flex items-center gap-2.5 rounded-full bg-yellow-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
               >
-                <span>Lanjut: Siklus Hidup Penyu</span>
+                <span>Selanjutnya</span>
                 <ArrowRight className="h-5 w-5 stroke-[3]" />
               </button>
             </div>
@@ -1091,9 +1111,6 @@ export default function MengenalPenyu({ onBack }) {
             {/* Header */}
             <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
               <div className="px-3 sm:px-6 md:px-8">
-                <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
-                  Daur Hidup
-                </span>
                 <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black text-sky-950">
                   Siklus Hidup Penyu Laut
                 </h1>
@@ -1156,9 +1173,9 @@ export default function MengenalPenyu({ onBack }) {
               <button
                 type="button"
                 onClick={() => setActiveSectionIndex(5)}
-                className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
+                className="flex items-center gap-2.5 rounded-full bg-yellow-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
               >
-                <span>Lanjut: Fakta Unik Penyu</span>
+                <span>Selanjutnya</span>
                 <ArrowRight className="h-5 w-5 stroke-[3]" />
               </button>
             </div>
