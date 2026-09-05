@@ -422,17 +422,17 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 0 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Wavy Header Card */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4 py-2">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-16 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8 py-3 sm:py-4">
                 <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black text-sky-950">
                   Penyu Terdampar &amp; Pengamatan Awal
                 </h1>
-                <p className="mt-2 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed max-w-4xl">
+                <p className="mt-3 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed max-w-4xl">
                   Tontonlah video pengamatan berikut untuk mengamati kondisi penyu yang terdampar, lalu berikan hipotesismu mengenai penyebab serta tindakan yang tepat.
                 </p>
 
-                {/* VIDEO CONTAINER DENGAN GAP AMAN */}
-                <div className="mt-6 overflow-hidden rounded-2xl border-4 border-sky-200 bg-slate-900 shadow-inner">
+                {/* VIDEO CONTAINER DENGAN GAP LEGA */}
+                <div className="mt-8 overflow-hidden rounded-2xl border-4 border-sky-200 bg-slate-900 shadow-inner">
                   {videoUrl ? (
                     <div className="aspect-video w-full">
                       <iframe
@@ -461,8 +461,8 @@ export default function MengenalPenyu({ onBack }) {
             </section>
 
             {/* PERTANYAAN 1: HIPOTESIS PENYEBAB (MULTI-SELECT CHECKBOX) */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-5">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-16 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-5">
+              <div className="px-3 sm:px-6 md:px-8 py-2">
                 <div className="flex items-start gap-3.5 mb-2">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400 text-amber-950 font-black font-brand text-base shadow-sm mt-0.5 border border-white">
                     1
@@ -477,7 +477,7 @@ export default function MengenalPenyu({ onBack }) {
                   </div>
                 </div>
 
-                <div className="grid gap-3 pt-4 sm:grid-cols-2">
+                <div className="grid gap-3.5 pt-4 sm:grid-cols-2">
                   {HYPOTHESIS_OPTIONS.map((option, idx) => {
                     const isChecked = selectedHypotheses.includes(option);
                     return (
@@ -505,8 +505,8 @@ export default function MengenalPenyu({ onBack }) {
             </section>
 
             {/* PERTANYAAN 2: AKSI / TINDAKAN (SINGLE-SELECT) */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-5">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-16 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-5">
+              <div className="px-3 sm:px-6 md:px-8 py-2">
                 <div className="flex items-start gap-3.5 mb-2">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400 text-amber-950 font-black font-brand text-base shadow-sm mt-0.5 border border-white">
                     2
@@ -573,8 +573,8 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 1 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header info */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8">
                 <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
                   Pengetahuan Ekologi
                 </span>
@@ -591,8 +591,8 @@ export default function MengenalPenyu({ onBack }) {
             <div className="grid gap-6 lg:grid-cols-12 items-start">
               
               {/* Gambar Anatomi */}
-              <section className="lg:col-span-6 relative bg-white/85 px-8 py-10 sm:px-10 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] flex flex-col items-center justify-center text-center">
-                <div className="px-2 w-full flex flex-col items-center">
+              <section className="lg:col-span-6 relative bg-white/85 px-10 py-12 sm:px-12 sm:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] flex flex-col items-center justify-center text-center">
+                <div className="px-2 sm:px-4 w-full flex flex-col items-center">
                   <span className="text-xs font-black uppercase text-sky-800 tracking-wider mb-3">
                     Struktur Anatomi Penyu Laut
                   </span>
@@ -619,8 +619,8 @@ export default function MengenalPenyu({ onBack }) {
               <div className="lg:col-span-6 space-y-6">
                 
                 {/* Organ Selector Buttons */}
-                <section className="relative bg-white/85 px-8 py-8 sm:px-10 sm:py-10 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-                  <div className="px-2">
+                <section className="relative bg-white/85 px-10 py-10 sm:px-12 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+                  <div className="px-2 sm:px-4">
                     <h2 className="font-brand text-sm sm:text-base font-black text-sky-950 mb-3">
                       Klik Bagian / Organ Penyu:
                     </h2>
@@ -650,8 +650,8 @@ export default function MengenalPenyu({ onBack }) {
                 {(() => {
                   const organ = ORGANS.find((o) => o.id === selectedOrganId) || ORGANS[0];
                   return (
-                    <section className="relative bg-gradient-to-br from-white via-sky-50 to-amber-50 px-8 py-10 sm:px-12 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] border border-white">
-                      <div className="px-2">
+                    <section className="relative bg-gradient-to-br from-white via-sky-50 to-amber-50 px-10 py-12 sm:px-14 sm:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] border border-white">
+                      <div className="px-2 sm:px-4">
                         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sky-200 pb-3 mb-4">
                           <h2 className="font-brand text-lg sm:text-xl md:text-2xl font-black text-sky-950">
                             {organ.name}
@@ -699,8 +699,8 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 2 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Wavy Card Header */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8">
                 <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
                   Uji Pemahaman
                 </span>
@@ -722,9 +722,9 @@ export default function MengenalPenyu({ onBack }) {
                 return (
                   <section 
                     key={q.id}
-                    className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-4"
+                    className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-4"
                   >
-                    <div className="px-2 sm:px-4">
+                    <div className="px-3 sm:px-6 md:px-8">
                       <div className="flex items-start gap-3.5 mb-3">
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-600 text-white font-brand text-base font-black shadow-sm mt-0.5 border border-white">
                           {qIndex + 1}
@@ -868,8 +868,8 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 3 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8">
                 <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
                   Keanekaragaman Hayati
                 </span>
@@ -887,9 +887,9 @@ export default function MengenalPenyu({ onBack }) {
               {TURTLE_SPECIES.map((turtle) => (
                 <section 
                   key={turtle.number}
-                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-8 py-10 sm:px-9 sm:py-11 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)] transition duration-300 hover:-translate-y-1.5"
+                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-10 py-12 sm:px-11 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)] transition duration-300 hover:-translate-y-1.5"
                 >
-                  <div className="px-1">
+                  <div className="px-2 sm:px-3">
                     {/* Gambar Spesies */}
                     <div className="relative mb-4 flex h-44 w-full items-center justify-center rounded-2xl bg-sky-50/80 p-4 border border-sky-100 shadow-inner">
                       <img 
@@ -933,7 +933,7 @@ export default function MengenalPenyu({ onBack }) {
                     </div>
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-sky-100 px-1">
+                  <div className="mt-5 pt-4 border-t border-sky-100 px-2 sm:px-3">
                     <span className={`inline-block rounded-full px-3.5 py-1.5 text-xs font-black border ${turtle.statusColor}`}>
                       Status: {turtle.status}
                     </span>
@@ -970,8 +970,8 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 4 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8">
                 <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
                   Daur Hidup
                 </span>
@@ -989,9 +989,9 @@ export default function MengenalPenyu({ onBack }) {
               {LIFE_CYCLES.map((cycle, idx) => (
                 <section 
                   key={idx}
-                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-8 py-10 sm:px-10 sm:py-11 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)]"
+                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-10 py-12 sm:px-12 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)]"
                 >
-                  <div className="px-1">
+                  <div className="px-2 sm:px-3">
                     {/* Gambar Tahap */}
                     <div className="relative mb-4 flex h-48 w-full items-center justify-center rounded-2xl bg-gradient-to-b from-sky-50 to-amber-50 p-4 border border-sky-200 shadow-inner">
                       <img 
@@ -1052,8 +1052,8 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 5 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8">
                 <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
                   Tahukah Kamu?
                 </span>
@@ -1071,9 +1071,9 @@ export default function MengenalPenyu({ onBack }) {
               {FUN_FACTS.map((fact, idx) => (
                 <section 
                   key={idx}
-                  className="relative overflow-hidden bg-white/90 px-8 py-10 sm:px-10 sm:py-11 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)] space-y-3.5"
+                  className="relative overflow-hidden bg-white/90 px-10 py-12 sm:px-12 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)] space-y-3.5"
                 >
-                  <div className="px-1">
+                  <div className="px-2 sm:px-3">
                     <div className="flex items-center gap-3.5 mb-2">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 font-brand text-lg font-black text-amber-950 shadow-sm border border-white">
                         {idx + 1}
@@ -1119,8 +1119,8 @@ export default function MengenalPenyu({ onBack }) {
         {activeSectionIndex === 6 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header */}
-            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-2 sm:px-4">
+            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8">
                 <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
                   Keseimbangan Samudra
                 </span>
@@ -1138,9 +1138,9 @@ export default function MengenalPenyu({ onBack }) {
               {ECOSYSTEM_ROLES.map((item, idx) => (
                 <section 
                   key={idx}
-                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-8 py-10 sm:px-9 sm:py-11 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)]"
+                  className="relative flex flex-col justify-between overflow-hidden bg-white/90 px-10 py-12 sm:px-11 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_18px_32px_rgba(7,89,133,.2))] [backdrop-filter:blur(20px)]"
                 >
-                  <div className="px-1">
+                  <div className="px-2 sm:px-3">
                     <div className="flex items-center gap-3.5 mb-3">
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-600 font-brand text-xs font-black text-white shadow-sm border border-white">
                         {idx + 1}
@@ -1155,7 +1155,7 @@ export default function MengenalPenyu({ onBack }) {
                     </p>
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-sky-100 text-[11px] font-mono text-sky-600 px-1">
+                  <div className="mt-5 pt-4 border-t border-sky-100 text-[11px] font-mono text-sky-600 px-2 sm:px-3">
                     Aset: <code>{item.imageName}</code>
                   </div>
                 </section>
@@ -1163,8 +1163,8 @@ export default function MengenalPenyu({ onBack }) {
             </div>
 
             {/* Selesai Modul Banner */}
-            <section className="relative bg-gradient-to-r from-emerald-500 via-teal-600 to-sky-600 px-8 py-12 sm:px-14 sm:py-14 text-white shadow-xl [clip-path:url(#mengenal-organic-wave)] text-center space-y-4">
-              <div className="px-2 max-w-2xl mx-auto">
+            <section className="relative bg-gradient-to-r from-emerald-500 via-teal-600 to-sky-600 px-10 py-14 sm:px-16 sm:py-16 text-white shadow-xl [clip-path:url(#mengenal-organic-wave)] text-center space-y-4">
+              <div className="px-3 sm:px-6 max-w-2xl mx-auto">
                 <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/20 border-2 border-white backdrop-blur-md shadow-lg mb-2">
                   <Award className="h-8 w-8 text-amber-300" />
                 </div>
