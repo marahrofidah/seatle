@@ -86,9 +86,10 @@ export default function Login({ onBack, onTeacherSuccess }) {
         <ArrowLeft className="h-6 w-6 stroke-[2.5]" />
       </button>
 
-      <section className="relative z-10 mt-8 w-full max-w-md rounded-b-[2.2rem] rounded-t-[2.8rem] border-4 border-cyan-100/80 bg-gradient-to-b from-sky-500/95 via-sky-600/95 to-blue-800/95 p-5 pt-6 text-white shadow-[0_24px_0_rgba(7,89,133,.5),0_36px_60px_rgba(3,50,80,.38),inset_0_2px_0_rgba(255,255,255,.25)] backdrop-blur-md sm:p-8 sm:pt-7">
-        <svg className="pointer-events-none absolute -top-[2.55rem] left-[-4px] h-16 w-[calc(100%+8px)] overflow-visible drop-shadow-[0_-3px_0_rgba(207,250,254,.85)]" viewBox="0 0 440 64" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M3 47 C48 4, 103 16, 145 34 C190 54, 220 56, 268 28 C311 4, 366 11, 437 40 L437 65 L3 65 Z" fill="#38a8e8" />
+      <section className="relative z-10 mt-12 w-full max-w-md rounded-b-[2.2rem] border-x-4 border-b-4 border-cyan-100/80 bg-gradient-to-b from-[#38a8e8] via-sky-600/95 to-blue-800/95 p-5 pt-5 text-white shadow-[0_24px_0_rgba(7,89,133,.5),0_36px_60px_rgba(3,50,80,.38),inset_0_2px_0_rgba(255,255,255,.25)] backdrop-blur-md sm:p-8 sm:pt-6">
+        <svg className="pointer-events-none absolute -top-[3.45rem] left-[-4px] h-16 w-[calc(100%+8px)] overflow-visible" viewBox="0 0 440 64" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M3 48 C48 5, 103 16, 145 34 C190 54, 220 56, 268 28 C311 4, 366 11, 437 40 L437 64 L3 64 Z" fill="#38a8e8" stroke="rgba(207,250,254,.9)" strokeWidth="4" strokeLinejoin="round" />
+          <path d="M5 51 C50 10, 102 20, 144 37 C190 56, 222 58, 269 31 C313 8, 366 14, 435 43" fill="none" stroke="rgba(255,255,255,.28)" strokeWidth="2" />
         </svg>
         <span className="pointer-events-none absolute left-5 top-8 h-3 w-3 rounded-full border-2 border-white/70" />
         <span className="pointer-events-none absolute right-7 top-28 h-5 w-5 rounded-full border-2 border-white/50" />
