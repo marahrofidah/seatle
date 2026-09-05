@@ -86,7 +86,7 @@ const extraMenus = [
   },
 ];
 
-export default function StudentDashboard({ onExit }) {
+export default function StudentDashboard({ onExit, onSelectModule }) {
   const [isTujuanOpen, setIsTujuanOpen] = useState(false);
   const studentName = sessionStorage.getItem('seatle_student_name') || 'Petualang';
   const studentClass = sessionStorage.getItem('seatle_student_class') || '-';
@@ -218,7 +218,7 @@ export default function StudentDashboard({ onExit }) {
           >
             
             {/* JALUR GARIS HUBUNG PETA (PERSISI MENGHUBUNGKAN DARI PENYU KE PENYU) */}
-            <svg className="absolute inset-0 h-full w-full" viewBox="0 0 800 1000" preserveAspectRatio="none" aria-hidden="true">
+            <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 800 1000" preserveAspectRatio="none" aria-hidden="true">
               <path 
                 d="M 170 155 C 380 120, 630 200, 630 365 C 630 510, 210 430, 210 580 C 210 730, 610 650, 610 795" 
                 fill="none" 
@@ -238,11 +238,16 @@ export default function StudentDashboard({ onExit }) {
 
             {/* 4 MAP POINT NODES */}
             {mapPoints.map((point) => (
-              <a 
+              <button 
                 id={point.slug} 
                 key={point.number} 
-                href={`#${point.slug}`} 
-                className={`group absolute flex w-[16rem] flex-col items-center transition-transform ${point.position}`}
+                type="button"
+                onClick={() => {
+                  if (onSelectModule) {
+                    onSelectModule(point.slug);
+                  }
+                }}
+                className={`group absolute z-20 flex w-[16rem] flex-col items-center transition-transform ${point.position} cursor-pointer focus:outline-none`}
               >
                 {/* GAMBAR NODE IKON */}
                 <div className="relative">
@@ -264,7 +269,7 @@ export default function StudentDashboard({ onExit }) {
                   <h3 className="font-brand text-base font-black text-sky-950">{point.title}</h3>
                   <p className="mt-0.5 text-xs font-semibold text-sky-700">{point.subtitle}</p>
                 </div>
-              </a>
+              </button>
             ))}
 
           </div>
