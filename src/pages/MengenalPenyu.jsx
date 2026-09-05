@@ -1409,19 +1409,22 @@ export default function MengenalPenyu({ onBack }) {
 
             {/* Peta eksplorasi ekosistem interaktif */}
             <section className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-sky-950 shadow-[0_24px_60px_rgba(3,60,100,.4)]">
-              <div className="relative aspect-[4/5] touch-none select-none overflow-hidden sm:aspect-[16/10] lg:aspect-[16/8] cursor-crosshair" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); setEcosystemScanning(true); moveEcosystemScanner(event); }} onPointerMove={moveEcosystemScanner} onPointerUp={() => setEcosystemScanning(false)} onPointerCancel={() => setEcosystemScanning(false)}>
-                <img src={peranPenyuImg} alt="Ilustrasi hubungan penyu dengan ekosistem laut" className="h-full w-full object-cover" />
+              <div className="relative aspect-[3/2] touch-none select-none overflow-hidden cursor-crosshair" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); setEcosystemScanning(true); moveEcosystemScanner(event); }} onPointerMove={moveEcosystemScanner} onPointerUp={() => setEcosystemScanning(false)} onPointerCancel={() => setEcosystemScanning(false)}>
+                <img src={peranPenyuImg} alt="Ilustrasi hubungan penyu dengan ekosistem laut" className="h-full w-full object-contain" />
                 <div className="absolute inset-0 bg-gradient-to-t from-sky-950 via-sky-950/10 to-transparent" />
-                <div className="pointer-events-none absolute left-4 top-4 z-20 rounded-xl border border-white/50 bg-sky-950/55 px-4 py-2 font-brand text-xs font-black text-white backdrop-blur-md sm:text-sm">Geser sonar di seluruh gambar</div>
-                <div className={`pointer-events-none absolute z-20 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-amber-300 bg-sky-200/10 shadow-[0_0_0_12px_rgba(251,191,36,.15),inset_0_0_24px_rgba(255,255,255,.45),0_0_35px_rgba(251,191,36,.9)] sm:h-32 sm:w-32 ${ecosystemScanning ? 'scale-110' : 'animate-pulse'}`} style={{ left: `${ecosystemScanner.x}%`, top: `${ecosystemScanner.y}%` }}><span className="absolute left-1/2 top-1/2 h-px w-[140%] -translate-x-1/2 bg-amber-200/60" /><span className="absolute left-1/2 top-1/2 h-[140%] w-px -translate-y-1/2 bg-amber-200/60" /></div>
+                <div className={`pointer-events-none absolute z-20 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-amber-300 bg-sky-200/10 shadow-[0_0_0_8px_rgba(251,191,36,.15),inset_0_0_24px_rgba(255,255,255,.45),0_0_35px_rgba(251,191,36,.9)] sm:h-32 sm:w-32 sm:shadow-[0_0_0_12px_rgba(251,191,36,.15),inset_0_0_24px_rgba(255,255,255,.45),0_0_35px_rgba(251,191,36,.9)] ${ecosystemScanning ? 'scale-110' : 'animate-pulse'}`} style={{ left: `${ecosystemScanner.x}%`, top: `${ecosystemScanner.y}%` }}><span className="absolute left-1/2 top-1/2 h-px w-[140%] -translate-x-1/2 bg-amber-200/60" /><span className="absolute left-1/2 top-1/2 h-[140%] w-px -translate-y-1/2 bg-amber-200/60" /></div>
 
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-5 sm:p-8 lg:p-10">
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden p-8 sm:block lg:p-10">
                   <div key={selectedEcosystemRole} className="max-w-2xl animate-fadeIn text-white">
                     <h2 className="font-brand text-2xl font-black sm:text-3xl lg:text-4xl">{ECOSYSTEM_ROLES[selectedEcosystemRole].title.replace(/^\d+\.\s*/, '')}</h2>
                     <p className="mt-3 max-w-xl text-xs font-bold leading-relaxed text-sky-50 sm:text-sm lg:text-base">{ECOSYSTEM_ROLES[selectedEcosystemRole].desc}</p>
                   </div>
                   <p className="mt-4 text-[11px] font-black uppercase tracking-wider text-amber-300 sm:text-xs">Sonar mendeteksi objek terdekat secara langsung</p>
                 </div>
+              </div>
+              <div key={`mobile-role-${selectedEcosystemRole}`} className="animate-fadeIn border-t border-white/30 bg-gradient-to-br from-sky-950 to-sky-900 p-5 text-white sm:hidden">
+                <h2 className="font-brand text-xl font-black">{ECOSYSTEM_ROLES[selectedEcosystemRole].title.replace(/^\d+\.\s*/, '')}</h2>
+                <p className="mt-2 text-xs font-bold leading-relaxed text-sky-100">{ECOSYSTEM_ROLES[selectedEcosystemRole].desc}</p>
               </div>
             </section>
 
@@ -1527,17 +1530,17 @@ export default function MengenalPenyu({ onBack }) {
             </section>
 
             {/* Selesai Modul Banner */}
-            <section className="relative overflow-hidden border border-white/40 bg-gradient-to-br from-white/25 via-sky-500/20 to-emerald-400/25 px-10 py-14 sm:px-16 sm:py-16 text-white shadow-[0_24px_60px_rgba(3,60,100,.35),inset_0_1px_0_rgba(255,255,255,.65)] [clip-path:url(#mengenal-organic-wave-mobile)] sm:[clip-path:url(#mengenal-organic-wave)] [backdrop-filter:blur(24px)_saturate(140%)] text-center space-y-4">
+            <section className="relative overflow-hidden border border-white/80 bg-gradient-to-br from-white/90 via-sky-50/80 to-cyan-100/70 px-10 py-14 sm:px-16 sm:py-16 text-sky-950 shadow-[0_24px_60px_rgba(3,60,100,.28),inset_0_1px_0_rgba(255,255,255,.95)] [clip-path:url(#mengenal-organic-wave-mobile)] sm:[clip-path:url(#mengenal-organic-wave)] [backdrop-filter:blur(28px)_saturate(115%)] text-center space-y-4">
               <div className="pointer-events-none absolute inset-x-[8%] top-0 h-px bg-gradient-to-r from-transparent via-white/90 to-transparent" aria-hidden="true" />
-              <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-white/15 blur-3xl" aria-hidden="true" />
-              <div className="pointer-events-none absolute -bottom-28 -left-16 h-64 w-64 rounded-full bg-emerald-300/20 blur-3xl" aria-hidden="true" />
+              <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-white/60 blur-3xl" aria-hidden="true" />
+              <div className="pointer-events-none absolute -bottom-28 -left-16 h-64 w-64 rounded-full bg-cyan-300/20 blur-3xl" aria-hidden="true" />
 
               <div className="relative z-10 px-3 sm:px-6 max-w-2xl mx-auto">
               
                 <h2 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black">
                   Selamat! Kamu Telah Menyelesaikan Misi Mengenal Penyu
                 </h2>
-                <p className="mt-2 text-xs sm:text-sm md:text-base font-bold text-white/85 leading-relaxed drop-shadow-sm">
+                <p className="mt-2 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed">
                   Kamu telah mempelajari pengamatan, biologi, spesies, daur hidup, dan peran ekosistem penyu. Mari kembali ke peta petualangan untuk melanjutkan misi berikutnya!
                 </p>
                 
