@@ -23,6 +23,7 @@ import {
 import dashboardBackground from '../assets/images/tanpa_penyu.png';
 import BubbleEffects from '../components/BubbleEffects';
 import mengenalPenyuImg from '../assets/images/mengenal_penyu.png';
+import infografisAnatomiImg from '../assets/images/anatomi_penyu.jpeg';
 
 // Section Navigation Tabs
 const SECTIONS = [
@@ -52,78 +53,129 @@ const ACTION_OPTIONS = [
   { 
     id: 'dorong', 
     text: 'Langsung mendorong penyu', 
-    color: 'bg-emerald-500 hover:bg-emerald-600 text-white',
-    dotColor: 'bg-emerald-400'
+    color: 'bg-emerald-500 hover:bg-emerald-600 text-white'
   },
   { 
     id: 'panggil', 
     text: 'Memanggil teman', 
-    color: 'bg-amber-500 hover:bg-amber-600 text-white',
-    dotColor: 'bg-amber-400'
+    color: 'bg-amber-500 hover:bg-amber-600 text-white'
   },
   { 
     id: 'lapor', 
     text: 'Melapor kepada petugas', 
-    color: 'bg-sky-600 hover:bg-sky-700 text-white',
-    dotColor: 'bg-sky-400'
+    color: 'bg-sky-600 hover:bg-sky-700 text-white'
   },
 ];
 
-// Organ & Bagian Anatomi Penyu
+// Organ & Bagian Anatomi Penyu (Sesuai Infografis Anatomi Penyu)
 const ORGANS = [
   {
     id: 'karapas',
+    number: 1,
     name: 'Karapas (Cangkang Atas)',
-    description: 'Melindungi organ dalam sekaligus membuat bentuk tubuh streamline agar penyu lincah berenang di lautan.',
-    badge: 'Pertahanan Utama'
+    description: 'Melindungi organ dalam sekaligus membuat bentuk tubuh streamline agar penyu lincah berenang.',
+    badge: 'Cangkang Atas',
+    colorCard: 'bg-emerald-50/90 border-emerald-300 text-emerald-950 hover:bg-emerald-100/90',
+    numberBg: 'bg-emerald-600 text-white',
+    badgeStyle: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+    dotColor: 'bg-emerald-500',
+    ringColor: 'ring-emerald-400',
   },
   {
     id: 'plastron',
+    number: 2,
     name: 'Plastron (Cangkang Bawah)',
-    description: 'Melindungi bagian perut. Berbeda dari penyu darat yang keras dan kaku, plastron penyu laut cenderung lebih tipis dan fleksibel untuk memudahkan penyelaman.',
-    badge: 'Pelindung Bawah'
+    description: 'Melindungi bagian perut. Berbeda dari penyu darat yang keras, plastron penyu laut cenderung lebih tipis dan fleksibel.',
+    badge: 'Cangkang Bawah',
+    colorCard: 'bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100/90',
+    numberBg: 'bg-amber-500 text-white',
+    badgeStyle: 'bg-amber-100 text-amber-800 border-amber-300',
+    dotColor: 'bg-amber-500',
+    ringColor: 'ring-amber-400',
   },
   {
     id: 'scutes',
+    number: 3,
     name: 'Scutes',
-    description: 'Lempengan keratin keras yang melapisi dan melindungi karapas dari gesekan batu karang serta gigitan predator.',
-    badge: 'Lapisan Keratin'
+    description: 'Lempengan keratin keras yang melapisi dan melindungi karapas.',
+    badge: 'Lapisan Keratin',
+    colorCard: 'bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100/90',
+    numberBg: 'bg-rose-500 text-white',
+    badgeStyle: 'bg-rose-100 text-rose-800 border-rose-300',
+    dotColor: 'bg-rose-500',
+    ringColor: 'ring-rose-400',
   },
   {
     id: 'marginal',
+    number: 4,
     name: 'Marginal & Inframarginal Scutes',
-    description: 'Sisik di sepanjang tepi cangkang yang memperkuat dan mengunci struktur tempurung penyu.',
-    badge: 'Tepi Cangkang'
+    description: 'Sisik di sepanjang tepi cangkang yang memperkuat struktur tempurung.',
+    badge: 'Tepi Cangkang',
+    colorCard: 'bg-purple-50/90 border-purple-300 text-purple-950 hover:bg-purple-100/90',
+    numberBg: 'bg-purple-600 text-white',
+    badgeStyle: 'bg-purple-100 text-purple-800 border-purple-300',
+    dotColor: 'bg-purple-600',
+    ringColor: 'ring-purple-400',
   },
   {
     id: 'sirip_depan',
+    number: 5,
     name: 'Sirip Depan',
-    description: 'Berfungsi sebagai pendorong utama saat berenang, layaknya kepakan sayap burung di dalam air laut.',
-    badge: 'Propulsi Berenang'
+    description: 'Berfungsi sebagai pendorong utama saat berenang, layaknya kepakan sayap di dalam air.',
+    badge: 'Pendorong Utama',
+    colorCard: 'bg-sky-50/90 border-sky-300 text-sky-950 hover:bg-sky-100/90',
+    numberBg: 'bg-sky-600 text-white',
+    badgeStyle: 'bg-sky-100 text-sky-800 border-sky-300',
+    dotColor: 'bg-sky-600',
+    ringColor: 'ring-sky-400',
   },
   {
     id: 'sirip_belakang',
+    number: 6,
     name: 'Sirip Belakang',
-    description: 'Berfungsi sebagai kemudi arah dan penyeimbang saat berenang. Bagi penyu betina, sirip ini juga digunakan khusus untuk menggali lubang sarang telur di pasir pantai.',
-    badge: 'Kemudi & Penggali'
+    description: 'Berfungsi sebagai kemudi arah dan penyeimbang. Bagi betina, sirip ini juga digunakan untuk menggali sarang.',
+    badge: 'Kemudi & Penggali',
+    colorCard: 'bg-lime-50/90 border-lime-300 text-lime-950 hover:bg-lime-100/90',
+    numberBg: 'bg-lime-600 text-white',
+    badgeStyle: 'bg-lime-100 text-lime-800 border-lime-300',
+    dotColor: 'bg-lime-600',
+    ringColor: 'ring-lime-400',
   },
   {
     id: 'paruh',
+    number: 7,
     name: 'Paruh',
-    description: 'Pengganti gigi yang keras dan tajam untuk memotong rumput laut, merobek ubur-ubur, kepiting, serta mengunyah makanan laut.',
-    badge: 'Alat Makan'
+    description: 'Pengganti gigi yang keras dan tajam untuk memotong serta merobek makanan.',
+    badge: 'Alat Makan',
+    colorCard: 'bg-orange-50/90 border-orange-300 text-orange-950 hover:bg-orange-100/90',
+    numberBg: 'bg-orange-500 text-white',
+    badgeStyle: 'bg-orange-100 text-orange-800 border-orange-300',
+    dotColor: 'bg-orange-500',
+    ringColor: 'ring-orange-400',
   },
   {
     id: 'kelenjar_garam',
+    number: 8,
     name: 'Kelenjar Garam',
-    description: 'Terletak di belakang mata untuk membuang kelebihan garam dari air laut yang tertelan. Efek sekresi garam ini membuat penyu tampak seperti sedang "menangis" saat bertelur di pantai.',
-    badge: 'Osmoregulasi'
+    description: 'Terletak di belakang mata untuk membuang kelebihan garam dari tubuh. Efek sekresinya membuat penyu tampak seperti "menangis".',
+    badge: 'Osmoregulasi',
+    colorCard: 'bg-blue-50/90 border-blue-300 text-blue-950 hover:bg-blue-100/90',
+    numberBg: 'bg-blue-600 text-white',
+    badgeStyle: 'bg-blue-100 text-blue-800 border-blue-300',
+    dotColor: 'bg-blue-600',
+    ringColor: 'ring-blue-400',
   },
   {
     id: 'sisik_kuku',
+    number: 9,
     name: 'Sisik & Kuku',
-    description: 'Sisik melindungi kulit kepala dan wajah dari cedera, sedangkan kuku pada sirip membantu penyu merayap di darat saat bertelur dan mencengkeram pasir.',
-    badge: 'Perlindungan & Cengkeram'
+    description: 'Sisik melindungi kulit kepala dan wajah, sedangkan kuku pada sirip membantu penyu merayap di darat dan menggali pasir.',
+    badge: 'Pelindung & Cengkeram',
+    colorCard: 'bg-teal-50/90 border-teal-300 text-teal-950 hover:bg-teal-100/90',
+    numberBg: 'bg-teal-600 text-white',
+    badgeStyle: 'bg-teal-100 text-teal-800 border-teal-300',
+    dotColor: 'bg-teal-600',
+    ringColor: 'ring-teal-400',
   },
 ];
 
@@ -337,7 +389,7 @@ export default function MengenalPenyu({ onBack }) {
   const [videoUrl, setVideoUrl] = useState('');
 
   // Section 2 State: Organ Exploration
-  const [selectedOrganId, setSelectedOrganId] = useState(ORGANS[0].id);
+  const [selectedOrganId, setSelectedOrganId] = useState(null);
 
   // Section 3 State: Quiz
   const [quizAnswers, setQuizAnswers] = useState({});
@@ -425,10 +477,10 @@ export default function MengenalPenyu({ onBack }) {
             <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-16 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
               <div className="px-3 sm:px-6 md:px-8 py-3 sm:py-4">
                 <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black text-sky-950">
-                  Penyu Terdampar &amp; Pengamatan Awal
+                  Pengamatan Awal
                 </h1>
                 <p className="mt-3 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed max-w-4xl">
-                  Tontonlah video pengamatan berikut untuk mengamati kondisi penyu yang terdampar, lalu berikan hipotesismu mengenai penyebab serta tindakan yang tepat.
+                  Tontonlah video pengamatan berikut untuk mengamati kondisi penyu yang terdampar.
                 </p>
 
                 {/* VIDEO CONTAINER DENGAN GAP LEGA */}
@@ -472,7 +524,7 @@ export default function MengenalPenyu({ onBack }) {
                       Kamu telah melihat kondisi penyu yang terdampar dan tampak lemah. Apa yang mungkin menyebabkan kondisi penyu tersebut?
                     </h2>
                     <p className="text-xs sm:text-sm font-bold text-sky-700 mt-1">
-                      (Bisa pilih lebih dari satu jawaban - tidak ada benar atau salah karena masih tahap hipotesis)
+                      (Bisa pilih lebih dari satu jawaban)
                     </p>
                   </div>
                 </div>
@@ -529,14 +581,13 @@ export default function MengenalPenyu({ onBack }) {
                         key={action.id}
                         type="button"
                         onClick={() => setSelectedAction(action.id)}
-                        className={`flex flex-col items-center justify-center gap-2.5 rounded-2xl p-6 text-center transition duration-200 cursor-pointer border ${
+                        className={`flex flex-col items-center justify-center gap-2.5 rounded-2xl p-3 text-center transition duration-200 cursor-pointer border ${
                           isSelected
                             ? `${action.color} border-white shadow-lg scale-105`
                             : 'bg-white/90 border-sky-200 text-sky-950 hover:bg-white shadow-sm'
                         }`}
                       >
-                        <div className={`h-4 w-4 rounded-full ${action.dotColor} border border-white shadow-sm`} />
-                        <span className="font-brand text-sm sm:text-base font-black leading-snug">{action.text}</span>
+                        <span className="font-brand text-sm sm:text-lg font-black leading-snug">{action.text}</span>
                       </button>
                     );
                   })}
@@ -556,9 +607,9 @@ export default function MengenalPenyu({ onBack }) {
                   <button
                     type="button"
                     onClick={() => setActiveSectionIndex(1)}
-                    className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
+                    className="flex items-center gap-2.5 rounded-full bg-yellow-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
                   >
-                    <span>Lanjut: Biologi &amp; Anatomi Penyu</span>
+                    <span>Selanjutnya</span>
                     <ArrowRight className="h-5 w-5 stroke-[3]" />
                   </button>
                 </div>
@@ -568,108 +619,176 @@ export default function MengenalPenyu({ onBack }) {
         )}
 
         {/* ========================================================================= */}
-        {/* 2. BAGIAN BIOLOGI & ANATOMI PENYU (INTERAKTIF ORGAN) */}
+        {/* 2. BAGIAN BIOLOGI & ANATOMI PENYU (ANATOMI_PENYU.JPEG & POPOVER RESPONSIP) */}
         {/* ========================================================================= */}
         {activeSectionIndex === 1 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header info */}
-            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-12 md:px-16 md:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
               <div className="px-3 sm:px-6 md:px-8">
-                <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
-                  Pengetahuan Ekologi
-                </span>
                 <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black text-sky-950">
                   Biologi &amp; Anatomi Penyu Laut
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed">
-                  Pilih organ atau bagian tubuh penyu di bawah ini untuk mempelajari struktur serta fungsi luar biasanya.
+                  Tekan salah satu angka (1–9) pada gambar penyu di bawah untuk melihat penjelasan bagian organ tubuh tersebut.
                 </p>
+
+                {/* Quick Selector Bar (Nomor 1-9) */}
+                
               </div>
             </section>
 
-            {/* Interactive Anatomy Explorer */}
-            <div className="grid gap-6 lg:grid-cols-12 items-start">
-              
-              {/* Gambar Anatomi */}
-              <section className="lg:col-span-6 relative bg-white/85 px-10 py-12 sm:px-12 sm:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] flex flex-col items-center justify-center text-center">
-                <div className="px-2 sm:px-4 w-full flex flex-col items-center">
-                  <span className="text-xs font-black uppercase text-sky-800 tracking-wider mb-3">
-                    Struktur Anatomi Penyu Laut
-                  </span>
+            {/* Gambar Penyu Interaktif + Popover Info Responsif */}
+            <section className="relative bg-white/85 px-8 py-10 sm:px-14 sm:py-14 md:px-16 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-3 sm:px-6 md:px-8 py-2 sm:py-4">
+                {/* Outer wrapper: OVERFLOW VISIBLE agar popover tidak terpotong! */}
+                <div className="relative w-full max-w-4xl mx-auto select-none rounded-2xl border-2 border-sky-200 bg-gradient-to-b from-sky-50 to-emerald-50 p-4 sm:p-6 md:p-8 shadow-inner overflow-visible">
                   
-                  <div className="relative flex w-full items-center justify-center p-6 bg-sky-50/70 rounded-3xl border border-sky-200 shadow-inner">
-                    <img 
-                      src="/src/assets/images/anatomi_penyu.png" 
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = mengenalPenyuImg;
-                      }}
-                      alt="Anatomi Penyu Laut" 
-                      className="max-h-80 w-full object-contain filter drop-shadow-md transition duration-300 hover:scale-105"
-                    />
-                  </div>
+                  {/* Gambar Anatomi Penyu Isolated */}
+                  <img
+                    src={infografisAnatomiImg}
+                    onError={(e) => { e.target.onerror = null; e.target.src = mengenalPenyuImg; }}
+                    alt="Anatomi Penyu Laut"
+                    className="w-full h-auto object-contain filter drop-shadow-md rounded-xl"
+                    draggable={false}
+                  />
 
-                  <p className="mt-4 text-xs font-bold text-sky-700">
-                    Aset gambar: <code className="bg-sky-100 px-2 py-0.5 rounded text-sky-900 font-mono">anatomi_penyu.png</code>
-                  </p>
-                </div>
-              </section>
+                  {/* 9 HOTSPOT BUTTONS ON ANATOMI_PENYU.JPEG */}
+                  {[
+                    { id: 'karapas',         number: 1, top: '32%', left: '52%', leftVal: 52 }, // Langsung di atas cangkang karapas
+                    { id: 'plastron',        number: 2, top: '58%', left: '42%', leftVal: 42 }, // Di bagian cangkang bawah/dada (plastron)
+                    { id: 'scutes',          number: 3, top: '46%', left: '60%', leftVal: 60 }, // Di lempengan keratin scutes cangkang
+                    { id: 'marginal',        number: 4, top: '54%', left: '74%', leftVal: 74 }, // Di pinggiran/tepi cangkang (marginal)
+                    { id: 'sirip_depan',     number: 5, top: '74%', left: '38%', leftVal: 38 }, // Langsung di sirip depan
+                    { id: 'sirip_belakang',  number: 6, top: '68%', left: '79%', leftVal: 79 }, // Pas di atas sirip belakang
+                    { id: 'paruh',           number: 7, top: '20%', left: '18.5%', leftVal: 18.5 }, // Pas di atas paruh/mulut penyu
+                    { id: 'kelenjar_garam',  number: 8, top: '16%', left: '28%', leftVal: 28 }, // Di kepala bagian belakang mata
+                    { id: 'sisik_kuku',      number: 9, top: '28%', left: '24%', leftVal: 24 }, // Di sisik pipi/wajah penyu
+                  ].map((hotspot) => {
+                    const isActive = selectedOrganId === hotspot.id;
+                    const organ = ORGANS.find((o) => o.id === hotspot.id);
+                    if (!organ) return null;
 
-              {/* Organ Selector & Detail Card */}
-              <div className="lg:col-span-6 space-y-6">
-                
-                {/* Organ Selector Buttons */}
-                <section className="relative bg-white/85 px-10 py-10 sm:px-12 sm:py-12 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-                  <div className="px-2 sm:px-4">
-                    <h2 className="font-brand text-sm sm:text-base font-black text-sky-950 mb-3">
-                      Klik Bagian / Organ Penyu:
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                      {ORGANS.map((organ) => {
-                        const isSelected = selectedOrganId === organ.id;
-                        return (
-                          <button
-                            key={organ.id}
-                            type="button"
-                            onClick={() => setSelectedOrganId(organ.id)}
-                            className={`rounded-full px-3.5 py-1.5 text-xs sm:text-sm font-black transition duration-200 cursor-pointer border ${
-                              isSelected
-                                ? 'bg-sky-600 border-sky-700 text-white shadow-md scale-105'
-                                : 'bg-white border-sky-200 text-sky-900 hover:bg-sky-100'
-                            }`}
+                    // Penentuan arah popover agar tidak pernah terpotong di tepi kiri/kanan
+                    const side = hotspot.leftVal < 45 ? 'right' : hotspot.leftVal > 55 ? 'left' : 'center';
+
+                    return (
+                      <div
+                        key={hotspot.id}
+                        style={{ top: hotspot.top, left: hotspot.left, transform: 'translate(-50%, -50%)' }}
+                        className={`absolute ${isActive ? 'z-50' : 'z-20'}`}
+                      >
+                        {/* Tombol Angka */}
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOrganId(isActive ? null : hotspot.id)}
+                          className={`relative flex h-8 w-8 sm:h-10 sm:w-10 md:h-11 md:w-11 items-center justify-center rounded-full font-brand text-xs sm:text-sm md:text-base font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${
+                            isActive
+                              ? `${organ.numberBg} scale-125 ring-4 ${organ.ringColor} shadow-xl animate-pulse`
+                              : `${organ.numberBg} opacity-90 hover:opacity-100 hover:scale-110`
+                          }`}
+                          aria-label={`Organ ${hotspot.number}: ${organ.name}`}
+                        >
+                          {hotspot.number}
+                        </button>
+
+                        {/* POPOVER CARD MUNCUL LANGSUNG DI SAMPING ANGKA HANYA PADA MODE LAPTOP/DESKTOP (MD:BLOCK) */}
+                        {isActive && (
+                          <div
+                            className={`hidden md:block absolute p-3.5 sm:p-4 rounded-2xl border-2 shadow-2xl backdrop-blur-md transition-all duration-300 animate-fadeIn ${organ.colorCard} border-white ring-4 ${organ.ringColor} ${
+                              side === 'right'
+                                ? 'left-full ml-3.5 top-1/2 -translate-y-1/2'
+                                : side === 'left'
+                                ? 'right-full mr-3.5 top-1/2 -translate-y-1/2'
+                                : 'left-1/2 -translate-x-1/2 top-full mt-3'
+                            } w-64 md:w-72`}
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            {organ.name.split(' (')[0]}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </section>
+                            {/* Panah / Segitiga Pointer */}
+                            <div
+                              className={`absolute top-1/2 -translate-y-1/2 w-0 h-0 ${
+                                side === 'right'
+                                  ? '-left-3 border-r-[12px] border-r-white border-y-[8px] border-y-transparent'
+                                  : side === 'left'
+                                  ? '-right-3 border-l-[12px] border-l-white border-y-[8px] border-y-transparent'
+                                  : '-top-3 left-1/2 -translate-x-1/2 border-b-[12px] border-b-white border-x-[8px] border-x-transparent'
+                              }`}
+                            />
 
-                {/* Active Organ Explanation Card */}
-                {(() => {
-                  const organ = ORGANS.find((o) => o.id === selectedOrganId) || ORGANS[0];
-                  return (
-                    <section className="relative bg-gradient-to-br from-white via-sky-50 to-amber-50 px-10 py-12 sm:px-14 sm:py-14 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] border border-white">
-                      <div className="px-2 sm:px-4">
-                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sky-200 pb-3 mb-4">
-                          <h2 className="font-brand text-lg sm:text-xl md:text-2xl font-black text-sky-950">
-                            {organ.name}
-                          </h2>
-                          <span className="rounded-full bg-sky-100 px-3.5 py-1 text-xs font-black text-sky-800 border border-sky-200 shrink-0">
-                            {organ.badge}
-                          </span>
-                        </div>
-                        <p className="text-xs sm:text-sm md:text-base font-bold text-sky-900 leading-relaxed">
-                          {organ.description}
-                        </p>
+                            <div className="flex items-start justify-between gap-2 mb-1.5">
+                              <div className="flex items-center gap-2">
+                                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-brand text-xs font-black shadow-sm ${organ.numberBg}`}>
+                                  {organ.number}
+                                </span>
+                                <h3 className="font-brand text-xs sm:text-sm md:text-base font-black text-sky-950 leading-tight">
+                                  {organ.name}
+                                </h3>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedOrganId(null)}
+                                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/80 text-slate-600 hover:bg-white hover:text-slate-900 text-[10px] font-black transition cursor-pointer shadow-sm border border-slate-200"
+                                title="Tutup"
+                              >
+                                ✕
+                              </button>
+                            </div>
+
+                            <span className={`inline-block mb-1.5 rounded-full px-2.5 py-0.5 text-[10px] sm:text-xs font-black border ${organ.badgeStyle}`}>
+                              {organ.badge}
+                            </span>
+
+                            <p className="text-[11px] sm:text-xs font-bold leading-relaxed text-slate-800">
+                              {organ.description}
+                            </p>
+                          </div>
+                        )}
                       </div>
-                    </section>
+                    );
+                  })}
+                </div>
+
+                {/* KARTU PENJELASAN ORGAN DI BAWAH GAMBAR HANYA PADA MODE DEVICE/MOBILE (BLOCK MD:HIDDEN) */}
+                {selectedOrganId && (() => {
+                  const activeOrgan = ORGANS.find((o) => o.id === selectedOrganId);
+                  if (!activeOrgan) return null;
+                  return (
+                    <div className="block md:hidden mt-6 px-2 sm:px-4">
+                      <div className={`max-w-4xl mx-auto p-4 sm:p-6 rounded-2xl border-2 shadow-lg transition-all duration-300 animate-fadeIn ${activeOrgan.colorCard} border-white ring-2 ${activeOrgan.ringColor}`}>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-start gap-3">
+                            <span className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full font-brand text-sm sm:text-base font-black shadow-md ${activeOrgan.numberBg}`}>
+                              {activeOrgan.number}
+                            </span>
+                            <div>
+                              <div className="flex flex-wrap items-center gap-2 mb-1">
+                                <h3 className="font-brand text-sm sm:text-base font-black text-sky-950">
+                                  {activeOrgan.name}
+                                </h3>
+                                <span className={`rounded-full px-2.5 py-0.5 text-[10px] sm:text-xs font-black border ${activeOrgan.badgeStyle}`}>
+                                  {activeOrgan.badge}
+                                </span>
+                              </div>
+                              <p className="text-xs font-bold leading-relaxed text-slate-800">
+                                {activeOrgan.description}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOrganId(null)}
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-slate-600 hover:bg-slate-100 text-xs font-black transition cursor-pointer shadow-sm border border-slate-200"
+                            title="Tutup"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   );
                 })()}
-
               </div>
-            </div>
+            </section>
 
             {/* Navigasi Bawah */}
             <div className="flex justify-between items-center pt-2">
@@ -686,7 +805,7 @@ export default function MengenalPenyu({ onBack }) {
                 onClick={() => setActiveSectionIndex(2)}
                 className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
               >
-                <span>Lanjut: Kuis Pemahaman Anatomi</span>
+                <span>Selanjutnya</span>
                 <ArrowRight className="h-5 w-5 stroke-[3]" />
               </button>
             </div>
@@ -694,171 +813,174 @@ export default function MengenalPenyu({ onBack }) {
         )}
 
         {/* ========================================================================= */}
-        {/* 3. BAGIAN KUIS ANATOMI (3 SOAL) */}
+        {/* 3. BAGIAN KUIS ANATOMI (SEMUA SOAL DALAM 1 CARD GELEMBUNG UNIFIED) */}
         {/* ========================================================================= */}
         {activeSectionIndex === 2 && (
           <div className="space-y-8 animate-fadeIn">
-            {/* Wavy Card Header */}
-            <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
-              <div className="px-3 sm:px-6 md:px-8">
-                <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
-                  Uji Pemahaman
-                </span>
+            {/* Unified Single Wavy Organic Card */}
+            <section className="relative bg-white/85 px-8 sm:px-14 md:px-18 py-10 sm:py-16 md:py-20 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
+              <div className="px-4 sm:px-8 md:px-12 pt-12 sm:pt-16 md:pt-20 pb-4 sm:pb-8">
+                {/* Header Kuis */}
+                
                 <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black text-sky-950">
                   Kuis Mengenal Organ Tubuh Penyu
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed">
-                  Pilihlah satu jawaban yang paling tepat untuk masing-masing soal di bawah ini.
+                  Perhatikan gambar anatomi penyu di bawah ini, lalu jawablah 3 pertanyaan kuis berikut dengan tepat.
                 </p>
-              </div>
-            </section>
 
-            {/* List 3 Soal */}
-            <div className="space-y-6">
-              {QUIZ_QUESTIONS.map((q, qIndex) => {
-                const selectedKey = quizAnswers[q.id];
-                const isCorrect = selectedKey === q.correctKey;
+                {/* GAMBAR UTAMA ANATOMI_PENYU.JPEG DENGAN PANAH DIAM MENUNJUK KE KARAPAS */}
+                <div className="my-8 relative w-full max-w-3xl mx-auto rounded-2xl border-2 border-sky-200 bg-gradient-to-b from-sky-50 to-emerald-50 p-4 sm:p-6 shadow-inner text-center">
+                  <div className="relative inline-block w-full">
+                    <img 
+                      src={infografisAnatomiImg}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = mengenalPenyuImg;
+                      }}
+                      alt="Gambar Anatomi Penyu - Karapas"
+                      className="w-full h-auto max-h-80 object-contain filter drop-shadow-md rounded-xl"
+                    />
 
-                return (
-                  <section 
-                    key={q.id}
-                    className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)] space-y-4"
-                  >
-                    <div className="px-3 sm:px-6 md:px-8">
-                      <div className="flex items-start gap-3.5 mb-3">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-600 text-white font-brand text-base font-black shadow-sm mt-0.5 border border-white">
-                          {qIndex + 1}
-                        </span>
-                        <h2 className="font-brand text-base sm:text-lg md:text-xl font-black text-sky-950 leading-snug">
-                          {q.question}
-                        </h2>
-                      </div>
-
-                      {/* Placeholder gambar kuis */}
-                      {q.imageName && (
-                        <div className="my-4 flex flex-col items-center justify-center rounded-2xl bg-sky-50/80 p-5 border border-dashed border-sky-300">
-                          <img 
-                            src={`/src/assets/images/${q.imageName}`}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = mengenalPenyuImg;
-                            }}
-                            alt={q.question}
-                            className="h-36 sm:h-44 object-contain filter drop-shadow-sm"
-                          />
-                          <span className="mt-2 text-xs font-bold text-sky-700">
-                            Nama file gambar: <code className="bg-sky-100 px-1.5 py-0.5 rounded text-sky-900 font-mono">{q.imageName}</code>
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Option Choices */}
-                      <div className="grid gap-3 pt-2 sm:grid-cols-2">
-                        {q.options.map((opt) => {
-                          const isThisSelected = selectedKey === opt.key;
-                          let optionStyle = 'bg-white/90 border-sky-200 text-sky-950 hover:bg-white shadow-sm';
-
-                          if (quizSubmitted) {
-                            if (opt.key === q.correctKey) {
-                              optionStyle = 'bg-emerald-100 border-emerald-500 text-emerald-950 font-black shadow-md';
-                            } else if (isThisSelected && !isCorrect) {
-                              optionStyle = 'bg-rose-100 border-rose-400 text-rose-950';
-                            }
-                          } else if (isThisSelected) {
-                            optionStyle = 'bg-sky-600 border-sky-700 text-white shadow-md scale-[1.01]';
-                          }
-
-                          return (
-                            <button
-                              key={opt.key}
-                              type="button"
-                              onClick={() => handleSelectQuizOption(q.id, opt.key)}
-                              className={`flex items-center gap-3.5 rounded-2xl p-4 text-left text-xs sm:text-sm font-bold transition duration-150 cursor-pointer border ${optionStyle}`}
-                            >
-                              <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
-                                isThisSelected && !quizSubmitted
-                                  ? 'bg-white text-sky-900'
-                                  : 'bg-sky-100 text-sky-800'
-                              }`}>
-                                {opt.key}
-                              </span>
-                              <span className="leading-snug">{opt.text}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {/* Penjelasan jika sudah disubmit */}
-                      {quizSubmitted && (
-                        <div className={`mt-5 rounded-2xl p-4 sm:p-5 border text-xs sm:text-sm font-bold ${
-                          isCorrect 
-                            ? 'bg-emerald-50 border-emerald-300 text-emerald-950' 
-                            : 'bg-amber-50 border-amber-300 text-amber-950'
-                        }`}>
-                          <p className="font-brand font-black text-sm mb-1">
-                            {isCorrect ? 'Jawaban Benar!' : 'Kunci Jawaban & Penjelasan:'}
-                          </p>
-                          <p className="leading-relaxed">{q.explanation}</p>
-                        </div>
-                      )}
+                    {/* PANAH MERAH DIAM MENUNJUK PERSISI KE KARAPAS (TOP: 32%, LEFT: 52%) */}
+                    <div 
+                      style={{ top: '32%', left: '52%', transform: 'translate(-50%, -100%)' }}
+                      className="absolute z-20 flex flex-col items-center pointer-events-none"
+                    >
+                      {/* Panah Merah SVG Menunjuk Tepat ke Bawah (Cangkang Karapas) */}
+                      <svg className="w-10 h-10 sm:w-12 sm:h-12 text-rose-600 filter drop-shadow-md" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21l-8-9h6V3h4v9h6l-8 9z"/>
+                      </svg>
                     </div>
-                  </section>
-                );
-              })}
-            </div>
+                  </div>
+                </div>
 
-            {/* Tombol Periksa Jawaban / Lanjut */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
-              <button
-                type="button"
-                onClick={() => setActiveSectionIndex(1)}
-                className="flex items-center gap-2 rounded-full bg-white/85 px-7 py-3 font-brand text-xs sm:text-sm font-black text-sky-900 shadow hover:bg-white transition cursor-pointer border border-white/70"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span>Sebelumnya</span>
-              </button>
+                {/* LIST 3 SOAL KUIS DALAM 1 WAVY CARD */}
+                <div className="space-y-8 pt-2">
+                  {QUIZ_QUESTIONS.map((q, qIndex) => {
+                    const selectedKey = quizAnswers[q.id];
+                    const isCorrect = selectedKey === q.correctKey;
 
-              <div className="flex items-center gap-3">
-                {!quizSubmitted ? (
+                    return (
+                      <div key={q.id} className="pt-6 border-t border-sky-100 first:border-t-0 first:pt-0">
+                        {/* Judul Soal */}
+                        <div className="flex items-start gap-3.5 mb-4">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-600 text-white font-brand text-base font-black shadow-sm mt-0.5 border border-white">
+                            {qIndex + 1}
+                          </span>
+                          <h2 className="font-brand text-base sm:text-lg md:text-xl font-black text-sky-950 leading-snug">
+                            {q.question}
+                          </h2>
+                        </div>
+
+                        {/* Option Choices */}
+                        <div className="grid gap-3.5 pt-1 sm:grid-cols-2">
+                          {q.options.map((opt) => {
+                            const isThisSelected = selectedKey === opt.key;
+                            let optionStyle = 'bg-white/90 border-sky-200 text-sky-950 hover:bg-white shadow-sm';
+
+                            if (quizSubmitted) {
+                              if (opt.key === q.correctKey) {
+                                optionStyle = 'bg-emerald-100 border-emerald-500 text-emerald-950 font-black shadow-md';
+                              } else if (isThisSelected && !isCorrect) {
+                                optionStyle = 'bg-rose-100 border-rose-400 text-rose-950';
+                              }
+                            } else if (isThisSelected) {
+                              optionStyle = 'bg-sky-600 border-sky-700 text-white shadow-md scale-[1.01]';
+                            }
+
+                            return (
+                              <button
+                                key={opt.key}
+                                type="button"
+                                onClick={() => handleSelectQuizOption(q.id, opt.key)}
+                                className={`flex items-center gap-3.5 rounded-2xl p-4 text-left text-xs sm:text-sm font-bold transition duration-150 cursor-pointer border ${optionStyle}`}
+                              >
+                                <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+                                  isThisSelected && !quizSubmitted
+                                    ? 'bg-white text-sky-900'
+                                    : 'bg-sky-100 text-sky-800'
+                                }`}>
+                                  {opt.key}
+                                </span>
+                                <span className="leading-snug">{opt.text}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Penjelasan jika sudah disubmit */}
+                        {quizSubmitted && (
+                          <div className={`mt-4 rounded-2xl p-4 sm:p-5 border text-xs sm:text-sm font-bold ${
+                            isCorrect 
+                              ? 'bg-emerald-50 border-emerald-300 text-emerald-950' 
+                              : 'bg-amber-50 border-amber-300 text-amber-950'
+                          }`}>
+                            <p className="font-brand font-black text-sm mb-1">
+                              {isCorrect ? 'Jawaban Benar!' : 'Kunci Jawaban & Penjelasan:'}
+                            </p>
+                            <p className="leading-relaxed">{q.explanation}</p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Tombol Periksa Jawaban / Ulangi / Lanjut */}
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 mt-6 border-t border-sky-200">
                   <button
                     type="button"
-                    onClick={() => setQuizSubmitted(true)}
-                    disabled={Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length}
-                    className={`flex items-center gap-2 rounded-full px-8 py-3.5 font-brand text-sm sm:text-base font-black shadow-lg border-2 border-white transition cursor-pointer ${
-                      Object.keys(quizAnswers).length === QUIZ_QUESTIONS.length
-                        ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:scale-105'
-                        : 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                    }`}
+                    onClick={() => setActiveSectionIndex(1)}
+                    className="flex items-center gap-2 rounded-full bg-white/85 px-7 py-3 font-brand text-xs sm:text-sm font-black text-sky-900 shadow hover:bg-white transition cursor-pointer border border-white/70"
                   >
-                    <CheckCircle2 className="h-5 w-5" />
-                    <span>Periksa Jawaban Kuis</span>
+                    <ArrowLeft className="h-4 w-4" />
+                    <span>Sebelumnya</span>
                   </button>
-                ) : (
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setQuizSubmitted(false);
-                        setQuizAnswers({});
-                      }}
-                      className="flex items-center gap-1.5 rounded-full bg-white px-6 py-3 font-brand text-xs sm:text-sm font-black text-sky-800 shadow hover:bg-sky-50 cursor-pointer border border-sky-200"
-                    >
-                      <RotateCcw className="h-4 w-4" />
-                      <span>Ulangi Kuis</span>
-                    </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setActiveSectionIndex(3)}
-                      className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
-                    >
-                      <span>Lanjut: 6 Spesies Penyu Indonesia</span>
-                      <ArrowRight className="h-5 w-5 stroke-[3]" />
-                    </button>
+                  <div className="flex items-center gap-3">
+                    {!quizSubmitted ? (
+                      <button
+                        type="button"
+                        onClick={() => setQuizSubmitted(true)}
+                        disabled={Object.keys(quizAnswers).length < QUIZ_QUESTIONS.length}
+                        className={`flex items-center gap-2 rounded-full px-8 py-3.5 font-brand text-sm sm:text-base font-black shadow-lg border-2 border-white transition cursor-pointer ${
+                          Object.keys(quizAnswers).length === QUIZ_QUESTIONS.length
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:scale-105'
+                            : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                        }`}
+                      >
+                        <CheckCircle2 className="h-5 w-5" />
+                        <span>Periksa Jawaban Kuis</span>
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setQuizSubmitted(false);
+                            setQuizAnswers({});
+                          }}
+                          className="flex items-center gap-1.5 rounded-full bg-white px-6 py-3 font-brand text-xs sm:text-sm font-black text-sky-800 shadow hover:bg-sky-50 cursor-pointer border border-sky-200"
+                        >
+                          <RotateCcw className="h-4 w-4" />
+                          <span>Ulangi Kuis</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setActiveSectionIndex(3)}
+                          className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-8 py-3.5 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
+                        >
+                          <span>Selanjutnya</span>
+                          <ArrowRight className="h-5 w-5 stroke-[3]" />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
+            </section>
           </div>
         )}
 
@@ -870,9 +992,6 @@ export default function MengenalPenyu({ onBack }) {
             {/* Header */}
             <section className="relative bg-white/85 px-10 py-12 sm:px-16 sm:py-14 md:px-20 md:py-16 shadow-lg [clip-path:url(#mengenal-organic-wave)] [filter:drop-shadow(0_20px_35px_rgba(7,89,133,.25))] [backdrop-filter:blur(20px)_saturate(115%)]">
               <div className="px-3 sm:px-6 md:px-8">
-                <span className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-3.5 py-1 text-xs font-black text-sky-800 uppercase tracking-wider mb-2">
-                  Keanekaragaman Hayati
-                </span>
                 <h1 className="font-brand text-2xl sm:text-3xl md:text-4xl font-black text-sky-950">
                   6 Spesies Penyu Laut di Indonesia
                 </h1>
