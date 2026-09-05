@@ -415,7 +415,6 @@ export default function MengenalPenyu({ onBack }) {
   // Section 1 State: Video & Hypothesis
   const [selectedHypotheses, setSelectedHypotheses] = useState([]);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [videoUrl, setVideoUrl] = useState('');
 
   // Section 2 State: Organ Exploration
   const [selectedOrganId, setSelectedOrganId] = useState(null);
@@ -439,7 +438,10 @@ export default function MengenalPenyu({ onBack }) {
     if (draggedCyclePosition === null) return;
     const target = document
       .elementsFromPoint(event.clientX, event.clientY)
-      .find((element) => element.dataset?.cyclePosition !== undefined);
+      .find((element) => (
+        element.dataset?.cyclePosition !== undefined
+        && Number(element.dataset.cyclePosition) !== draggedCyclePosition
+      ));
     const destination = target ? Number(target.dataset.cyclePosition) : draggedCyclePosition;
     setCycleOrder((current) => {
       const updated = [...current];
@@ -580,29 +582,17 @@ export default function MengenalPenyu({ onBack }) {
 
                 {/* VIDEO CONTAINER DENGAN GAP LEGA */}
                 <div className="mt-8 overflow-hidden rounded-2xl border-4 border-sky-200 bg-slate-900 shadow-inner">
-                  {videoUrl ? (
-                    <div className="aspect-video w-full">
-                      <iframe
-                        src={videoUrl}
-                        title="Video Penyu Terdampar"
-                        className="h-full w-full"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                  <div className="relative flex aspect-video w-full flex-col items-center justify-center bg-gradient-to-br from-sky-950 via-slate-900 to-sky-900 p-8 text-center text-white">
+                    <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-sky-400 bg-sky-500/30 text-sky-300 shadow-lg">
+                      <Play className="ml-1 h-8 w-8" />
                     </div>
-                  ) : (
-                    <div className="relative flex aspect-video w-full flex-col items-center justify-center p-8 text-center text-white bg-gradient-to-br from-sky-950 via-slate-900 to-sky-900">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sky-500/30 border-2 border-sky-400 text-sky-300 mb-3 shadow-lg">
-                        <Play className="h-8 w-8 ml-1" />
-                      </div>
-                      <h2 className="font-brand text-lg sm:text-xl font-black text-sky-100">
-                        Video Pembelajaran Penyu Terdampar
-                      </h2>
-                      <p className="mt-1 text-xs text-sky-300/90 max-w-md">
-                        Area sematan video pembelajaran interaktif. Tautan video dapat disematkan di sini kapan saja.
-                      </p>
-                    </div>
-                  )}
+                    <h2 className="font-brand text-lg font-black text-sky-100 sm:text-xl">
+                      Video Pembelajaran Segera Hadir
+                    </h2>
+                    <p className="mt-1 max-w-md text-xs text-sky-300/90">
+                      Video pengamatan akan ditambahkan pada pembaruan berikutnya.
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
