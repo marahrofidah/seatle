@@ -30,6 +30,12 @@ import tukikImg from '../assets/images/tukik.png';
 import penyuRemajaImg from '../assets/images/penyu_remaja.png';
 import penyuDewasaImg from '../assets/images/penyu_dewasa.png';
 import peranPenyuImg from '../assets/images/peran_penyu.png';
+import penyuHijauImg from '../assets/images/anatomi_penyu.jpeg';
+import penyuPipihImg from '../assets/images/penyu_pipih.webp';
+import penyuBelimbingImg from '../assets/images/penyu_belimbing.webp';
+import penyuLekangImg from '../assets/images/penyu_lekang.jpeg';
+import penyuTempayanImg from '../assets/images/penyu_tempayan.png';
+import penyuSisikImg from '../assets/images/penyu_sisik.jpeg';
 
 // Section Navigation Tabs
 const SECTIONS = [
@@ -234,7 +240,7 @@ const TURTLE_SPECIES = [
     number: 1,
     name: 'Penyu Hijau',
     latin: 'Chelonia mydas',
-    imageName: 'anatomi_penyu.jpeg',
+    image: penyuHijauImg,
     habitat: 'Perairan dangkal, padang lamun, dan terumbu karang.',
     food: 'Lamun, Alga, dan Rumput Laut',
     status: 'Resiko Rendah (Least Concern/LC)',
@@ -245,7 +251,7 @@ const TURTLE_SPECIES = [
     number: 2,
     name: 'Penyu Pipih',
     latin: 'Natator depressus',
-    imageName: 'penyu_pipih.webp',
+    image: penyuPipihImg,
     habitat: 'Perairan dangkal berpasir di dekat pantai.',
     food: 'Ubur-ubur, Pena Laut, dan Teripang',
     status: 'Data Kurang (Data Deficient/DD)',
@@ -256,7 +262,7 @@ const TURTLE_SPECIES = [
     number: 3,
     name: 'Penyu Belimbing',
     latin: 'Dermochelys coriacea',
-    imageName: 'penyu_belimbing.webp',
+    image: penyuBelimbingImg,
     habitat: 'Laut lepas dan samudra terbuka.',
     food: 'Ubur-ubur dan hewan bertubuh lunak',
     status: 'Rentan (Vulnerable/VU)',
@@ -267,7 +273,7 @@ const TURTLE_SPECIES = [
     number: 4,
     name: 'Penyu Lekang',
     latin: 'Lepidochelys olivacea',
-    imageName: 'penyu_lekang.jpeg',
+    image: penyuLekangImg,
     habitat: 'Perairan pantai hingga laut lepas.',
     food: 'Alga, lobster, kepiting, tunikata, ubur-ubur, udang, ikan, dan telur ikan',
     status: 'Rentan (Vulnerable/VU)',
@@ -278,7 +284,7 @@ const TURTLE_SPECIES = [
     number: 5,
     name: 'Penyu Tempayan',
     latin: 'Caretta caretta',
-    imageName: 'penyu_tempayan.png',
+    image: penyuTempayanImg,
     habitat: 'Laut lepas dan perairan pesisir.',
     food: 'Spons, karang, landak laut, cumi-cumi, bintang laut, dan bahkan serangga',
     status: 'Rentan (Vulnerable/VU)',
@@ -289,7 +295,7 @@ const TURTLE_SPECIES = [
     number: 6,
     name: 'Penyu Sisik',
     latin: 'Eretmochelys imbricata',
-    imageName: 'penyu_sisik.jpeg',
+    image: penyuSisikImg,
     habitat: 'Terumbu karang di perairan tropis.',
     food: 'Spons, anemon, karang lunak, landak laut, ubur-ubur, cumi-cumi, dan udang',
     status: 'Kritis (Critically Endangered/CR)',
@@ -1106,7 +1112,7 @@ export default function MengenalPenyu({ onBack }) {
                     {/* Gambar Spesies */}
                     <div className="relative mb-4 flex h-44 w-full items-center justify-center rounded-2xl bg-sky-50/80 p-4 border border-sky-100 shadow-inner">
                       <img 
-                        src={`/src/assets/images/${turtle.imageName}`}
+                        src={turtle.image}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = mengenalPenyuImg;
