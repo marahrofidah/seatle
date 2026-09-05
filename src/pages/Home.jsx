@@ -3,12 +3,12 @@ import bgSeatle from '../assets/images/bg_seatle.png';
 import BubbleEffects from '../components/BubbleEffects';
 
 const titleLetters = [
-  { letter: 'S', color: '#fef08a', rotate: '-6deg' },
-  { letter: 'E', color: '#ffffff', rotate: '4deg' },
-  { letter: 'A', color: '#a7f3d0', rotate: '-3deg' },
-  { letter: 'T', color: '#ffffff', rotate: '5deg' },
-  { letter: 'L', color: '#bae6fd', rotate: '-5deg' },
-  { letter: 'E', color: '#fef08a', rotate: '3deg' },
+  { letter: 'S', color: '#fef08a', rotate: '-7deg', shadowColor: '#eab308' },
+  { letter: 'E', color: '#ffffff', rotate: '4deg', shadowColor: '#0284c7' },
+  { letter: 'A', color: '#a7f3d0', rotate: '-4deg', shadowColor: '#059669' },
+  { letter: 'T', color: '#ffffff', rotate: '6deg', shadowColor: '#0284c7' },
+  { letter: 'L', color: '#bae6fd', rotate: '-5deg', shadowColor: '#0284c7' },
+  { letter: 'E', color: '#fef08a', rotate: '3deg', shadowColor: '#eab308' },
 ];
 
 const bubbles = [
@@ -41,7 +41,7 @@ export default function Home({ onStart }) {
       <style>{`
         @keyframes playful-float {
           0%, 100% { transform: translateY(0) rotate(var(--letter-rotate)); }
-          50% { transform: translateY(-8px) rotate(calc(var(--letter-rotate) * -0.45)); }
+          50% { transform: translateY(-10px) rotate(calc(var(--letter-rotate) * -0.5)); }
         }
         @keyframes bubble-rise {
           0% { transform: translate3d(0, 12vh, 0) scale(0.75); opacity: 0; }
@@ -76,24 +76,31 @@ export default function Home({ onStart }) {
       {/* HERO CONTENT: CENTERED ON MOBILE, LEFT-BALANCED ON LARGE SCREENS */}
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center px-2 py-8 text-center md:-translate-x-16 lg:-translate-x-28">
 
-        {/* 2. PLAYFUL BOUNCY TITLE */}
+        {/* 2. PLAYFUL BOUNCY 3D TITLE */}
         <div className="relative mb-5 mt-4 sm:mb-7 sm:mt-5">
-          <span aria-hidden="true" className="absolute -left-4 -top-3 rotate-[-18deg] text-2xl text-yellow-200 drop-shadow-md sm:-left-9 sm:text-4xl">✦</span>
-          <span aria-hidden="true" className="absolute -right-3 top-0 rotate-12 text-xl text-white drop-shadow-md sm:-right-8 sm:text-3xl">✦</span>
-          <span aria-hidden="true" className="absolute -right-5 bottom-2 h-3 w-3 rounded-full border-2 border-cyan-100 sm:-right-10 sm:h-5 sm:w-5" />
+          <span aria-hidden="true" className="absolute -left-5 -top-4 rotate-[-18deg] text-3xl text-yellow-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)] sm:-left-10 sm:text-5xl">✦</span>
+          <span aria-hidden="true" className="absolute -right-4 top-0 rotate-12 text-2xl text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.2)] sm:-right-9 sm:text-4xl">✦</span>
+          <span aria-hidden="true" className="absolute -right-6 bottom-2 h-4 w-4 rounded-full border-2 border-cyan-100 sm:-right-12 sm:h-6 sm:w-6" />
 
           <h1 aria-label="SEATLE" className="flex items-end justify-center font-brand leading-none">
             {titleLetters.map(({ letter, color, rotate }, index) => (
               <span
                 key={`${letter}-${index}`}
                 aria-hidden="true"
-                className="playful-letter inline-block cursor-default text-[3.8rem] font-black transition-[filter] duration-300 hover:brightness-110 sm:text-[6rem] md:text-[7.6rem] lg:text-[8.7rem]"
+                className="playful-letter inline-block cursor-default text-[4rem] font-black transition-transform duration-300 hover:scale-110 sm:text-[6.5rem] md:text-[8rem] lg:text-[9.2rem]"
                 style={{
                   '--letter-rotate': rotate,
                   color,
                   animation: `playful-float 2.8s ease-in-out ${index * 0.12}s infinite`,
-                  WebkitTextStroke: '2px #075985',
-                  textShadow: '0 3px 0 #38bdf8, 0 7px 0 #0284c7, 0 11px 0 #075985, 0 17px 18px rgba(7, 89, 133, 0.35)',
+                  WebkitTextStroke: '2.5px #075985',
+                  textShadow: `
+                    0 2px 0 #ffffff,
+                    0 4px 0 #38bdf8,
+                    0 7px 0 #0284c7,
+                    0 10px 0 #0369a1,
+                    0 14px 0 #075985,
+                    0 20px 24px rgba(7, 89, 133, 0.45)
+                  `,
                 }}
               >
                 {letter}
@@ -101,7 +108,7 @@ export default function Home({ onStart }) {
             ))}
           </h1>
 
-          <div className="mx-auto mt-4 h-2 w-4/5 rounded-full bg-sky-950/20 blur-sm sm:mt-6" />
+          <div className="mx-auto mt-4 h-2.5 w-4/5 rounded-full bg-sky-950/25 blur-sm sm:mt-6" />
         </div>
 
         {/* 3. SUBTITLES */}

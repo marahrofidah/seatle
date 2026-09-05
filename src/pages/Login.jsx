@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import { ArrowLeft, BookOpen, CheckCircle2, GraduationCap, KeyRound, LoaderCircle, UserRound, UsersRound } from 'lucide-react';
-import loginBackground from '../assets/images/tanpa_penyu.png';
-import studentTurtle from '../assets/images/penyu_murid.png';
-import teacherTurtle from '../assets/images/penyu_guru.png';
+import { ArrowLeft, BookOpen, CheckCircle2, Eye, EyeOff, GraduationCap, KeyRound, LoaderCircle, UserRound, UsersRound } from 'lucide-react';
+import loginBackground from '../assets/images/login_bg.png';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import BubbleEffects from '../components/BubbleEffects';
 
 const teacherEmail = import.meta.env.VITE_TEACHER_EMAIL || 'guru@seatle.local';
 
-export default function Login({ onBack, onTeacherSuccess }) {
+export default function Login({ onBack, onTeacherSuccess, onStudentSuccess }) {
   const [role, setRole] = useState('guru');
   const [name, setName] = useState('');
   const [studentClass, setStudentClass] = useState('');
@@ -16,6 +14,7 @@ export default function Login({ onBack, onTeacherSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [studentDone, setStudentDone] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const changeRole = (nextRole) => {
     if (nextRole === role) return;
@@ -71,7 +70,10 @@ export default function Login({ onBack, onTeacherSuccess }) {
       setError(`Data belum berhasil disimpan: ${insertError.message}`);
       return;
     }
+    sessionStorage.setItem('seatle_student_name', cleanName);
+    sessionStorage.setItem('seatle_student_class', cleanClass);
     setStudentDone(true);
+    window.setTimeout(() => onStudentSuccess?.(), 650);
   };
 
   return (
@@ -80,89 +82,87 @@ export default function Login({ onBack, onTeacherSuccess }) {
       style={{ backgroundImage: `url(${loginBackground})` }}
     >
       <BubbleEffects />
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-400/5 via-transparent to-sky-900/10" />
+      <div className="absolute inset-0 bg-sky-900/10" />
 
-      <button type="button" onClick={onBack} className="absolute left-5 top-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/70 bg-white/50 text-sky-950 shadow-lg backdrop-blur-md transition hover:-translate-x-1 hover:bg-white/70" aria-label="Kembali ke halaman utama">
+      <button type="button" onClick={onBack} className="absolute left-5 top-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border-2 border-sky-100 bg-white text-sky-950 shadow-lg transition hover:-translate-x-1 hover:bg-sky-50" aria-label="Kembali ke halaman utama">
         <ArrowLeft className="h-6 w-6 stroke-[2.5]" />
       </button>
 
-      <section className="relative z-10 mt-12 w-full max-w-md rounded-b-[2.2rem] border-x-4 border-b-4 border-cyan-100/80 bg-gradient-to-b from-[#38a8e8] via-sky-600/95 to-blue-800/95 p-5 pt-5 text-white shadow-[0_24px_0_rgba(7,89,133,.5),0_36px_60px_rgba(3,50,80,.38),inset_0_2px_0_rgba(255,255,255,.25)] backdrop-blur-md sm:p-8 sm:pt-6">
-        <svg className="pointer-events-none absolute -top-[3.45rem] left-[-4px] h-16 w-[calc(100%+8px)] overflow-visible" viewBox="0 0 440 64" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M3 48 C48 5, 103 16, 145 34 C190 54, 220 56, 268 28 C311 4, 366 11, 437 40 L437 64 L3 64 Z" fill="#38a8e8" stroke="rgba(207,250,254,.9)" strokeWidth="4" strokeLinejoin="round" />
-          <path d="M5 51 C50 10, 102 20, 144 37 C190 56, 222 58, 269 31 C313 8, 366 14, 435 43" fill="none" stroke="rgba(255,255,255,.28)" strokeWidth="2" />
-        </svg>
-        <span className="pointer-events-none absolute left-5 top-8 h-3 w-3 rounded-full border-2 border-white/70" />
-        <span className="pointer-events-none absolute right-7 top-28 h-5 w-5 rounded-full border-2 border-white/50" />
+      <svg className="absolute h-0 w-0" aria-hidden="true">
+        <defs>
+          <clipPath id="login-organic-card" clipPathUnits="objectBoundingBox">
+            <path d="M .075,.035 C .16,.005 .245,.075 .34,.045 C .43,.015 .515,.005 .605,.04 C .7,.075 .79,.005 .895,.03 C .96,.045 .99,.085 .985,.15 C .975,.225 1,.29 .985,.37 C .97,.45 1,.525 .985,.605 C .97,.69 1,.77 .975,.855 C .955,.925 .91,.97 .84,.975 C .755,.985 .68,.95 .59,.975 C .5,1 .42,.955 .33,.975 C .24,.995 .17,.955 .09,.97 C .035,.95 .015,.905 .02,.845 C .03,.77 .005,.7 .02,.62 C .035,.535 .005,.46 .02,.38 C .035,.295 .005,.225 .02,.145 C .025,.09 .045,.055 .075,.035 Z" />
+          </clipPath>
+        </defs>
+      </svg>
 
-        <header className="relative flex min-h-28 items-center text-left">
-          <div className="relative z-10 max-w-[62%]">
-            <span className="inline-flex rounded-full bg-white/20 px-3 py-1 text-[10px] font-black tracking-[0.16em] text-cyan-50 backdrop-blur-sm">LOGIN SEATLE</span>
-            <h1 className="mt-2 font-brand text-3xl font-black leading-none text-white drop-shadow-md sm:text-4xl">Belajar Seru!</h1>
-            <p className="mt-2 text-xs font-bold leading-relaxed text-cyan-50/90">Pilih peranmu dan mulai petualangan bawah laut.</p>
-          </div>
-          <img src={role === 'guru' ? teacherTurtle : studentTurtle} alt={role === 'guru' ? 'Penyu guru' : 'Penyu murid'} className="pointer-events-none absolute -right-4 -top-12 h-44 w-40 object-contain drop-shadow-[0_12px_10px_rgba(3,50,80,.35)] transition-all duration-500 sm:-right-8 sm:-top-16 sm:h-52 sm:w-48" />
+      <section
+        className="relative z-10 w-full max-w-lg bg-white/55 px-7 py-11 text-sky-950 [clip-path:url(#login-organic-card)] [filter:drop-shadow(0_28px_32px_rgba(7,89,133,.3))] [backdrop-filter:blur(22px)_saturate(115%)] sm:px-14 sm:py-14 md:translate-x-10 lg:translate-x-16"
+      >
+        <span className="pointer-events-none absolute left-5 top-8 h-3 w-3 rounded-full border-2 border-sky-300/50" />
+        <span className="pointer-events-none absolute right-7 top-28 h-5 w-5 rounded-full border-2 border-sky-300/40" />
+
+        <header className="relative px-3 pt-5 text-center sm:pt-6">
+          <h1 className="font-brand text-3xl font-black leading-tight text-sky-950 drop-shadow-sm sm:text-4xl">Welcome to Seatle</h1>
+          <p className="mt-2 text-sm font-bold text-sky-900">Masuk untuk mulai Belajar</p>
         </header>
 
-        <div className="relative mt-5 grid grid-cols-2 rounded-full border border-white/25 bg-blue-950/20 p-1 shadow-inner">
-          <span className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-full bg-gradient-to-r from-yellow-300 to-amber-400 shadow-[0_5px_14px_rgba(251,191,36,.35)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${role === 'guru' ? 'translate-x-0' : 'translate-x-full'}`} />
-          <button type="button" onClick={() => changeRole('guru')} className={`relative z-10 flex items-center justify-center gap-2 rounded-full py-3 text-sm font-black transition-colors duration-300 ${role === 'guru' ? 'text-amber-950' : 'text-white/80'}`}>
+        <div className="relative mt-7 grid grid-cols-2 rounded-full bg-sky-100 p-1.5 shadow-[inset_0_2px_6px_rgba(14,116,144,.1)] sm:mt-8">
+          <span className={`pointer-events-none absolute bottom-1.5 left-1.5 top-1.5 w-[calc(50%-6px)] rounded-full bg-sky-800 shadow-[0_5px_12px_rgba(7,89,133,.28)] transition-transform duration-300 ease-out ${role === 'guru' ? 'translate-x-0' : 'translate-x-full'}`} />
+          <button type="button" onClick={() => changeRole('guru')} className={`relative z-10 flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-3 text-center text-sm font-black transition-colors duration-200 ${role === 'guru' ? 'text-white' : 'text-sky-700'}`}>
             <GraduationCap className="h-4 w-4" /> Guru
           </button>
-          <button type="button" onClick={() => changeRole('murid')} className={`relative z-10 flex items-center justify-center gap-2 rounded-full py-3 text-sm font-black transition-colors duration-300 ${role === 'murid' ? 'text-amber-950' : 'text-white/80'}`}>
+          <button type="button" onClick={() => changeRole('murid')} className={`relative z-10 flex min-w-0 items-center justify-center gap-2 rounded-full px-3 py-3 text-center text-sm font-black transition-colors duration-200 ${role === 'murid' ? 'text-white' : 'text-sky-700'}`}>
             <UsersRound className="h-4 w-4" /> Murid
           </button>
         </div>
 
-        <div className="relative mt-6 [perspective:900px]">
-          <div key={role} className="animate-[login-panel-in_.45s_cubic-bezier(.22,1,.36,1)]">
-            <style>{`
-              @keyframes login-panel-in {
-                from { opacity: 0; transform: rotateY(12deg) translateX(18px) scale(.97); }
-                to { opacity: 1; transform: rotateY(0) translateX(0) scale(1); }
-              }
-            `}</style>
-
+        <div className="relative mt-8 sm:mt-9">
+          <div>
             {studentDone ? (
               <div className="flex min-h-[18rem] flex-col items-center justify-center text-center">
                 <CheckCircle2 className="h-20 w-20 text-emerald-300 drop-shadow-lg" />
                 <h2 className="mt-4 font-brand text-3xl font-black">Berhasil Masuk!</h2>
-                <p className="mt-2 text-sm font-semibold text-cyan-50">Data {name.trim()} sudah terhubung ke guru.</p>
-                <button type="button" onClick={() => setStudentDone(false)} className="mt-7 rounded-full bg-gradient-to-r from-yellow-300 to-amber-400 px-8 py-3 font-black text-amber-950 shadow-lg transition hover:scale-105">Kembali</button>
+                <p className="mt-2 text-sm font-semibold text-sky-700">Data {name.trim()} sudah terhubung ke guru.</p>
+                <button type="button" onClick={() => setStudentDone(false)} className="mt-7 rounded-full bg-amber-400 px-8 py-3 font-black text-amber-950 shadow-lg transition hover:scale-105">Kembali</button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <label className="block">
-                  <span className="mb-2 block text-xs font-black uppercase tracking-wide text-white">
+                  <span className="mb-3 block text-xs font-black uppercase tracking-wide text-sky-950">
                     {role === 'guru' ? 'Nama Guru' : 'Nama Murid'}
                   </span>
                   <div className="group relative">
-                    <UserRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sky-500 transition group-focus-within:text-sky-600" />
-                    <input value={name} onChange={(event) => setName(event.target.value)} maxLength={100} autoComplete="name" placeholder={role === 'guru' ? 'Masukkan nama guru' : 'Masukkan nama murid'} className="w-full rounded-2xl border-2 border-amber-200 bg-white/90 py-3.5 pl-12 pr-4 font-bold text-sky-950 outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:ring-4 focus:ring-sky-200/60" />
+                    <UserRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sky-800 transition group-focus-within:text-sky-900" />
+                    <input value={name} onChange={(event) => setName(event.target.value)} maxLength={100} autoComplete="name" placeholder={role === 'guru' ? 'Masukkan nama guru' : 'Masukkan nama murid'} className="w-full rounded-full border border-sky-200 bg-white py-3 pl-12 pr-4 text-sm font-bold text-sky-950 shadow-[0_5px_14px_rgba(3,105,161,.1)] outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-200/50" />
                   </div>
                 </label>
 
                 {role === 'guru' ? (
                   <label className="block">
-                    <span className="mb-2 block text-xs font-black uppercase tracking-wide text-white">Password</span>
+                    <span className="mb-3 block text-xs font-black uppercase tracking-wide text-sky-950">Password</span>
                     <div className="group relative">
-                      <KeyRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sky-500 transition group-focus-within:text-sky-600" />
-                      <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" placeholder="Masukkan password" className="w-full rounded-2xl border-2 border-amber-200 bg-white/90 py-3.5 pl-12 pr-4 font-bold text-sky-950 outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:ring-4 focus:ring-sky-200/60" />
+                      <KeyRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sky-800 transition group-focus-within:text-sky-900" />
+                      <input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" placeholder="Masukkan password" className="w-full rounded-full border border-sky-200 bg-white py-3 pl-12 pr-12 text-sm font-bold text-sky-950 shadow-[0_5px_14px_rgba(3,105,161,.1)] outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-200/50" />
+                      <button type="button" onClick={() => setShowPassword((visible) => !visible)} className="absolute right-4 top-1/2 -translate-y-1/2 text-sky-800 transition hover:text-sky-950" aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}>
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
                     </div>
                   </label>
                 ) : (
                   <label className="block">
-                    <span className="mb-2 block text-xs font-black uppercase tracking-wide text-white">Kelas</span>
+                    <span className="mb-3 block text-xs font-black uppercase tracking-wide text-sky-950">Kelas</span>
                     <div className="group relative">
-                      <BookOpen className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sky-500 transition group-focus-within:text-sky-600" />
-                      <input value={studentClass} onChange={(event) => setStudentClass(event.target.value)} maxLength={30} placeholder="Contoh: 5A" className="w-full rounded-2xl border-2 border-amber-200 bg-white/90 py-3.5 pl-12 pr-4 font-bold text-sky-950 outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:ring-4 focus:ring-sky-200/60" />
+                      <BookOpen className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-sky-800 transition group-focus-within:text-sky-900" />
+                      <input value={studentClass} onChange={(event) => setStudentClass(event.target.value)} maxLength={30} placeholder="Contoh: 5A" className="w-full rounded-full border border-sky-200 bg-white py-3 pl-12 pr-4 text-sm font-bold text-sky-950 shadow-[0_5px_14px_rgba(3,105,161,.1)] outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-200/50" />
                     </div>
                   </label>
                 )}
 
                 {error && <p role="alert" className="rounded-xl bg-red-100 px-4 py-3 text-center text-sm font-bold text-red-700">{error}</p>}
 
-                <button type="submit" disabled={loading} className="flex w-full items-center justify-center rounded-full bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-400 py-3.5 font-brand text-lg font-black text-amber-950 shadow-[0_8px_20px_rgba(251,191,36,.28)] transition hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-wait disabled:opacity-70">
-                  {loading ? <LoaderCircle className="h-6 w-6 animate-spin" /> : role === 'guru' ? 'MASUK SEBAGAI GURU' : 'MULAI BELAJAR'}
+                <button type="submit" disabled={loading} className="mt-2 flex w-full items-center justify-center rounded-full bg-amber-400 px-6 py-4 text-base font-black text-amber-950 shadow-[0_8px_18px_rgba(217,119,6,.22)] transition-colors hover:bg-amber-500 disabled:cursor-wait disabled:opacity-70">
+                  {loading ? <LoaderCircle className="h-6 w-6 animate-spin" /> : role === 'guru' ? 'Masuk Sebagai Guru' : 'Mulai Belajar'}
                 </button>
               </form>
             )}

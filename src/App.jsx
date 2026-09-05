@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import StudentLogin from './pages/StudentLogin';
 import TeacherLogin from './pages/TeacherLogin';
+import StudentDashboard from './pages/StudentDashboard';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -27,5 +28,9 @@ export default function App() {
     return <TeacherLogin onBack={() => setCurrentPage('login')} />;
   }
 
-  return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} />;
+  if (currentPage === 'student-dashboard') {
+    return <StudentDashboard onExit={() => setCurrentPage('login')} />;
+  }
+
+  return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;
 }
