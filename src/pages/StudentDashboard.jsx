@@ -9,6 +9,7 @@ import refleksiImg from '../assets/images/refleksi.png';
 import glosariumImg from '../assets/images/glosarium.png';
 import galleryImg from '../assets/images/gallery.png';
 import BubbleEffects from '../components/BubbleEffects';
+import { getCompletedAspects } from '../lib/studentProgress';
 
 const logoLetters = [
   { letter: 'S', color: '#fef08a', rotate: '-5deg' },
@@ -90,6 +91,8 @@ export default function StudentDashboard({ onExit, onSelectModule }) {
   const [isTujuanOpen, setIsTujuanOpen] = useState(false);
   const studentName = sessionStorage.getItem('seatle_student_name') || 'Petualang';
   const studentClass = sessionStorage.getItem('seatle_student_class') || '-';
+  const completedAspects = getCompletedAspects();
+  const progress = completedAspects.length * 25;
 
   return (
     <main 
@@ -109,7 +112,7 @@ export default function StudentDashboard({ onExit, onSelectModule }) {
       </svg>
 
       {/* HEADER SIMPEL & ELEGAN */}
-      <header className="relative z-20 mx-auto flex w-full max-w-[96%] sm:max-w-7xl items-center justify-between px-2 py-4 sm:px-4">
+      <header className="relative z-20 mx-auto flex w-full max-w-[96%] sm:max-w-7xl flex-wrap items-center justify-between gap-3 px-2 py-4 sm:px-4">
         {/* LOGO SEATLE */}
         <div aria-label="SEATLE" className="flex items-end px-2 py-2 font-brand leading-none">
           {logoLetters.map(({ letter, color, rotate }, index) => (
@@ -130,18 +133,32 @@ export default function StudentDashboard({ onExit, onSelectModule }) {
         </div>
 
         {/* PROFILE BADGE DISAMPING NAMA & LOGOUT */}
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-2.5 rounded-full border border-white/70 bg-white/85 px-4 py-2 shadow-lg backdrop-blur-md">
-            <span className="text-xs sm:text-sm font-black text-sky-950 tracking-wide">{studentName}</span>
-            <span className="text-[11px] font-extrabold text-sky-700 bg-sky-100/90 px-2.5 py-0.5 rounded-full border border-sky-200">
-              Kelas {studentClass}
-            </span>
+        <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto sm:max-w-full sm:gap-2.5">
+          <div className="flex min-w-0 flex-1 items-center justify-between gap-3 rounded-2xl border border-white/70 bg-white/85 px-3 py-2 shadow-lg backdrop-blur-md sm:rounded-3xl sm:px-4">
+            <div className="flex min-w-0 flex-1 flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2.5">
+              <span title={studentName} className="w-full truncate text-sm font-black text-sky-950 tracking-wide sm:w-auto sm:max-w-48">{studentName}</span>
+              <span className="max-w-full truncate text-[10px] font-extrabold text-sky-700 bg-sky-100/90 px-2 py-0.5 rounded-full border border-sky-200 sm:text-[11px] sm:px-2.5">
+                Kelas {studentClass}
+              </span>
+            </div>
+            <div className="flex shrink-0 flex-col items-center gap-0 border-l border-sky-200/80 pl-3 sm:ml-1 sm:flex-row sm:gap-2.5 sm:rounded-full sm:border sm:bg-gradient-to-br sm:from-sky-50 sm:to-cyan-100/70 sm:py-1 sm:pl-1 sm:pr-4">
+              <div role="progressbar" aria-label="Progress belajar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={`${completedAspects.length} dari 4 aspek selesai`} className="relative flex h-12 w-12 shrink-0 items-center justify-center">
+                <svg viewBox="0 0 48 48" className="absolute inset-0 h-full w-full -rotate-90" aria-hidden="true">
+                  <circle cx="24" cy="24" r="19" fill="none" stroke="#d0e9f2" strokeWidth="4" />
+                  <circle cx="24" cy="24" r="19" fill="none" stroke={progress === 100 ? '#059669' : '#0284c7'} strokeWidth="4" strokeLinecap="round" pathLength="100" strokeDasharray="100" strokeDashoffset={100 - progress} className="transition-all duration-500 motion-reduce:transition-none" opacity={progress === 0 ? 0 : 1} />
+                </svg>
+                <span className="text-xs font-black tabular-nums text-sky-950">{progress}%</span>
+              </div>
+              <div>
+                <p className="whitespace-nowrap text-[10px] font-bold text-sky-700 sm:text-xs sm:font-black sm:text-sky-950">{completedAspects.length}/4 aspek<span className="hidden sm:inline"> selesai</span></p>
+              </div>
+            </div>
           </div>
 
           <button 
             type="button" 
             onClick={onExit} 
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/85 text-sky-800 shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-white hover:text-rose-600 cursor-pointer" 
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/85 text-sky-800 shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-white hover:text-rose-600 cursor-pointer" 
             aria-label="Keluar"
             title="Keluar"
           >

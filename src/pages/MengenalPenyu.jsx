@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import dashboardBackground from '../assets/images/tanpa_penyu.png';
 import BubbleEffects from '../components/BubbleEffects';
+import { completeAspect } from '../lib/studentProgress';
 import mengenalPenyuImg from '../assets/images/mengenal_penyu.png';
 import infografisAnatomiImg from '../assets/images/anatomi_penyu.jpeg';
 import telurImg from '../assets/images/telur.png';
@@ -409,6 +410,10 @@ const ECOSYSTEM_CLUES = [
 ];
 
 export default function MengenalPenyu({ onBack }) {
+  const handleComplete = () => {
+    completeAspect('mengenal-penyu');
+    onBack();
+  };
   // Navigation State
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
 
@@ -1278,12 +1283,16 @@ export default function MengenalPenyu({ onBack }) {
                         <h2 className="font-brand text-lg font-black text-sky-950 lg:text-xl">
                         {cycle.stage.replace(/^\d+\.\s*/, '')}
                       </h2>
-                        <div className="mt-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-wide text-sky-700 md:justify-start">
-                          <span>{cycle.subtitle}</span>
-                        </div>
-                      <p className={`mt-3 text-xs font-bold leading-relaxed text-sky-900 sm:block sm:text-sm ${cycleOrderCorrect ? 'block' : 'hidden'}`}>
-                        {cycle.desc}
-                      </p>
+                        {cycleOrderCorrect && (
+                          <div>
+                            <div className="mt-2 flex items-center gap-2 text-[11px] font-black uppercase tracking-wide text-sky-700 md:justify-start">
+                              <span>{cycle.subtitle}</span>
+                            </div>
+                            <p className="mt-3 text-xs font-bold leading-relaxed text-sky-900 sm:text-sm">
+                              {cycle.desc}
+                            </p>
+                          </div>
+                        )}
                         {!cycleOrderCorrect && <p className="mt-3 text-[10px] font-black uppercase tracking-widest text-sky-600"><span className="mr-1 text-lg leading-none">⠿</span> Geser kartu untuk mengurutkan</p>}
                       </div>
                     </div>
@@ -1547,10 +1556,10 @@ export default function MengenalPenyu({ onBack }) {
                 <div className="pt-5">
                   <button
                     type="button"
-                    onClick={onBack}
+                    onClick={handleComplete}
                     className="rounded-full bg-yellow-400 px-9 py-4 font-brand text-sm sm:text-base font-black text-amber-950 shadow-lg border-2 border-white hover:scale-105 transition cursor-pointer"
                   >
-                    Kembali ke Peta Petualangan
+                    Selesai & Kembali ke Peta
                   </button>
                 </div>
               </div>
@@ -1568,7 +1577,7 @@ export default function MengenalPenyu({ onBack }) {
               </button>
               <button
                 type="button"
-                onClick={onBack}
+                onClick={handleComplete}
                 className="flex items-center gap-2 rounded-full bg-white px-7 py-3 font-brand text-xs sm:text-sm font-black text-sky-900 shadow hover:bg-sky-50 transition cursor-pointer border border-sky-200"
               >
                 <span>Kembali ke Dashboard</span>
