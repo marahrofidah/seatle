@@ -12,7 +12,6 @@ import {
   Shield, 
   Heart, 
   RotateCcw,
-  Play,
   CircleAlert,
   Sun,
   Fish,
@@ -586,18 +585,18 @@ export default function MengenalPenyu({ onBack }) {
                 </p>
 
                 {/* VIDEO CONTAINER DENGAN GAP LEGA */}
-                <div className="mt-8 overflow-hidden rounded-2xl border-4 border-sky-200 bg-slate-900 shadow-inner">
-                  <div className="relative flex aspect-video w-full flex-col items-center justify-center bg-gradient-to-br from-sky-950 via-slate-900 to-sky-900 p-8 text-center text-white">
-                    <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full border-2 border-sky-400 bg-sky-500/30 text-sky-300 shadow-lg">
-                      <Play className="ml-1 h-8 w-8" />
-                    </div>
-                    <h2 className="font-brand text-lg font-black text-sky-100 sm:text-xl">
-                      Video Pembelajaran Segera Hadir
-                    </h2>
-                    <p className="mt-1 max-w-md text-xs text-sky-300/90">
-                      Video pengamatan akan ditambahkan pada pembaruan berikutnya.
-                    </p>
-                  </div>
+                <div className="-mx-6 mt-8 overflow-hidden rounded-2xl border-2 border-sky-200 bg-slate-900 shadow-inner sm:mx-0 sm:border-4">
+                  <video
+                    controls
+                    playsInline
+                    preload="metadata"
+                    aria-label="Video pembelajaran pengamatan awal penyu"
+                    className="block aspect-video w-full object-contain"
+                    src="https://tbrbbmcsxtiwtwnlwtbz.supabase.co/storage/v1/object/public/video-pembelajaran/video_misi.mp4"
+                  >
+                    Browser kamu tidak mendukung pemutar video.
+                    <a href="https://tbrbbmcsxtiwtwnlwtbz.supabase.co/storage/v1/object/public/video-pembelajaran/video_misi.mp4">Buka video pembelajaran</a>
+                  </video>
                 </div>
               </div>
             </section>
