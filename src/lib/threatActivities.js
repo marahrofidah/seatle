@@ -79,3 +79,18 @@ export const actionQuestions = [
     explanation: 'Membersihkan pantai dan mengurangi penggunaan plastik membantu menjaga habitat penyu tetap bersih dan aman.',
   },
 ];
+
+export function createEffectOrder() {
+  // Choose uniformly from arrangements without answers beside their causes.
+  const arrangements = [];
+  function visit(order, remaining) {
+    if (!remaining.length) { arrangements.push(order); return; }
+    remaining.forEach((effect) => {
+      if (effect !== causes[order.length].effect) {
+        visit([...order, effect], remaining.filter((item) => item !== effect));
+      }
+    });
+  }
+  visit([], effects.map((_, index) => index));
+  return arrangements[Math.floor(Math.random() * arrangements.length)];
+}

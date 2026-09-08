@@ -5,7 +5,7 @@ import turtle from '../assets/images/ancaman_penyu.png';
 import BubbleEffects from '../components/BubbleEffects';
 import ThreatConnections from '../components/ThreatConnections';
 import { completeAspect } from '../lib/studentProgress';
-import { suspectedCauses, causes, actionQuestions } from '../lib/threatActivities';
+import { suspectedCauses, causes, actionQuestions, createEffectOrder } from '../lib/threatActivities';
 
 const steps = ['Temukan penyebab', 'Hubungkan dampak', 'Tentukan tindakan'];
 const wavyCard = 'relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:content-[\'\'] before:[clip-path:url(#threat-wavy-card)] before:backdrop-blur-xl [filter:drop-shadow(0_20px_30px_rgba(7,89,133,.25))]';
@@ -16,6 +16,7 @@ export default function AncamanPenyu({ onBack }) {
   const [suspicions, setSuspicions] = useState([]);
   const [identified, setIdentified] = useState(false);
   const [matches, setMatches] = useState({});
+  const [effectOrder] = useState(createEffectOrder);
   const [checkedMatches, setCheckedMatches] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -86,7 +87,7 @@ export default function AncamanPenyu({ onBack }) {
               ))}
             </nav>
 
-            <section className={`${wavyCard} px-10 py-16 before:bg-white/90 sm:px-16 sm:py-20 md:px-24 md:py-24`}>
+            <section className={`${wavyCard} px-8 py-16 before:bg-white/90 sm:px-16 sm:py-20 md:px-24 md:py-24`}>
               {step === 0 && (
                 <>
                   <div className="mb-5 flex items-center gap-3"><Search className="h-6 w-6 shrink-0 text-sky-600" /><h2 className="font-brand text-2xl font-black">Apa yang mungkin terjadi?</h2></div>
@@ -114,7 +115,7 @@ export default function AncamanPenyu({ onBack }) {
                 <>
                   <h2 className="font-brand text-2xl font-black">Setiap ancaman meninggalkan dampak</h2>
                   <p className="mt-3 text-sm font-bold leading-relaxed text-sky-700">Pasangkan setiap penyebab dengan dampak yang sesuai. Gunakan setiap dampak satu kali, lalu periksa hasil penyelidikanmu.</p>
-                  <ThreatConnections matches={matches} checked={checkedMatches} locked={allMatched} onChange={(next) => { setMatches(next); setCheckedMatches(false); }} />
+                  <ThreatConnections effectOrder={effectOrder} matches={matches} checked={checkedMatches} locked={allMatched} onChange={(next) => { setMatches(next); setCheckedMatches(false); }} />
                   <div aria-live="polite" className="mt-5 text-sm font-black text-sky-800">{checkedMatches && `${causes.filter((cause, index) => matches[index] === cause.effect).length} dari 5 pasangan benar.`}</div>
                   <div className="mt-5 flex justify-end"><button type="button" className={primaryButton} disabled={!causes.every((_, index) => matches[index] !== undefined)} onClick={() => allMatched ? goToStep(2) : setCheckedMatches(true)}>{allMatched ? 'Tentukan tindakan' : 'Periksa pasangan'}<ArrowRight className="h-4 w-4" /></button></div>
                 </>
