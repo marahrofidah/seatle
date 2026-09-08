@@ -5,6 +5,7 @@ import StudentLogin from './pages/StudentLogin';
 import TeacherLogin from './pages/TeacherLogin';
 import StudentDashboard from './pages/StudentDashboard';
 import MengenalPenyu from './pages/MengenalPenyu';
+import AncamanPenyu from './pages/AncamanPenyu';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -14,6 +15,8 @@ export default function App() {
       const hash = window.location.hash.replace('#', '');
       if (hash === 'mengenal-penyu') {
         setCurrentPage('mengenal-penyu');
+      } else if (hash === 'ancaman-penyu') {
+        setCurrentPage('ancaman-penyu');
       } else if (hash === 'student-dashboard') {
         setCurrentPage('student-dashboard');
       }
@@ -50,6 +53,8 @@ export default function App() {
         onSelectModule={(slug) => {
           if (slug === 'mengenal-penyu') {
             setCurrentPage('mengenal-penyu');
+          } else if (slug === 'ancaman-penyu') {
+            setCurrentPage('ancaman-penyu');
           }
         }} 
       />
@@ -58,6 +63,10 @@ export default function App() {
 
   if (currentPage === 'mengenal-penyu') {
     return <MengenalPenyu onBack={() => setCurrentPage('student-dashboard')} />;
+  }
+
+  if (currentPage === 'ancaman-penyu') {
+    return <AncamanPenyu onBack={() => setCurrentPage('student-dashboard')} />;
   }
 
   return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;

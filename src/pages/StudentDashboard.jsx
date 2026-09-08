@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, LogOut } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, LogOut } from 'lucide-react';
 import dashboardBackground from '../assets/images/tanpa_penyu.png';
 import mengenalPenyuImg from '../assets/images/mengenal_penyu.png';
 import ancamanPenyuImg from '../assets/images/ancaman_penyu.png';
@@ -276,13 +276,29 @@ export default function StudentDashboard({ onExit, onSelectModule }) {
                     />
                   </div>
                   {/* LENCANA ANGKA DENGAN JARAK PAS */}
+                  {completedAspects.includes(point.slug) && (
+                    <span className="pointer-events-none absolute -left-12 -top-5 z-10 h-32 w-28 -rotate-[8deg] drop-shadow-[0_4px_3px_rgba(7,45,65,.35)] sm:-left-14 sm:-top-6 sm:h-36 sm:w-32">
+                      <span className="sr-only">Misi selesai</span>
+                      <svg viewBox="0 0 88 108" className="h-full w-full" aria-hidden="true">
+                        <path d="M 12 99 Q 23 92 36 98" fill="none" stroke="#f9dc94" strokeWidth="5" strokeLinecap="round" />
+                        <path d="M 23 10 L 23 98" stroke="#69452d" strokeWidth="5" strokeLinecap="round" />
+                        <path d="M 22 12 L 22 95" stroke="#d4a56a" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M 25 15 Q 43 8 60 15 Q 72 19 84 13 L 74 33 L 84 49 Q 70 55 56 49 Q 40 43 25 50 Z" fill="#ffcf5c" stroke="#89552e" strokeWidth="1.5" strokeLinejoin="round" />
+                        <path d="M 29 20 Q 45 14 59 20 Q 69 24 76 20 M 29 44 Q 43 39 57 44 Q 67 49 77 46" fill="none" stroke="#fff2bc" strokeWidth="1.5" strokeDasharray="3 3" />
+                        <text x="52" y="35" textAnchor="middle" fill="#704020" fontSize="10" fontWeight="900" className="font-brand" letterSpacing=".5">TUNTAS</text>
+                        <circle cx="23" cy="9" r="4" fill="#ffe4a0" stroke="#89552e" strokeWidth="1.5" />
+                      </svg>
+                    </span>
+                  )}
                   <span className="absolute -right-2 -top-1 sm:-right-3 sm:-top-2 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-b from-yellow-300 via-amber-400 to-amber-500 font-brand text-base sm:text-xl font-black text-amber-950 shadow-[0_6px_14px_rgba(0,0,0,0.35)] border-3 border-white select-none transition duration-300 group-hover:scale-110">
-                    {point.number}
+                    {completedAspects.includes(point.slug)
+                      ? <Check className="h-7 w-7 stroke-[4] sm:h-8 sm:w-8" aria-hidden="true" />
+                      : point.number}
                   </span>
                 </div>
 
                 {/* LABEL TEKS DENGAN WAVY CARD CLIP */}
-                <div className="relative -mt-1 w-full bg-white/90 px-4 py-3 shadow-lg [clip-path:url(#dashboard-wavy-card)] [backdrop-filter:blur(10px)] transition group-hover:scale-105 text-center">
+                <div className={`relative -mt-1 w-full px-4 py-3 shadow-lg [clip-path:url(#dashboard-wavy-card)] [backdrop-filter:blur(10px)] transition group-hover:scale-105 text-center ${completedAspects.includes(point.slug) ? 'bg-amber-100/95' : 'bg-white/90'}`}>
                   <h3 className="font-brand text-base font-black text-sky-950">{point.title}</h3>
                   <p className="mt-0.5 text-xs font-semibold text-sky-700">{point.subtitle}</p>
                 </div>
