@@ -3,8 +3,9 @@ import { ArrowLeft, ArrowRight, Check, Flag, Search } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.png';
 import turtle from '../assets/images/ancaman_penyu.png';
 import BubbleEffects from '../components/BubbleEffects';
+import ThreatConnections from '../components/ThreatConnections';
 import { completeAspect } from '../lib/studentProgress';
-import { suspectedCauses, causes, effects, actionQuestions } from '../lib/threatActivities';
+import { suspectedCauses, causes, actionQuestions } from '../lib/threatActivities';
 
 const steps = ['Temukan penyebab', 'Hubungkan dampak', 'Tentukan tindakan'];
 const wavyCard = 'relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:content-[\'\'] before:[clip-path:url(#threat-wavy-card)] before:backdrop-blur-xl [filter:drop-shadow(0_20px_30px_rgba(7,89,133,.25))]';
@@ -85,7 +86,7 @@ export default function AncamanPenyu({ onBack }) {
               ))}
             </nav>
 
-            <section className={`${wavyCard} px-8 py-12 before:bg-white/90 sm:px-14 sm:py-14 md:px-16`}>
+            <section className={`${wavyCard} px-10 py-16 before:bg-white/90 sm:px-16 sm:py-20 md:px-24 md:py-24`}>
               {step === 0 && (
                 <>
                   <div className="mb-5 flex items-center gap-3"><Search className="h-6 w-6 shrink-0 text-sky-600" /><h2 className="font-brand text-2xl font-black">Apa yang mungkin terjadi?</h2></div>
@@ -113,22 +114,7 @@ export default function AncamanPenyu({ onBack }) {
                 <>
                   <h2 className="font-brand text-2xl font-black">Setiap ancaman meninggalkan dampak</h2>
                   <p className="mt-3 text-sm font-bold leading-relaxed text-sky-700">Pasangkan setiap penyebab dengan dampak yang sesuai. Gunakan setiap dampak satu kali, lalu periksa hasil penyelidikanmu.</p>
-                  <div className="mt-6 space-y-4">
-                    {causes.map((cause, index) => {
-                      const correct = matches[index] === cause.effect;
-                      return (
-                        <div key={cause.title} className="rounded-2xl border border-sky-200 bg-sky-50/60 p-4 sm:p-5">
-                          <label htmlFor={`cause-${index}`} className="flex items-center gap-3 font-black"><span className="font-brand text-xl text-sky-600">{String.fromCharCode(65 + index)}</span>{cause.title}</label>
-                          <select id={`cause-${index}`} value={matches[index] ?? ''} disabled={allMatched} onChange={(event) => { setMatches({ ...matches, [index]: event.target.value === '' ? undefined : Number(event.target.value) }); setCheckedMatches(false); }} className="mt-3 w-full min-w-0 rounded-xl border border-sky-300 bg-white p-3 text-sm font-bold text-sky-950 focus:outline-sky-500">
-                            <option value="">Pilih dampaknya…</option>
-                            {effects.map((effect, effectIndex) => <option key={effect} value={effectIndex}>{effectIndex + 1}. {effect}</option>)}
-                          </select>
-                          {matches[index] !== undefined && <p className="mt-2 text-sm leading-relaxed text-sky-800">{effects[matches[index]]}</p>}
-                          {checkedMatches && <p className={`mt-3 text-sm font-bold ${correct ? 'text-emerald-800' : 'text-rose-700'}`}>{correct ? `Benar. ${cause.explanation}` : 'Belum tepat. Coba pikirkan kembali akibat dari penyebab ini.'}</p>}
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <ThreatConnections matches={matches} checked={checkedMatches} locked={allMatched} onChange={(next) => { setMatches(next); setCheckedMatches(false); }} />
                   <div aria-live="polite" className="mt-5 text-sm font-black text-sky-800">{checkedMatches && `${causes.filter((cause, index) => matches[index] === cause.effect).length} dari 5 pasangan benar.`}</div>
                   <div className="mt-5 flex justify-end"><button type="button" className={primaryButton} disabled={!causes.every((_, index) => matches[index] !== undefined)} onClick={() => allMatched ? goToStep(2) : setCheckedMatches(true)}>{allMatched ? 'Tentukan tindakan' : 'Periksa pasangan'}<ArrowRight className="h-4 w-4" /></button></div>
                 </>
