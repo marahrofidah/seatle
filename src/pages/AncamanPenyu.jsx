@@ -50,9 +50,13 @@ export default function AncamanPenyu({ onBack }) {
         </defs>
       </svg>
       <div className="relative mx-auto w-full max-w-[96%] px-2 sm:max-w-7xl sm:px-4">
-        <header className="flex items-center justify-between gap-4 py-5">
-          <button type="button" onClick={onBack} className="flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-4 py-3 text-sm font-black shadow-md"><ArrowLeft className="h-4 w-4" /> Peta petualangan</button>
-          <span className="font-brand text-lg font-black text-white drop-shadow-md">MISI 02</span>
+        <header className="relative z-20 flex items-center gap-3 py-4">
+          <button type="button" onClick={onBack} aria-label="Kembali ke Dashboard" title="Kembali ke Dashboard" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/85 text-sky-900 shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-white cursor-pointer">
+            <ArrowLeft className="h-5 w-5 stroke-[2.5]" />
+          </button>
+          <div className="rounded-full border border-white/70 bg-white/85 px-7 py-3 shadow-lg backdrop-blur-md">
+            <span className="font-brand text-lg sm:text-xl font-black text-sky-950 tracking-wide">Ancaman Penyu</span>
+          </div>
         </header>
 
         <section className={`${wavyCard} mb-6 flex items-center gap-2 px-8 py-10 before:bg-sky-50/90 sm:gap-8 sm:px-14 sm:py-12 md:px-16`}>
