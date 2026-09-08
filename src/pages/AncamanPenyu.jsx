@@ -49,7 +49,7 @@ export default function AncamanPenyu({ onBack }) {
           </clipPath>
         </defs>
       </svg>
-      <div className="relative mx-auto w-full max-w-[96%] px-2 sm:max-w-7xl sm:px-4">
+      <div className="relative z-10 mx-auto w-full max-w-[96%] px-2 sm:max-w-7xl sm:px-4">
         <header className="relative z-20 flex items-center gap-3 py-4">
           <button type="button" onClick={onBack} aria-label="Kembali ke Dashboard" title="Kembali ke Dashboard" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/85 text-sky-900 shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-white cursor-pointer">
             <ArrowLeft className="h-5 w-5 stroke-[2.5]" />
