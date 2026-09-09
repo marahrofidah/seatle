@@ -80,6 +80,24 @@ export const actionQuestions = [
   },
 ];
 
+export function createActionOptionOrders() {
+  const shuffle = (items) => {
+    const result = [...items];
+    for (let index = result.length - 1; index > 0; index--) {
+      const target = Math.floor(Math.random() * (index + 1));
+      [result[index], result[target]] = [result[target], result[index]];
+    }
+    return result;
+  };
+  // Spread the correct answers across A–D, then randomize question positions.
+  const positions = shuffle([0, 1, 2, 3, Math.floor(Math.random() * 4)]);
+  return actionQuestions.map((question, index) => {
+    const order = shuffle(question.options.map((_, option) => option).slice(1));
+    order.splice(positions[index], 0, 0);
+    return order;
+  });
+}
+
 export function createEffectOrder() {
   // Choose uniformly from arrangements without answers beside their causes.
   const arrangements = [];

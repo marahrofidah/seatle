@@ -61,8 +61,8 @@ export default function ThreatConnections({ matches, checked, locked, onChange, 
   return (
     <div className="mt-6">
       <p className="mb-5 text-sm font-bold text-sky-700">Tarik dari titik penyebab ke dampaknya, atau ketuk penyebab lalu dampak. Pilih ulang untuk mengganti pasangan.</p>
-      <div className="mb-3 grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-8 sm:grid-cols-2 text-xs font-black uppercase tracking-wide sm:tracking-widest text-sky-600 sm:gap-24"><span>Penyebab</span><span>Dampak</span></div>
-      <div ref={boardRef} data-no-bubbles className="relative grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-x-8 sm:grid-cols-2 sm:gap-x-24">
+      <div className="mb-3 grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-14 sm:grid-cols-2 text-xs font-black uppercase tracking-wide sm:tracking-widest text-sky-600 sm:gap-24"><span>Penyebab</span><span>Dampak</span></div>
+      <div ref={boardRef} data-no-bubbles className="relative grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-x-14 sm:grid-cols-2 sm:gap-x-24">
         {geometry?.width > 0 && (
           <svg aria-hidden="true" width={geometry.width} height={geometry.height} className="pointer-events-none absolute inset-0 z-10 overflow-visible" viewBox={`0 0 ${geometry.width} ${geometry.height}`}>
             {Object.entries(matches).map(([cause, effect]) => geometry.left[cause] && geometry.right[effect] && (

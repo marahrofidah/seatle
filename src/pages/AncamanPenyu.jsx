@@ -5,7 +5,7 @@ import turtle from '../assets/images/ancaman_penyu.png';
 import BubbleEffects from '../components/BubbleEffects';
 import ThreatConnections from '../components/ThreatConnections';
 import { completeAspect } from '../lib/studentProgress';
-import { suspectedCauses, causes, actionQuestions, createEffectOrder } from '../lib/threatActivities';
+import { suspectedCauses, causes, actionQuestions, createEffectOrder, createActionOptionOrders } from '../lib/threatActivities';
 
 const steps = ['Temukan penyebab', 'Hubungkan dampak', 'Tentukan tindakan'];
 const wavyCard = 'relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:content-[\'\'] before:[clip-path:url(#threat-wavy-card)] before:backdrop-blur-xl [filter:drop-shadow(0_20px_30px_rgba(7,89,133,.25))]';
@@ -19,6 +19,7 @@ export default function AncamanPenyu({ onBack }) {
   const [effectOrder] = useState(createEffectOrder);
   const [checkedMatches, setCheckedMatches] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [actionOptionOrders] = useState(createActionOptionOrders);
   const [answers, setAnswers] = useState({});
   const [checkedAnswers, setCheckedAnswers] = useState({});
   const [finished, setFinished] = useState(false);
@@ -126,10 +127,10 @@ export default function AncamanPenyu({ onBack }) {
                   <p className="mt-4 text-sm font-bold leading-relaxed sm:text-base">{question.question}</p>
                   <fieldset className="mt-6 space-y-3" disabled={Boolean(answerCorrect)}>
                     <legend className="sr-only">Pilih tindakan yang paling tepat</legend>
-                    {question.options.map((option, index) => (
+                    {actionOptionOrders[questionIndex].map((index, position) => (
                       <label key={`${questionIndex}-${index}`} className={`flex cursor-pointer items-start gap-3 rounded-2xl border-2 p-4 text-sm font-bold leading-relaxed ${answers[questionIndex] === index ? 'border-sky-500 bg-sky-50' : 'border-sky-100'}`}>
                         <input type="radio" name={`action-${questionIndex}`} checked={answers[questionIndex] === index} onChange={() => { setAnswers({ ...answers, [questionIndex]: index }); setCheckedAnswers({ ...checkedAnswers, [questionIndex]: false }); }} className="mt-1 h-4 w-4 shrink-0 accent-sky-600" />
-                        <span><span className="mr-2 font-black text-sky-600">{String.fromCharCode(65 + index)}.</span>{option}</span>
+                        <span><span className="mr-2 font-black text-sky-600">{String.fromCharCode(65 + position)}.</span>{question.options[index]}</span>
                       </label>
                     ))}
                   </fieldset>
