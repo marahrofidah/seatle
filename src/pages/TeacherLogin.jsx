@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, LoaderCircle, LogOut, RefreshCw } from 'lucide-react';
-import loginBackground from '../assets/images/tanpa_penyu.png';
+import loginBackground from '../assets/images/tanpa_penyu.webp';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import BubbleEffects from '../components/BubbleEffects';
 

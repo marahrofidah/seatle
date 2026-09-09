@@ -195,7 +195,7 @@ const ORGANS = [
 const QUIZ_QUESTIONS = [
   {
     id: 1,
-    imageName: 'kuis_karapas.png',
+    imageName: 'kuis_karapas.webp',
     question: 'Perhatikan gambar! Bagian yang ditunjukkan adalah karapas. Apa fungsi bagian tersebut?',
     options: [
       { key: 'A', text: 'Membantu penyu menggali pasir' },
@@ -208,7 +208,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     id: 2,
-    imageName: 'kuis_sirip_depan.png',
+    imageName: 'kuis_sirip_depan.webp',
     question: 'Apa fungsi sirip depan pada penyu laut?',
     options: [
       { key: 'A', text: 'Untuk mengarahkan suara' },
@@ -221,7 +221,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     id: 3,
-    imageName: 'kuis_kelenjar_garam.png',
+    imageName: 'kuis_kelenjar_garam.webp',
     question: 'Mengapa penyu laut memiliki kelenjar garam?',
     options: [
       { key: 'A', text: 'Untuk membuang kelebihan garam dari tubuh' },
@@ -357,43 +357,43 @@ const ECOSYSTEM_ROLES = [
   {
     title: '1. Matahari',
     position: { left: '79%', top: '8%' },
-    imageName: 'ekosistem_matahari.png',
+    imageName: 'ekosistem_matahari.webp',
     desc: 'Matahari merupakan sumber energi utama bagi ekosistem laut. Cahaya matahari membantu lamun dan tumbuhan laut melakukan fotosintesis sehingga dapat tumbuh dengan baik.'
   },
   {
     title: '2. Penyu Laut',
     position: { left: '51%', top: '40%' },
-    imageName: 'ekosistem_penyu.png',
+    imageName: 'ekosistem_penyu.webp',
     desc: 'Penyu laut berperan penting menjaga keseimbangan ekosistem laut. Setiap jenis penyu memiliki makanan berbeda sehingga membantu mengendalikan populasi berbagai organisme laut.'
   },
   {
     title: '3. Padang Lamun',
     position: { left: '12%', top: '55%' },
-    imageName: 'ekosistem_lamun.png',
+    imageName: 'ekosistem_lamun.webp',
     desc: 'Padang lamun adalah tempat hidup dan mencari makan bagi banyak hewan laut, termasuk penyu hijau. Lamun yang dimakan dan dipangkas secara alami oleh penyu membuatnya tetap subur dan sehat.'
   },
   {
     title: '4. Terumbu Karang',
     position: { left: '90%', top: '57%' },
-    imageName: 'ekosistem_karang.png',
+    imageName: 'ekosistem_karang.webp',
     desc: 'Terumbu karang menjadi rumah bagi berbagai jenis ikan dan hewan laut. Penyu sisik membantu menjaga kesehatan terumbu karang dengan memakan spons laut yang dapat menutupi karang.'
   },
   {
     title: '5. Ubur-ubur',
     position: { left: '79%', top: '35%' },
-    imageName: 'ekosistem_uburubur.png',
+    imageName: 'ekosistem_uburubur.webp',
     desc: 'Ubur-ubur merupakan makanan utama penyu belimbing. Dengan memangsa ubur-ubur, penyu membantu mengontrol jumlah populasi ubur-ubur agar tidak memangsa larva ikan secara berlebihan.'
   },
   {
     title: '6. Hewan Dasar Laut',
     position: { left: '51%', top: '86%' },
-    imageName: 'ekosistem_dasarlaut.png',
+    imageName: 'ekosistem_dasarlaut.webp',
     desc: 'Kepiting, kerang, dan teripang hidup di dasar laut. Penyu lekang, penyu tempayan, dan penyu pipih memakan beberapa hewan dasar laut sehingga siklus rantai makanan dasar laut tetap seimbang.'
   },
   {
     title: '7. Ikan',
     position: { left: '18%', top: '40%' },
-    imageName: 'ekosistem_ikan.png',
+    imageName: 'ekosistem_ikan.webp',
     desc: 'Banyak ikan hidup di sekitar padang lamun dan terumbu karang. Jika habitat lautnya terjaga sehat oleh kehadiran penyu, ikan dapat bertelur, tumbuh, dan berkembang biak dengan baik.'
   },
 ];
@@ -707,9 +707,7 @@ export default function MengenalPenyu({ onBack }) {
           </div>
         )}
 
-        {/* ========================================================================= */}
-        {/* 2. BAGIAN BIOLOGI & ANATOMI PENYU (ANATOMI_PENYU.JPEG & POPOVER RESPONSIP) */}
-        {/* ========================================================================= */}
+      
         {activeSectionIndex === 1 && (
           <div className="space-y-8 animate-fadeIn">
             {/* Header info */}
@@ -742,7 +740,6 @@ export default function MengenalPenyu({ onBack }) {
                     draggable={false}
                   />
 
-                  {/* 9 HOTSPOT BUTTONS ON ANATOMI_PENYU.JPEG */}
                   {[
                     { id: 'karapas',         number: 1, top: '32%', left: '52%', leftVal: 52 }, // Langsung di atas cangkang karapas
                     { id: 'plastron',        number: 2, top: '58%', left: '42%', leftVal: 42 }, // Di bagian cangkang bawah/dada (plastron)
@@ -918,7 +915,6 @@ export default function MengenalPenyu({ onBack }) {
                   Perhatikan gambar anatomi penyu di bawah ini, lalu jawablah 3 pertanyaan kuis berikut dengan tepat.
                 </p>
 
-                {/* GAMBAR UTAMA ANATOMI_PENYU.JPEG DENGAN PANAH DIAM MENUNJUK KE KARAPAS */}
                 <div className="my-8 relative w-full max-w-3xl mx-auto rounded-2xl border-2 border-sky-200 bg-gradient-to-b from-sky-50 to-emerald-50 p-4 sm:p-6 shadow-inner text-center">
                   <div className="relative inline-block w-full">
                     <img 

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Check, ChevronDown, ChevronUp, LogOut } from 'lucide-react';
-import dashboardBackground from '../assets/images/tanpa_penyu.png';
-import mengenalPenyuImg from '../assets/images/mengenal_penyu.png';
-import ancamanPenyuImg from '../assets/images/ancaman_penyu.png';
-import peduliLingkunganImg from '../assets/images/peduli_lingkungan.png';
-import aksiPeduliImg from '../assets/images/aksi_peduli.png';
-import refleksiImg from '../assets/images/refleksi.png';
-import glosariumImg from '../assets/images/glosarium.png';
-import galleryImg from '../assets/images/gallery.png';
+import dashboardBackground from '../assets/images/tanpa_penyu.webp';
+import mengenalPenyuImg from '../assets/images/mengenal_penyu.webp';
+import ancamanPenyuImg from '../assets/images/ancaman_penyu.webp';
+import peduliLingkunganImg from '../assets/images/peduli_lingkungan.webp';
+import aksiPeduliImg from '../assets/images/aksi_peduli.webp';
+import refleksiImg from '../assets/images/refleksi.webp';
+import glosariumImg from '../assets/images/glosarium.webp';
+import galleryImg from '../assets/images/gallery.webp';
 import BubbleEffects from '../components/BubbleEffects';
 import { getCompletedAspects } from '../lib/studentProgress';
 
