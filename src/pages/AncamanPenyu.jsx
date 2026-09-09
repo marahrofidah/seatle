@@ -71,10 +71,8 @@ export default function AncamanPenyu({ onBack }) {
 
         {finished ? (
           <section className={`${wavyCard} px-8 py-12 text-center before:bg-amber-50 sm:px-14 sm:py-16 md:px-16`}>
-            <Flag className="mx-auto mb-5 h-16 w-16 text-amber-600" aria-hidden="true" />
-            <p className="text-xs font-black uppercase tracking-[.25em] text-amber-800">Penyelidikan selesai</p>
             <h2 className="mt-3 font-brand text-3xl font-black">Misi Ancaman Penyu tuntas!</h2>
-            <p className="mx-auto mt-4 max-w-lg text-sm font-bold leading-relaxed">Kamu sudah mengidentifikasi dugaan penyebab, memasangkan lima dampak, dan menentukan tindakan pada lima situasi. Misi ini menyumbang 25% progress belajarmu.</p>
+            <p className="mx-auto mt-4 max-w-lg text-sm font-bold leading-relaxed">Kamu sudah mengidentifikasi dugaan penyebab, memasangkan lima dampak, dan menentukan tindakan pada lima situasi. Misi ini menambah 25% progress belajarmu.</p>
             <button type="button" onClick={onBack} className={`${primaryButton} mt-8`}>Kembali ke peta <ArrowRight className="h-4 w-4" /></button>
           </section>
         ) : (
