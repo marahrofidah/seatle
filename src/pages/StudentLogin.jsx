@@ -41,8 +41,8 @@ export default function StudentLogin({ onBack }) {
 
   return (
     <main
-      className="relative flex min-h-screen items-center justify-center overflow-x-hidden bg-sky-600 bg-cover bg-center px-4 py-8"
-      style={{ backgroundImage: `url(${loginBackground})` }}
+      className="page-background relative flex min-h-screen items-center justify-center overflow-x-hidden bg-sky-600 bg-cover bg-center px-4 py-8"
+      style={{ '--page-background': `url(${loginBackground})` }}
     >
       <BubbleEffects />
       <div className="absolute inset-0 bg-sky-950/10" />

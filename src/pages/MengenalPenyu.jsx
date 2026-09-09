@@ -513,8 +513,8 @@ export default function MengenalPenyu({ onBack }) {
 
   return (
     <main 
-      className="relative min-h-screen overflow-x-hidden bg-sky-700 bg-cover bg-center bg-fixed text-sky-950 font-sans selection:bg-sky-500 selection:text-white pb-24"
-      style={{ backgroundImage: `url(${dashboardBackground})` }}
+      className="page-background relative min-h-screen overflow-x-hidden bg-sky-700 bg-cover bg-center text-sky-950 font-sans selection:bg-sky-500 selection:text-white pb-24"
+      style={{ '--page-background': `url(${dashboardBackground})` }}
     >
       <BubbleEffects />
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-sky-300/10 via-sky-700/10 to-sky-950/40" />

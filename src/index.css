@@ -5,6 +5,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* A separate fixed layer avoids mobile background-attachment repaint issues. */
+.page-background {
+  isolation: isolate;
+}
+
+.page-background::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  height: 100lvh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--page-background);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 @layer base {
   html, body {
     margin: 0;

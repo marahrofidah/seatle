@@ -26,12 +26,9 @@ const bubbles = [
 export default function Home({ onStart }) {
   return (
     <div 
-      className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden select-none bg-sky-600"
+      className="page-background relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden select-none bg-sky-600"
       style={{
-        backgroundImage: `url(${bgSeatle})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        '--page-background': `url(${bgSeatle})`,
       }}
     >
       <BubbleEffects ambient={false} />
