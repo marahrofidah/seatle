@@ -124,7 +124,6 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess }) {
                 <CheckCircle2 className="h-20 w-20 text-emerald-300 drop-shadow-lg" />
                 <h2 className="mt-4 font-brand text-3xl font-black">Berhasil Masuk!</h2>
                 <p className="mt-2 text-sm font-semibold text-sky-700">Data {name.trim()} sudah terhubung ke guru.</p>
-                <button type="button" onClick={() => setStudentDone(false)} className="mt-7 rounded-full bg-amber-400 px-8 py-3 font-black text-amber-950 shadow-lg transition hover:scale-105">Kembali</button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
