@@ -20,22 +20,22 @@ import {
   Award,
   ChevronDown
 } from 'lucide-react';
-import dashboardBackground from '../assets/images/tanpa_penyu.png';
+import dashboardBackground from '../assets/images/tanpa_penyu.webp';
 import BubbleEffects from '../components/BubbleEffects';
 import { completeAspect } from '../lib/studentProgress';
-import mengenalPenyuImg from '../assets/images/mengenal_penyu.png';
-import infografisAnatomiImg from '../assets/images/anatomi_penyu.jpeg';
-import telurImg from '../assets/images/telur.png';
-import tukikImg from '../assets/images/tukik.png';
-import penyuRemajaImg from '../assets/images/penyu_remaja.png';
-import penyuDewasaImg from '../assets/images/penyu_dewasa.png';
-import peranPenyuImg from '../assets/images/peran_penyu.png';
-import penyuHijauImg from '../assets/images/anatomi_penyu.jpeg';
+import mengenalPenyuImg from '../assets/images/mengenal_penyu.webp';
+import infografisAnatomiImg from '../assets/images/anatomi_penyu.webp';
+import telurImg from '../assets/images/telur.webp';
+import tukikImg from '../assets/images/tukik.webp';
+import penyuRemajaImg from '../assets/images/penyu_remaja.webp';
+import penyuDewasaImg from '../assets/images/penyu_dewasa.webp';
+import peranPenyuImg from '../assets/images/peran_penyu.webp';
+import penyuHijauImg from '../assets/images/anatomi_penyu.webp';
 import penyuPipihImg from '../assets/images/penyu_pipih.webp';
 import penyuBelimbingImg from '../assets/images/penyu_belimbing.webp';
-import penyuLekangImg from '../assets/images/penyu_lekang.jpeg';
-import penyuTempayanImg from '../assets/images/penyu_tempayan.png';
-import penyuSisikImg from '../assets/images/penyu_sisik.jpeg';
+import penyuLekangImg from '../assets/images/penyu_lekang.webp';
+import penyuTempayanImg from '../assets/images/penyu_tempayan.webp';
+import penyuSisikImg from '../assets/images/penyu_sisik.webp';
 
 // Section Navigation Tabs
 const SECTIONS = [
