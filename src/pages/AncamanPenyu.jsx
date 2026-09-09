@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Flag, Search } from 'lucide-react';
-import background from '../assets/images/tanpa_penyu.png';
-import turtle from '../assets/images/ancaman_penyu.png';
+import background from '../assets/images/tanpa_penyu.webp';
+import turtle from '../assets/images/ancaman_penyu.webp';
 import BubbleEffects from '../components/BubbleEffects';
 import ThreatConnections from '../components/ThreatConnections';
 import { completeAspect } from '../lib/studentProgress';
