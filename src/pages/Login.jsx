@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, BookOpen, CheckCircle2, Eye, EyeOff, GraduationCap, KeyRound, LoaderCircle, UserRound, UsersRound } from 'lucide-react';
-import loginBackground from '../assets/images/login_bg.png';
+import loginBackground from '../assets/images/login_bg.webp';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import BubbleEffects from '../components/BubbleEffects';
 

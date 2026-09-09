@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import bgSeatle from '../assets/images/bg_seatle.png';
+import bgSeatle from '../assets/images/bg_seatle.webp';
 import BubbleEffects from '../components/BubbleEffects';
 
 const titleLetters = [
