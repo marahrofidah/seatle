@@ -4,20 +4,10 @@ import {
   ArrowRight, 
   Check, 
   CheckCircle2, 
-  HelpCircle, 
   Info, 
-  Sparkles, 
-  Waves, 
   Compass, 
-  Shield, 
-  Heart, 
   RotateCcw,
   CircleAlert,
-  Sun,
-  Fish,
-  Layers,
-  Activity,
-  Award,
   ChevronDown
 } from 'lucide-react';
 import dashboardBackground from '../assets/images/tanpa_penyu.webp';
@@ -30,7 +20,7 @@ import tukikImg from '../assets/images/tukik.webp';
 import penyuRemajaImg from '../assets/images/penyu_remaja.webp';
 import penyuDewasaImg from '../assets/images/penyu_dewasa.webp';
 import peranPenyuImg from '../assets/images/peran_penyu.webp';
-import penyuHijauImg from '../assets/images/anatomi_penyu.webp';
+import penyuHijauImg from '../assets/images/penyu_hijau.webp';
 import penyuPipihImg from '../assets/images/penyu_pipih.webp';
 import penyuBelimbingImg from '../assets/images/penyu_belimbing.webp';
 import penyuLekangImg from '../assets/images/penyu_lekang.webp';
@@ -106,32 +96,8 @@ const ORGANS = [
     ringColor: 'ring-amber-400',
   },
   {
-    id: 'scutes',
-    number: 3,
-    name: 'Scutes',
-    description: 'Lempengan keratin keras yang melapisi dan melindungi karapas.',
-    badge: 'Lapisan Keratin',
-    colorCard: 'bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100/90',
-    numberBg: 'bg-rose-500 text-white',
-    badgeStyle: 'bg-rose-100 text-rose-800 border-rose-300',
-    dotColor: 'bg-rose-500',
-    ringColor: 'ring-rose-400',
-  },
-  {
-    id: 'marginal',
-    number: 4,
-    name: 'Marginal & Inframarginal Scutes',
-    description: 'Sisik di sepanjang tepi cangkang yang memperkuat struktur tempurung.',
-    badge: 'Tepi Cangkang',
-    colorCard: 'bg-purple-50/90 border-purple-300 text-purple-950 hover:bg-purple-100/90',
-    numberBg: 'bg-purple-600 text-white',
-    badgeStyle: 'bg-purple-100 text-purple-800 border-purple-300',
-    dotColor: 'bg-purple-600',
-    ringColor: 'ring-purple-400',
-  },
-  {
     id: 'sirip_depan',
-    number: 5,
+    number: 3,
     name: 'Sirip Depan',
     description: 'Berfungsi sebagai pendorong utama saat berenang, layaknya kepakan sayap di dalam air.',
     badge: 'Pendorong Utama',
@@ -143,7 +109,7 @@ const ORGANS = [
   },
   {
     id: 'sirip_belakang',
-    number: 6,
+    number: 4,
     name: 'Sirip Belakang',
     description: 'Berfungsi sebagai kemudi arah dan penyeimbang. Bagi betina, sirip ini juga digunakan untuk menggali sarang.',
     badge: 'Kemudi & Penggali',
@@ -155,7 +121,7 @@ const ORGANS = [
   },
   {
     id: 'paruh',
-    number: 7,
+    number: 5,
     name: 'Paruh',
     description: 'Pengganti gigi yang keras dan tajam untuk memotong serta merobek makanan.',
     badge: 'Alat Makan',
@@ -167,7 +133,7 @@ const ORGANS = [
   },
   {
     id: 'kelenjar_garam',
-    number: 8,
+    number: 6,
     name: 'Kelenjar Garam',
     description: 'Terletak di belakang mata untuk membuang kelebihan garam dari tubuh. Efek sekresinya membuat penyu tampak seperti "menangis".',
     badge: 'Osmoregulasi',
@@ -178,11 +144,11 @@ const ORGANS = [
     ringColor: 'ring-blue-400',
   },
   {
-    id: 'sisik_kuku',
-    number: 9,
-    name: 'Sisik & Kuku',
-    description: 'Sisik melindungi kulit kepala dan wajah, sedangkan kuku pada sirip membantu penyu merayap di darat dan menggali pasir.',
-    badge: 'Pelindung & Cengkeram',
+    id: 'kepala',
+    number: 7,
+    name: 'Kepala',
+    description: 'Bagian tubuh tempat otak dan organ indra, seperti mata dan lubang hidung, berada.',
+    badge: 'Pusat Indra',
     colorCard: 'bg-teal-50/90 border-teal-300 text-teal-950 hover:bg-teal-100/90',
     numberBg: 'bg-teal-600 text-white',
     badgeStyle: 'bg-teal-100 text-teal-800 border-teal-300',
@@ -717,11 +683,10 @@ export default function MengenalPenyu({ onBack }) {
                   Biologi &amp; Anatomi Penyu Laut
                 </h1>
                 <p className="mt-2 text-xs sm:text-sm md:text-base font-bold text-sky-800 leading-relaxed">
-                  Tekan salah satu angka (1–9) pada gambar penyu di bawah untuk melihat penjelasan bagian organ tubuh tersebut.
+                  Tekan salah satu angka (1–7) pada gambar penyu di bawah untuk melihat penjelasan bagian organ tubuh tersebut.
                 </p>
 
-                {/* Quick Selector Bar (Nomor 1-9) */}
-                
+
               </div>
             </section>
 
@@ -731,7 +696,8 @@ export default function MengenalPenyu({ onBack }) {
                 {/* Outer wrapper: OVERFLOW VISIBLE agar popover tidak terpotong! */}
                 <div className="relative w-full max-w-4xl mx-auto select-none rounded-2xl border-2 border-sky-200 bg-gradient-to-b from-sky-50 to-emerald-50 p-4 sm:p-6 md:p-8 shadow-inner overflow-visible">
                   
-                  {/* Gambar Anatomi Penyu Isolated */}
+                  {/* Titik mengikuti ukuran gambar tanpa menghitung padding bingkai. */}
+                  <div className="relative">
                   <img
                     src={infografisAnatomiImg}
                     onError={(e) => { e.target.onerror = null; e.target.src = mengenalPenyuImg; }}
@@ -741,15 +707,13 @@ export default function MengenalPenyu({ onBack }) {
                   />
 
                   {[
-                    { id: 'karapas',         number: 1, top: '32%', left: '52%', leftVal: 52 }, // Langsung di atas cangkang karapas
-                    { id: 'plastron',        number: 2, top: '58%', left: '42%', leftVal: 42 }, // Di bagian cangkang bawah/dada (plastron)
-                    { id: 'scutes',          number: 3, top: '46%', left: '60%', leftVal: 60 }, // Di lempengan keratin scutes cangkang
-                    { id: 'marginal',        number: 4, top: '54%', left: '74%', leftVal: 74 }, // Di pinggiran/tepi cangkang (marginal)
-                    { id: 'sirip_depan',     number: 5, top: '74%', left: '38%', leftVal: 38 }, // Langsung di sirip depan
-                    { id: 'sirip_belakang',  number: 6, top: '68%', left: '79%', leftVal: 79 }, // Pas di atas sirip belakang
-                    { id: 'paruh',           number: 7, top: '20%', left: '18.5%', leftVal: 18.5 }, // Pas di atas paruh/mulut penyu
-                    { id: 'kelenjar_garam',  number: 8, top: '16%', left: '28%', leftVal: 28 }, // Di kepala bagian belakang mata
-                    { id: 'sisik_kuku',      number: 9, top: '28%', left: '24%', leftVal: 24 }, // Di sisik pipi/wajah penyu
+                    { id: 'karapas',        number: 1, top: '26%', left: '57%', leftVal: 57 },
+                    { id: 'plastron',       number: 2, top: '65%', left: '53%', leftVal: 53 },
+                    { id: 'sirip_depan',    number: 3, top: '84%', left: '43.5%', leftVal: 43.5 },
+                    { id: 'sirip_belakang', number: 4, top: '67%', left: '78%', leftVal: 78 },
+                    { id: 'paruh',          number: 5, top: '15.5%', left: '19%', leftVal: 19 },
+                    { id: 'kelenjar_garam', number: 6, top: '20.5%', left: '26.5%', leftVal: 26.5 },
+                    { id: 'kepala',         number: 7, top: '19%', left: '30%', leftVal: 30 },
                   ].map((hotspot) => {
                     const isActive = selectedOrganId === hotspot.id;
                     const organ = ORGANS.find((o) => o.id === hotspot.id);
@@ -768,7 +732,7 @@ export default function MengenalPenyu({ onBack }) {
                         <button
                           type="button"
                           onClick={() => setSelectedOrganId(isActive ? null : hotspot.id)}
-                          className={`relative flex h-6 w-6 sm:h-9 sm:w-9 md:h-11 md:w-11 items-center justify-center rounded-full font-brand text-[10px] sm:text-sm md:text-base font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${
+                          className={`relative flex h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full font-brand text-[9px] sm:text-xs md:text-sm font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${
                             isActive
                               ? `${organ.numberBg} scale-125 ring-4 ${organ.ringColor} shadow-xl animate-pulse`
                               : `${organ.numberBg} opacity-90 hover:opacity-100 hover:scale-110`
@@ -832,6 +796,7 @@ export default function MengenalPenyu({ onBack }) {
                       </div>
                     );
                   })}
+                  </div>
                 </div>
 
                 {/* KARTU PENJELASAN ORGAN DI BAWAH GAMBAR HANYA PADA MODE DEVICE/MOBILE (BLOCK MD:HIDDEN) */}
