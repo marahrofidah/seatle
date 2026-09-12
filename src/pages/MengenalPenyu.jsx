@@ -728,11 +728,20 @@ export default function MengenalPenyu({ onBack }) {
                         style={{ top: hotspot.top, left: hotspot.left, transform: 'translate(-50%, -50%)' }}
                         className={`absolute ${isActive ? 'z-50' : 'z-20'}`}
                       >
+                        {/* Pisahkan label kepala di HP; garis tetap menunjuk lokasi anatomi. */}
+                        {(hotspot.number === 6 || hotspot.number === 7) && (
+                          <span
+                            aria-hidden="true"
+                            className={`pointer-events-none absolute left-1/2 -translate-x-1/2 w-px bg-sky-800 sm:hidden ${hotspot.number === 6 ? 'top-1/2 h-7' : 'bottom-1/2 h-4'}`}
+                          >
+                            <span className={`absolute left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-sky-800 ${hotspot.number === 6 ? 'top-0' : 'bottom-0'}`} />
+                          </span>
+                        )}
                         {/* Tombol Angka */}
                         <button
                           type="button"
                           onClick={() => setSelectedOrganId(isActive ? null : hotspot.id)}
-                          className={`relative flex h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full font-brand text-[9px] sm:text-xs md:text-sm font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${
+                          className={`relative flex h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full font-brand text-[9px] sm:text-xs md:text-sm font-black shadow-lg border-2 border-white transition duration-200 cursor-pointer ${hotspot.number === 6 ? 'translate-y-7 sm:translate-y-0' : hotspot.number === 7 ? '-translate-y-4 sm:translate-y-0' : ''} ${
                             isActive
                               ? `${organ.numberBg} scale-125 ring-4 ${organ.ringColor} shadow-xl animate-pulse`
                               : `${organ.numberBg} opacity-90 hover:opacity-100 hover:scale-110`
