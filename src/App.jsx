@@ -6,9 +6,13 @@ import TeacherLogin from './pages/TeacherLogin';
 import StudentDashboard from './pages/StudentDashboard';
 import MengenalPenyu from './pages/MengenalPenyu';
 import AncamanPenyu from './pages/AncamanPenyu';
+import PeduliLingkungan from './pages/PeduliLingkungan';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(() => {
+    const hash = window.location.hash.slice(1);
+    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'student-dashboard'].includes(hash) ? hash : 'home';
+  });
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -17,6 +21,8 @@ export default function App() {
         setCurrentPage('mengenal-penyu');
       } else if (hash === 'ancaman-penyu') {
         setCurrentPage('ancaman-penyu');
+      } else if (hash === 'peduli-lingkungan') {
+        setCurrentPage('peduli-lingkungan');
       } else if (hash === 'student-dashboard') {
         setCurrentPage('student-dashboard');
       }
@@ -55,6 +61,8 @@ export default function App() {
             setCurrentPage('mengenal-penyu');
           } else if (slug === 'ancaman-penyu') {
             setCurrentPage('ancaman-penyu');
+          } else if (slug === 'peduli-lingkungan') {
+            setCurrentPage('peduli-lingkungan');
           }
         }} 
       />
@@ -67,6 +75,10 @@ export default function App() {
 
   if (currentPage === 'ancaman-penyu') {
     return <AncamanPenyu onBack={() => setCurrentPage('student-dashboard')} />;
+  }
+
+  if (currentPage === 'peduli-lingkungan') {
+    return <PeduliLingkungan onBack={() => setCurrentPage('student-dashboard')} />;
   }
 
   return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;

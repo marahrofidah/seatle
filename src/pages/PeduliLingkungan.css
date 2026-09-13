@@ -1,0 +1,71 @@
+.care-ocean { --care-ink: #164e63; }
+.care-heading { display: flex; justify-content: space-between; align-items: center; gap: 2rem; max-width: 900px; margin: 1.5rem auto 2rem; color: #f0fdfa; }
+.care-eyebrow { font-size: .65rem; letter-spacing: .15em; font-weight: 900; color: #a5f3fc; }
+.care-heading h1 { margin: .6rem 0; font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.2; font-weight: 500; }
+.care-heading p:last-child { max-width: 520px; color: #d4eef1; font-size: .85rem; line-height: 1.7; }
+.care-completion { flex-shrink: 0; border-left: 1px solid #cffafe55; padding-left: 1.5rem; }
+.care-completion strong { font-family: Fredoka, sans-serif; display: block; font-size: 2.3rem; font-weight: 500; }
+.care-completion strong span { font-size: 1.25rem; color: #a4cdd5; }
+.care-completion small { font-size: .65rem; color: #d4eef1; }
+.care-activity { max-width: 900px; margin: auto; }
+.care-water-panel { position: relative; isolation: isolate; min-width: 0; color: var(--care-ink); filter: drop-shadow(0 20px 30px #07598540); }
+.care-water-panel::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; clip-path: url(#care-wavy-card); background: #f4fcfbed; backdrop-filter: blur(14px); }
+.care-activity-panel { padding: 3rem 3.5rem; }
+.care-section-nav { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; border-bottom: 1px solid #c4ddd9; }
+.care-section-nav button { display: flex; align-items: center; gap: .5rem; min-height: 48px; padding: .6rem 0 1rem; color: #57777e; font-size: .8rem; font-weight: 800; border-bottom: 2px solid transparent; }
+.care-section-nav button > span { display: grid; place-items: center; width: 21px; height: 21px; border: 1px solid #abc9c8; border-radius: 50%; font-size: .65rem; }
+.care-section-nav .is-active { color: #0f766e; border-bottom-color: #0f766e; }
+.care-section-nav .is-active > span { background: #0f766e; color: white; border-color: #0f766e; }
+.care-section-nav button:focus-visible, .care-question-dots button:focus-visible, .care-question-controls button:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
+.care-activity-panel h2 { font-size: 1.8rem; font-weight: 500; }
+.care-commitment-grid { display: grid; gap: 1.5rem; }
+.care-answer { background: #ffffffb0; border: 1px solid #afcccf; border-radius: 12px; box-shadow: none; }
+.care-promise-preview { border-left: 3px solid #6eb7ac; padding: .7rem 1.2rem; background: #e5f3ef80; }
+.care-promise-preview p { font-family: Nunito, sans-serif; font-size: 1rem; line-height: 1.7; }
+.care-feelings { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; margin: 1rem 0; }
+.care-feeling { min-width: 0; }
+.care-feeling > span { min-height: 115px; padding: 1rem .5rem; border-radius: 12px; border-width: 1px; border-color: #c6dedb; box-shadow: none; background: #ffffff70; }
+.care-feeling > span > span:first-child { font-size: 1.7rem; }
+.care-feeling > span > span:nth-child(2) { font-size: .72rem; font-weight: 800; }
+.care-feeling input:checked + span { background: #dff3ec; border-color: #0f766e; box-shadow: none; }
+.care-question-progress { margin: 1.7rem 0 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.care-question-progress p { font-size: .75rem; font-weight: 800; }
+.care-question-progress p span { color: #63818a; font-weight: 600; }
+.care-question-dots { display: flex; gap: .4rem; }
+.care-question-dots button { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #bad3d1; border-radius: 50%; font-size: .7rem; color: #57777e; }
+.care-question-dots .is-answered { color: #0f766e; background: #d9efea; }
+.care-question-dots .is-current { border: 2px solid #0f766e; color: #0f766e; }
+.care-statement { min-width: 0; border: 0; padding: 0; }
+.care-statement legend { min-height: 85px; width: 100%; font-family: Fredoka, sans-serif; font-size: 1.55rem; font-weight: 400; line-height: 1.4; }
+.care-agreement-options { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-top: 1.2rem; }
+.care-agreement-option { display: flex; align-items: center; gap: .7rem; min-height: 56px; padding: .8rem 1rem; border: 1px solid #bbd4d2; border-radius: 12px; background: #ffffff90; font-size: .85rem; font-weight: 700; }
+.care-radio-mark { display: grid; place-items: center; width: 18px; height: 18px; flex-shrink: 0; border: 1px solid #8cb3b1; border-radius: 50%; }
+.care-agreement-options input:checked + span { border-color: #0f766e; background: #dff3ec; color: #115e59; }
+.care-agreement-options input:checked + span .care-radio-mark { color: white; background: #0f766e; border-color: #0f766e; }
+.care-agreement-options input:focus-visible + span { outline: 3px solid #0284c7; outline-offset: 2px; }
+.care-question-controls { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.2rem; }
+.care-question-controls button { display: flex; align-items: center; gap: .5rem; min-height: 44px; color: #0f766e; font-size: .8rem; font-weight: 800; }
+.care-question-controls button:disabled { opacity: .35; cursor: not-allowed; }
+@media (max-width: 639px) {
+  .care-heading { margin: 1rem .5rem 1.2rem; gap: 1rem; }
+  .care-heading h1 { font-size: 1.75rem; }
+  .care-heading p:last-child { font-size: .75rem; }
+  .care-completion { padding-left: .7rem; }
+  .care-completion strong { font-size: 1.8rem; }
+  .care-completion small { display: block; max-width: 65px; line-height: 1.4; }
+  .care-activity-panel { padding: 2.4rem 1.5rem; }
+  .care-section-nav { gap: .8rem; justify-content: space-between; margin-bottom: 1.5rem; }
+  .care-section-nav button { font-size: .7rem; gap: .35rem; }
+  .care-feelings { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+  .care-feeling > span { min-height: 80px; flex-direction: row; justify-content: flex-start; text-align: left; gap: .6rem; padding: .7rem; }
+  .care-feeling:last-child { grid-column: 1 / -1; }
+  .care-feeling > span > span:first-child { font-size: 1.4rem; }
+  .care-feeling > span > span:nth-child(2) { font-size: .7rem; }
+  .care-question-progress { flex-direction: column; align-items: flex-start; gap: .8rem; margin-bottom: 1.5rem; }
+  .care-question-dots button { width: 36px; height: 36px; }
+  .care-statement legend { font-size: 1.25rem; min-height: 120px; }
+  .care-agreement-option { font-size: .75rem; padding: .8rem .6rem; gap: .4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .care-ocean *, .care-ocean *::before { scroll-behavior: auto !important; transition: none !important; }
+}
