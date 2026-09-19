@@ -483,7 +483,6 @@ export default function MengenalPenyu({ onBack }) {
       style={{ '--page-background': `url(${dashboardBackground})` }}
     >
       <BubbleEffects />
-      <div className="pointer-events-none fixed inset-0 bg-gradient-to-b from-sky-300/10 via-sky-700/10 to-sky-950/40" />
 
       {/* DEFINISI SVG CLIP-PATH GELOMBANG ORGANIK RESMI SEATLE (SAMA DENGAN LOGIN & DASHBOARD) */}
       <svg className="absolute h-0 w-0" aria-hidden="true">

@@ -82,7 +82,6 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess }) {
       style={{ '--page-background': `url(${loginBackground})` }}
     >
       <BubbleEffects />
-      <div className="absolute inset-0 bg-sky-900/10" />
 
       <button type="button" onClick={onBack} className="absolute left-5 top-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border-2 border-sky-100 bg-white text-sky-950 shadow-lg transition hover:-translate-x-1 hover:bg-sky-50" aria-label="Kembali ke halaman utama">
         <ArrowLeft className="h-6 w-6 stroke-[2.5]" />

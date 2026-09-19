@@ -112,7 +112,6 @@ export default function PeduliLingkungan({ onBack }) {
           </clipPath>
         </defs>
       </svg>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-sky-950/65 via-sky-950/40 to-sky-950/60" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-3 sm:px-6">
         <header className="flex items-center gap-3 py-4">
@@ -121,7 +120,7 @@ export default function PeduliLingkungan({ onBack }) {
         </header>
 
         <div className="care-heading">
-          <div><p className="care-eyebrow">MISI 03 / ASPEK SIKAP</p><h1>Peduli dimulai dari diri sendiri.</h1><p>Luangkan waktu untuk memikirkan satu tindakan, perasaan, dan sikapmu terhadap laut.</p></div>
+          <div><h1>Peduli dimulai dari diri sendiri.</h1><p>Luangkan waktu untuk memikirkan satu tindakan, perasaan, dan sikapmu terhadap laut.</p></div>
           <div className="care-completion" role="progressbar" aria-label="Bagian refleksi tersimpan" aria-valuemin={0} aria-valuemax={3} aria-valuenow={completedCount}><div className="care-progress-ring" style={{ '--care-progress': `${completedCount / 3 * 100}%` }}><strong>{completedCount}<span>/3</span></strong></div><small>bagian tersimpan</small></div>
         </div>
 

@@ -45,7 +45,6 @@ export default function StudentLogin({ onBack }) {
       style={{ '--page-background': `url(${loginBackground})` }}
     >
       <BubbleEffects />
-      <div className="absolute inset-0 bg-sky-950/10" />
 
       <button
         type="button"

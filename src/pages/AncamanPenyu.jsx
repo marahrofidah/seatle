@@ -44,7 +44,6 @@ export default function AncamanPenyu({ onBack }) {
   return (
     <main className="page-background relative min-h-screen overflow-x-hidden bg-sky-800 bg-cover bg-center pb-16 text-sky-950" style={{ '--page-background': `url(${background})` }}>
       <BubbleEffects />
-      <div className="pointer-events-none absolute inset-0 bg-sky-950/20" />
       <svg className="absolute h-0 w-0" aria-hidden="true">
         <defs>
           <clipPath id="threat-wavy-card" clipPathUnits="objectBoundingBox">

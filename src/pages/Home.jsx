@@ -32,8 +32,6 @@ export default function Home({ onStart }) {
       }}
     >
       <BubbleEffects ambient={false} />
-      {/* SOFT OVERLAY FOR OPTIMAL READABILITY */}
-      <div className="absolute inset-0 bg-sky-900/10 pointer-events-none" />
 
       <style>{`
         @keyframes playful-float {

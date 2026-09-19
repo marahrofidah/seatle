@@ -121,7 +121,6 @@ export default function TeacherLogin({ onBack }) {
   return (
     <main className="page-background relative flex min-h-screen items-center justify-center overflow-hidden bg-sky-600 bg-cover bg-center px-4 py-8" style={{ '--page-background': `url(${loginBackground})` }}>
       <BubbleEffects />
-      <div className="absolute inset-0 bg-sky-950/10" />
       <button type="button" onClick={onBack} className="absolute left-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/70 bg-white/50 text-sky-950 shadow-lg backdrop-blur-md transition hover:-translate-x-1" aria-label="Kembali"><ArrowLeft className="h-6 w-6 stroke-[3]" /></button>
       <section className="relative z-10 w-full max-w-md rounded-[2rem] border-4 border-emerald-200 bg-emerald-50/90 p-6 text-center shadow-[0_22px_55px_rgba(7,89,133,.35)] backdrop-blur-md sm:p-8">
         <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-200 to-emerald-500 text-3xl shadow-lg" aria-hidden="true">✦</div>
