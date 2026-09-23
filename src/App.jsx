@@ -7,16 +7,18 @@ import StudentDashboard from './pages/StudentDashboard';
 import MengenalPenyu from './pages/MengenalPenyu';
 import AncamanPenyu from './pages/AncamanPenyu';
 import PeduliLingkungan from './pages/PeduliLingkungan';
+import AksiPeduli from './pages/AksiPeduli';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
     const hash = window.location.hash.slice(1);
-    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'student-dashboard'].includes(hash) ? hash : 'home';
+    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'gallery', 'student-dashboard'].includes(hash) ? hash : 'home';
   });
 
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
+      if (hash === 'aksi-peduli' || hash === 'gallery') { setCurrentPage(hash); return; }
       if (hash === 'mengenal-penyu') {
         setCurrentPage('mengenal-penyu');
       } else if (hash === 'ancaman-penyu') {
@@ -63,6 +65,8 @@ export default function App() {
             setCurrentPage('ancaman-penyu');
           } else if (slug === 'peduli-lingkungan') {
             setCurrentPage('peduli-lingkungan');
+          } else if (slug === 'aksi-peduli') {
+            setCurrentPage('aksi-peduli');
           }
         }} 
       />
@@ -79,6 +83,10 @@ export default function App() {
 
   if (currentPage === 'peduli-lingkungan') {
     return <PeduliLingkungan onBack={() => setCurrentPage('student-dashboard')} />;
+  }
+
+  if (currentPage === 'aksi-peduli' || currentPage === 'gallery') {
+    return <AksiPeduli key={currentPage} initialTab={currentPage === 'gallery' ? 'gallery' : 'journal'} onBack={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} />;
   }
 
   return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;

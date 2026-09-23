@@ -81,7 +81,7 @@ const extraMenus = [
   },
   { 
     label: 'GALLERY', 
-    description: 'Lihat koleksi foto keindahan dunia penyu', 
+    description: 'Jelajahi poster kampanye karya Sahabat Penyu',
     image: galleryImg, 
     href: '#gallery', 
   },

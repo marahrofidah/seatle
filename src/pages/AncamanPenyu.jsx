@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, Flag, Search } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Search } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.webp';
 import turtle from '../assets/images/ancaman_penyu.webp';
 import BubbleEffects from '../components/BubbleEffects';
