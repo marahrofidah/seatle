@@ -1,9 +1,15 @@
+import feelingImage0 from '../assets/images/sedih.png';
+import feelingImage1 from '../assets/images/prihatin.png';
+import feelingImage2 from '../assets/images/senang_ingin_membantu.png';
+import feelingImage3 from '../assets/images/peduli.png';
+import feelingImage4 from '../assets/images/terkejut.png';
+
 export const feelings = [
-  { id: 'sedih', emoji: '😢', label: 'Sedih' },
-  { id: 'prihatin', emoji: '😟', label: 'Prihatin' },
-  { id: 'senang', emoji: '🥰', label: 'Senang ingin membantu' },
-  { id: 'peduli', emoji: '💚', label: 'Peduli' },
-  { id: 'terkejut', emoji: '😮', label: 'Terkejut' },
+  { id: 'sedih', image: feelingImage0, label: 'Sedih' },
+  { id: 'prihatin', image: feelingImage1, label: 'Prihatin' },
+  { id: 'senang', image: feelingImage2, label: 'Senang ingin membantu' },
+  { id: 'peduli', image: feelingImage3, label: 'Peduli' },
+  { id: 'terkejut', image: feelingImage4, label: 'Terkejut' },
 ];
 
 export const statements = [

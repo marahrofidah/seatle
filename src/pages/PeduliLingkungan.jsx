@@ -137,7 +137,7 @@ export default function PeduliLingkungan({ onBack }) {
             <div className="mx-auto mt-7 max-w-2xl rounded-3xl border-2 border-sky-200 bg-gradient-to-br from-sky-50 via-white to-amber-50 p-6 sm:p-8">
               <div className="flex items-center justify-between text-sky-700"><span className="text-xs font-black uppercase tracking-widest">Janjiku untuk laut</span><Waves className="h-6 w-6" /></div>
               <p className="mt-4 break-words font-brand text-xl leading-relaxed">Mulai hari ini saya berkomitmen untuk {data.action.trim()}<br /><span className="text-sky-700">Agar {data.purpose.trim()}</span></p>
-              <div className="mt-6 border-t border-sky-200 pt-5"><p className="font-black"><span aria-hidden="true" className="mr-2 text-2xl">{selectedFeeling?.emoji}</span>{selectedFeeling?.label}</p><p className="mt-2 break-words text-sm leading-relaxed">{data.reason}</p></div>
+              <div className="mt-6 border-t border-sky-200 pt-5"><p className="font-black">{selectedFeeling && <img src={selectedFeeling.image} alt="" className="mr-2 inline-block h-10 w-10 object-contain" />}{selectedFeeling?.label}</p><p className="mt-2 break-words text-sm leading-relaxed">{data.reason}</p></div>
               <details className="mt-5 border-t border-sky-200 pt-4"><summary className="cursor-pointer text-sm font-black text-sky-800">Lihat 5 jawaban refleksi sikapku</summary><ol className="mt-4 space-y-4">{statements.map((statement, index) => <li key={statement} className="text-sm leading-relaxed"><p>{index + 1}. {statement}</p><p className="mt-1 font-black text-sky-700">{data.answers[index]}</p></li>)}</ol></details>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-center text-sm font-bold leading-relaxed text-sky-700">{feedback[2]}</p>
@@ -181,13 +181,13 @@ export default function PeduliLingkungan({ onBack }) {
                   <>
                     <p className="text-base font-bold leading-relaxed">Bagaimana perasaanmu setelah melihat perjalanan hidup penyu laut?</p>
                     <div className="care-feeling-spotlight" data-feeling={data.feeling || 'none'} aria-live="polite">
-                      <div className="care-feeling-orbit" aria-hidden="true"><span key={data.feeling}>{selectedFeeling ? selectedFeeling.emoji : <Heart className="h-9 w-9" />}</span></div>
+                      <div className="care-feeling-orbit" aria-hidden="true"><span key={data.feeling}>{selectedFeeling ? <img src={selectedFeeling.image} alt="" className="h-full w-full object-contain" /> : <Heart className="h-9 w-9" />}</span></div>
                       <div><p className="care-section-kicker">PERASAANKU SAAT INI</p><h3>{selectedFeeling?.label || 'Setiap perasaan berarti.'}</h3><p>{selectedFeeling ? 'Apa yang membuatmu merasa demikian? Ceritakan di bawah.' : 'Pilih yang paling dekat dengan perasaanmu. Tidak ada jawaban benar atau salah.'}</p></div>
                     </div>
-                    <fieldset className="mt-5"><legend className="text-sm font-bold text-sky-700">Pilih satu emoji yang paling menggambarkan perasaanmu.</legend><div className="care-feelings">{feelings.map((feeling) => (
+                    <fieldset className="mt-5"><legend className="text-sm font-bold text-sky-700">Pilih satu gambar yang paling menggambarkan perasaanmu.</legend><div className="care-feelings">{feelings.map((feeling) => (
                       <label key={feeling.id} className="care-feeling relative cursor-pointer">
                         <input type="radio" name="feeling" value={feeling.id} required checked={data.feeling === feeling.id} onChange={() => update({ feeling: feeling.id })} className="peer sr-only" />
-                        <span className="flex h-full min-h-32 flex-col items-center justify-center gap-3 rounded-3xl border-2 border-sky-100 bg-white p-3 text-center transition hover:border-sky-300 peer-checked:border-sky-600 peer-checked:bg-sky-50 peer-checked:shadow-md peer-focus-visible:ring-4 peer-focus-visible:ring-sky-400"><span aria-hidden="true" className="text-4xl">{feeling.emoji}</span><span className="text-sm font-black">{feeling.label}</span>{data.feeling === feeling.id && <Check aria-hidden="true" className="absolute right-3 top-3 h-4 w-4 text-sky-700" />}</span>
+                        <span className="flex h-full min-h-32 flex-col items-center justify-center gap-3 rounded-3xl border-2 border-sky-100 bg-white p-3 text-center transition hover:border-sky-300 peer-checked:border-sky-600 peer-checked:bg-sky-50 peer-checked:shadow-md peer-focus-visible:ring-4 peer-focus-visible:ring-sky-400"><span aria-hidden="true" className="shrink-0"><img src={feeling.image} alt="" className="h-12 w-12 object-contain" /></span><span className="text-sm font-black">{feeling.label}</span>{data.feeling === feeling.id && <Check aria-hidden="true" className="absolute right-3 top-3 h-4 w-4 text-sky-700" />}</span>
                       </label>
                     ))}</div></fieldset>
 

@@ -108,15 +108,15 @@
 .care-promise-preview .care-hold-hint { color: #e0f2fe; font-size: .6rem; }
 .care-preview-waves { position: absolute; bottom: 0; left: 0; width: 100%; height: 65px; color: #bae6fd; pointer-events: none; z-index: -1; }
 .care-promise-saved { display: flex; align-items: center; gap: .5rem; margin-top: 1.5rem; padding: .8rem 0; color: #fef3c7; font-size: .8rem; font-weight: 800; }
-.care-feeling-spotlight { --feeling-tint: #e0f2fe; display: flex; align-items: center; gap: 1.8rem; min-height: 168px; margin-top: 1.5rem; padding: 1.6rem 2rem; border-radius: 28px; background: var(--feeling-tint); transition: background .3s; }
+.care-feeling-spotlight { --feeling-tint: #e0f2fe; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem; width: 100%; max-width: 480px; margin: 1.5rem auto 0; padding: 1.5rem 2rem; border-radius: 28px; text-align: center; background: var(--feeling-tint); transition: background .3s; }
 .care-feeling-spotlight[data-feeling=sedih] { --feeling-tint: #1565d8; }
 .care-feeling-spotlight[data-feeling=prihatin] { --feeling-tint: #7535c9; }
 .care-feeling-spotlight[data-feeling=senang] { --feeling-tint: #d51b60; }
 .care-feeling-spotlight[data-feeling=peduli] { --feeling-tint: #118447; }
 .care-feeling-spotlight[data-feeling=terkejut] { --feeling-tint: #ffcc00; }
 .care-feeling-spotlight:is([data-feeling=sedih], [data-feeling=prihatin], [data-feeling=senang], [data-feeling=peduli]) :is(.care-section-kicker, h3, p:last-child) { color: #fff; }
-.care-feeling-orbit { display: grid; place-items: center; flex-shrink: 0; width: 105px; height: 105px; border-radius: 50%; border: 1px solid #fff; box-shadow: 0 0 0 9px #ffffff30; }
-.care-feeling-orbit > span { display: grid; place-items: center; width: 78px; height: 78px; background: #ffffffa0; border-radius: 50%; font-size: 2.6rem; color: #0284c7; animation: care-feeling-appear .25s ease-out; }
+.care-feeling-orbit { display: grid; place-items: center; flex-shrink: 0; width: 105px; height: 105px; }
+.care-feeling-orbit > span { display: grid; place-items: center; width: 100%; height: 100%; font-size: 2.6rem; color: #0284c7; animation: care-feeling-appear .25s ease-out; }
 .care-feeling-spotlight h3 { margin: .4rem 0; font-size: 1.5rem; font-weight: 500; }
 .care-feeling-spotlight p:last-child { max-width: 410px; color: #476b86; font-size: .8rem; line-height: 1.7; }
 .care-feeling > span { border-color: transparent; background: #ffffff70; border-radius: 18px; min-height: 100px; }
@@ -141,9 +141,9 @@
   .care-progress-ring strong { font-size: 1.65rem; }
   .care-progress-ring strong span { font-size: 1rem; }
   .care-promise-preview { padding: 1.5rem; border-radius: 24px 24px 42px 24px; }
-  .care-feeling-spotlight { gap: 1.2rem; padding: 1.4rem 1.1rem; min-height: 140px; }
-  .care-feeling-orbit { width: 65px; height: 65px; box-shadow: 0 0 0 5px #ffffff30; }
-  .care-feeling-orbit > span { width: 52px; height: 52px; font-size: 1.8rem; }
+  .care-feeling-spotlight { gap: .65rem; padding: 1.4rem 1.1rem; }
+  .care-feeling-orbit { width: 65px; height: 65px; }
+  .care-feeling-orbit > span { font-size: 1.8rem; }
   .care-feeling-spotlight h3 { font-size: 1.15rem; }
   .care-feeling-spotlight p:last-child { font-size: .7rem; }
   .care-statement legend { gap: .85rem; min-height: 150px; }
