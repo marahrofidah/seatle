@@ -110,7 +110,7 @@ export default function AksiPeduli({ onBack, initialTab = 'journal' }) {
 
   return <main className="action-ocean island-ocean page-background" style={{ '--page-background': `url(${background})` }}><div className="action-container">
     <header className="action-header"><button onClick={onBack} aria-label="Kembali ke peta misi"><ArrowLeft size={20} /></button><span>Aksi Peduli</span><small>MISI 04 / ASPEK PERILAKU</small></header>
-    <div className="island-page-heading"><div><p className="action-kicker">ASPEK PERILAKU / PRO BEHAVIOUR</p><h1>Aksi kecilmu menghidupkan pulau ini.</h1></div><span>7 HARI AKSI NYATA · 1 KARYA BERSAMA</span></div>
+    <div className="island-page-heading"><div><p className="action-kicker">ASPEK PERILAKU / PRO BEHAVIOUR</p><h1>Aksi kecilmu menghidupkan pulau ini.</h1></div></div>
     <div className="island-content"><nav className="island-navigation" aria-label="Jelajahi pulau">{[['journal', 'Pulau aksi'], ['campaign', 'Pondok kreativitas'], ['gallery', 'Papan kampanye']].map(([id, label]) => <button key={id} aria-current={tab === id ? 'page' : undefined} onClick={() => { setTab(id); setNotice(''); }}>{id === 'journal' ? <Waves size={16} /> : id === 'campaign' ? <Sparkles size={16} /> : <ImagePlus size={16} />}{label}</button>)}</nav>
     {error && <p role="alert" className="action-error">{error}</p>}{notice && <p role="status" className="action-notice"><Check size={18} />{notice}</p>}
     {loading ? <div className="action-panel" role="status">Menyiapkan pulaumu…</div> : <>
