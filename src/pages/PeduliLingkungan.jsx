@@ -180,7 +180,7 @@ export default function PeduliLingkungan({ onBack }) {
                 {step === 1 && (
                   <>
                     <p className="text-base font-bold leading-relaxed">Bagaimana perasaanmu setelah melihat perjalanan hidup penyu laut?</p>
-                    <div className="care-feeling-spotlight" data-feeling={data.feeling || 'none'} aria-live="polite">
+                    <div className="care-feeling-spotlight" aria-live="polite">
                       <div className="care-feeling-orbit" aria-hidden="true"><span key={data.feeling}>{selectedFeeling ? <img src={selectedFeeling.image} alt="" className="h-full w-full object-contain" /> : <Heart className="h-9 w-9" />}</span></div>
                       <div><p className="care-section-kicker">PERASAANKU SAAT INI</p><h3>{selectedFeeling?.label || 'Setiap perasaan berarti.'}</h3><p>{selectedFeeling ? 'Apa yang membuatmu merasa demikian? Ceritakan di bawah.' : 'Pilih yang paling dekat dengan perasaanmu. Tidak ada jawaban benar atau salah.'}</p></div>
                     </div>
@@ -224,8 +224,8 @@ export default function PeduliLingkungan({ onBack }) {
                 )}
 
                 {data.confirmed[step] && <div role="status" className="mt-6 flex items-start gap-3 rounded-2xl border border-sky-200 bg-sky-50 p-5 text-sm font-bold leading-relaxed text-sky-900"><Check className="mt-0.5 h-5 w-5 shrink-0" /><p>{feedback[step]}</p></div>}
-                <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-sky-100 pt-5">
-                  {step > 0 ? <button type="button" onClick={() => goToStep(step - 1)} className="inline-flex min-h-12 items-center gap-2 text-sm font-black text-sky-700"><ArrowLeft className="h-4 w-4" />Bagian sebelumnya</button> : <span className="text-xs font-bold text-sky-600">Isi kedua bagian untuk menyimpan janjimu.</span>}
+                <div className="care-step-actions mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-sky-100 pt-5">
+                  {step > 0 ? <button type="button" onClick={() => goToStep(step - 1)} className="inline-flex min-h-12 items-center gap-2 text-sm font-black text-sky-700"><ArrowLeft className="h-4 w-4" /><span className="hidden sm:inline">Bagian sebelumnya</span><span className="sm:hidden">Sebelumnya</span></button> : <span className="text-xs font-bold text-sky-600">Isi kedua bagian untuk menyimpan janjimu.</span>}
                   {!data.confirmed[step] ? <button type="submit" disabled={!isStepComplete(data, step)} className={button}>{['Simpan komitmenku', 'Simpan perasaanku', 'Simpan refleksiku'][step]}<Check className="h-4 w-4" /></button> : step < 2 ? <button type="button" className={button} onClick={() => goToStep(step + 1)}>Selanjutnya<ArrowRight className="h-4 w-4" /></button> : <button type="button" disabled={!data.confirmed.every(Boolean)} onClick={finish} className={button}>Tuntaskan misi<Check className="h-4 w-4" /></button>}
                 </div>
                 {step === 2 && data.confirmed[2] && !data.confirmed.every(Boolean) && <p className="mt-3 text-sm font-bold text-sky-700">Simpan juga komitmen dan perasaanmu pada langkah sebelumnya untuk menuntaskan misi.</p>}
