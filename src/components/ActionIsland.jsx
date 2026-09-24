@@ -1,15 +1,22 @@
-import { Check, ArrowRight, Camera } from 'lucide-react';
+import { Check, Camera } from 'lucide-react';
 import turtle from '../assets/images/senang_ingin_membantu.png';
 import { challenges } from '../lib/actionJournal';
+import tanpaSedotan from '../assets/images/tanpa_sedotan.png';
+import botolMinum from '../assets/images/botol_minum.png';
+import tasKain from '../assets/images/tas_kain.png';
+import tempatSampah from '../assets/images/tempat_sampah.png';
+import kurangiPlastik from '../assets/images/kurangi_plastik.png';
+import pilahSampah from '../assets/images/pilah_sampah.png';
+import bersihRumah from '../assets/images/bersih_rumah.png';
 
 const objects = [
-  { name: 'Tanpa sedotan', x: 15, y: 49 },
-  { name: 'Botol minum', x: 31, y: 58 },
-  { name: 'Tas kain', x: 48, y: 48 },
-  { name: 'Tempat sampah', x: 66, y: 58 },
-  { name: 'Kurangi plastik', x: 81, y: 47 },
-  { name: 'Pilah sampah', x: 21, y: 75 },
-  { name: 'Bersih rumah', x: 77, y: 75 },
+  { name: 'Tanpa sedotan', image: tanpaSedotan, x: 15, y: 49 },
+  { name: 'Botol minum', image: botolMinum, x: 31, y: 58 },
+  { name: 'Tas kain', image: tasKain, x: 48, y: 48 },
+  { name: 'Tempat sampah', image: tempatSampah, x: 66, y: 58 },
+  { name: 'Kurangi plastik', image: kurangiPlastik, x: 81, y: 47 },
+  { name: 'Pilah sampah', image: pilahSampah, x: 21, y: 75 },
+  { name: 'Bersih rumah', image: bersihRumah, x: 77, y: 75 },
 ];
 
 function Palm({ x, y, scale = 1 }) {
@@ -45,14 +52,31 @@ export default function ActionIsland({ data, busy, onChallenge, onDay, onNavigat
       </svg>
       <button className="island-building island-hut" onClick={() => onNavigate('campaign')}><Hut /><span>Pondok kreativitas</span></button>
       <button className="island-building island-board" onClick={() => onNavigate('gallery')}><Hut gallery /><span>Papan kampanye</span></button>
-      <div className="island-objects" role="group" aria-label="Pilih satu tantangan untuk tujuh hari">{objects.map((object, index) => <button key={object.name} className={`island-object ${data.challenge === challenges[index][1] ? 'is-selected' : ''}`} style={{ '--object-x': `${object.x}%`, '--object-y': `${object.y}%` }} disabled={busy || (count > 0 && data.challenge !== challenges[index][1])} aria-pressed={data.challenge === challenges[index][1]} aria-label={challenges[index][1]} onClick={() => onChallenge(challenges[index][1])}><span className="island-object-art" aria-hidden="true">{challenges[index][0]}</span><span className="island-object-name">{object.name}{data.challenge === challenges[index][1] && <Check size={12} />}</span></button>)}</div>
+      <div className="island-objects" role="group" aria-label="Pilih satu tantangan untuk tujuh hari">{objects.map((object, index) => <button key={object.name} className={`island-object ${data.challenge === challenges[index][1] ? 'is-selected' : ''}`} style={{ '--object-x': `${object.x}%`, '--object-y': `${object.y}%` }} disabled={busy || (count > 0 && data.challenge !== challenges[index][1])} aria-pressed={data.challenge === challenges[index][1]} aria-label={challenges[index][1]} onClick={() => onChallenge(challenges[index][1])}><span className="island-object-art" aria-hidden="true"><img src={object.image} alt="" draggable={false} /></span><span className="island-object-name">{object.name}{data.challenge === challenges[index][1] && <Check size={12} />}</span></button>)}</div>
       <div className="island-litter" aria-hidden="true">{[[39,74,'🥤'],[52,69,'🧴'],[58,79,'🥡'],[35,85,'🥤'],[64,87,'🧴'],[44,91,'🥡'],[71,91,'🥤']].map(([x,y,icon],i) => <span key={i} className={i < count ? 'is-cleaned' : ''} style={{ left: `${x}%`, top: `${y}%`, rotate: `${i * 37 - 30}deg` }}>{icon}</span>)}</div>
       <div className={`island-turtle ${count === 7 ? 'is-swimming' : ''}`} style={{ '--turtle-x': `${43 + count * 2.2}%`, '--turtle-y': `${72 + count * 2.7}%` }}><img src={turtle} alt={count === 7 ? 'Penyu sudah mencapai laut yang bersih' : 'Penyu bergerak menuju laut seiring aksi yang kamu simpan'} /><span>{count === 7 ? 'Terima kasih, sahabat!' : count ? 'Pantainya makin bersih!' : 'Bantu jaga rumahku, yuk!'}</span></div>
       </div>
       <div className="island-clean-meter" role="progressbar" aria-label="Progres tantangan tujuh hari" aria-valuemin={0} aria-valuemax={7} aria-valuenow={count}><span><strong>{count}/7</strong> aksi tersimpan</span><div>{Array.from({ length: 7 }, (_, i) => <i key={i} className={i < count ? 'is-filled' : ''} />)}</div></div>
     </div>
     <div className="island-action-dock"><div className="island-current-action"><span>TANTANGAN PILIHANMU</span><h3>{data.challenge || 'Mulai dari benda pilihanmu di pantai.'}</h3><p>{count ? 'Lanjutkan aksi yang sama setiap hari. Pantai berubah setelah dokumentasimu tersimpan.' : 'Pilih satu aksi yang paling sering kamu lakukan, lalu dokumentasikan selama 7 hari.'}</p></div><button className="action-primary" disabled={!data.challenge || busy} onClick={() => onDay(nextDay)}><Camera size={18} />{count === 7 ? 'Lihat dokumentasiku' : `Dokumentasi hari ke-${nextDay}`}</button></div>
-    <div className="island-days"><div><span>② JEJAK AKSIMU</span><p>Setiap hari punya cerita.</p></div><nav aria-label="Dokumentasi tujuh hari">{Array.from({ length: 7 }, (_, i) => i + 1).map(day => <button key={day} onClick={() => onDay(day)} aria-label={`Dokumentasi hari ${day}${data.days[day] ? ', tersimpan' : ''}`} className={data.days[day] ? 'is-done' : ''}>{data.days[day] ? <img src={data.days[day].photo} alt="" /> : <Camera size={18} />}<span>Hari {day}</span>{data.days[day] && <i><Check size={10} /></i>}</button>)}</nav></div>
-    <p className="island-footnote">Perubahan pantai adalah ilustrasi progres aksimu. Lakukan aksinya di kehidupan sehari-hari, lalu unggah foto dan caption.</p>
+    <div className="island-days">
+      <div className="island-days-heading">
+        <div><span>JEJAK AKSIMU</span><h3>Satu hari, satu aksi baik.</h3></div>
+        <span className="island-days-count">{count} dari 7 selesai</span>
+      </div>
+      <nav aria-label="Dokumentasi tujuh hari">
+        {Array.from({ length: 7 }, (_, i) => i + 1).map(day => {
+          const entry = data.days[day];
+          const isNext = !entry && day === nextDay;
+          return <button key={day} type="button" disabled={busy} onClick={() => onDay(day)} aria-current={isNext ? 'step' : undefined} aria-label={`Dokumentasi hari ${day}${entry ? ', tersimpan' : isNext ? ', berikutnya' : ''}`} className={entry ? 'is-done' : isNext ? 'is-next' : ''}>
+            {entry && <img src={entry.photo} alt="" />}
+            <span className="island-day-number">{entry ? <Check size={18} /> : isNext ? <Camera size={20} /> : String(day).padStart(2, '0')}</span>
+            <span className="island-day-label">Hari {day}</span>
+            <span className="island-day-status">{entry ? 'Tersimpan' : isNext ? 'Berikutnya' : 'Belum diisi'}</span>
+          </button>;
+        })}
+      </nav>
+    </div>
+    <p className="island-footnote">Lakukan aksi nyata, lalu ceritakan lewat foto dan caption. Setiap aksi membuat ilustrasi pantaimu semakin bersih.</p>
   </section>;
 }
