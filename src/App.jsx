@@ -9,6 +9,7 @@ import AncamanPenyu from './pages/AncamanPenyu';
 import PeduliLingkungan from './pages/PeduliLingkungan';
 import AksiPeduli from './pages/AksiPeduli';
 import Gallery from './pages/Gallery';
+import Refleksi from './pages/Refleksi';
 import { clearStudentSession, restoreStudentSession } from './lib/studentSession';
 
 export default function App() {
@@ -16,14 +17,14 @@ export default function App() {
     const student = restoreStudentSession();
     const hash = window.location.hash.slice(1);
     if (!student) return hash === 'gallery' ? 'gallery' : 'home';
-    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'aksi-peduli/campaign', 'gallery', 'student-dashboard'].includes(hash) ? hash : 'student-dashboard';
+    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'aksi-peduli/campaign', 'gallery', 'refleksi', 'student-dashboard'].includes(hash) ? hash : 'student-dashboard';
   });
 
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash !== 'gallery' && !restoreStudentSession()) { setCurrentPage('login'); return; }
-      if (hash === 'aksi-peduli' || hash === 'aksi-peduli/campaign' || hash === 'gallery') { setCurrentPage(hash); return; }
+      if (hash === 'aksi-peduli' || hash === 'aksi-peduli/campaign' || hash === 'gallery' || hash === 'refleksi') { setCurrentPage(hash); return; }
       if (hash === 'mengenal-penyu') {
         setCurrentPage('mengenal-penyu');
       } else if (hash === 'ancaman-penyu') {
@@ -94,6 +95,10 @@ export default function App() {
 
   if (currentPage === 'peduli-lingkungan') {
     return <PeduliLingkungan onBack={() => setCurrentPage('student-dashboard')} />;
+  }
+
+  if (currentPage === 'refleksi') {
+    return <Refleksi onBack={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} />;
   }
 
   if (currentPage === 'gallery') {

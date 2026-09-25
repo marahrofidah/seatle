@@ -1,0 +1,39 @@
+.website-reflection { position: relative; isolation: isolate; overflow-x: hidden; min-height: 100vh; padding: 24px 20px 64px; background-color: #075985; color: #0c4a6e; }
+.reflection-container { position: relative; z-index: 10; max-width: 1040px; margin: auto; }
+.reflection-back { display: inline-flex; align-items: center; gap: 9px; padding: 12px 18px; background: #ffffffe6; border: 1px solid white; border-radius: 30px; font-size: 13px; font-weight: 800; margin-bottom: 22px; }
+.reflection-sheet { position: relative; isolation: isolate; padding: 88px 80px 104px; filter: drop-shadow(0 20px 30px #07598540); }
+.reflection-sheet::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; clip-path: url(#reflection-wavy-card); background: linear-gradient(130deg, #ffffff 15%, #f0f9fff5 65%, #e0f2fef5); backdrop-filter: blur(14px); }
+.reflection-heading { text-align: center; padding-bottom: 24px; border-bottom: 1px solid #bae6fd; }
+.reflection-eyebrow { color: #0369a1; font-size: 11px; font-weight: 900; letter-spacing: 2px; }
+.reflection-heading h1 { font-family: Fredoka, sans-serif; font-size: clamp(30px, 5vw, 42px); margin: 10px 0; font-weight: 500; }
+.reflection-heading p { font-size: 16px; line-height: 1.6; }
+.reflection-count { display: inline-block; background: #e0f2fe; color: #075985; border-radius: 20px; padding: 8px 14px; margin-top: 18px; font-size: 12px; font-weight: 800; }
+.reflection-instruction { font-size: 13px; line-height: 1.8; color: #476b86; margin: 22px 0; text-align: center; }
+.reflection-questions { display: grid; gap: 24px; }
+.reflection-question { min-width: 0; border: 0; border-bottom: 1px solid #bae6fd; padding: 18px 0 24px; background: transparent; }
+.reflection-question legend { padding: 0 8px; font-size: 15px; font-weight: 800; line-height: 1.7; max-width: 100%; }
+.reflection-number { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #e0f2fe; color: #0369a1; margin-right: 10px; }
+.reflection-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.reflection-option { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; padding: 14px 8px; min-height: 94px; background: #ffffffc0; border: 2px solid #bae6fd; border-radius: 14px; cursor: pointer; font-size: 12px; font-weight: 800; text-align: center; }
+.reflection-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.reflection-option:hover { border-color: #7dd3fc; }
+.reflection-option:focus-within { outline: 3px solid #137b9c; outline-offset: 3px; }
+.reflection-option.is-selected { background: #fef3c7; border-color: #0369a1; color: #075985; }
+.reflection-option-check { position: absolute; top: 7px; right: 7px; visibility: hidden; }
+.reflection-option.is-selected .reflection-option-check { visibility: visible; }
+.reflection-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 26px; }
+.reflection-footer p { font-size: 12px; color: #476b86; line-height: 1.7; }
+.reflection-footer button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 28px; padding: 14px 22px; background: #fcd34d; color: #78350f; border: 2px solid white; box-shadow: 0 4px 12px #07598520; font-size: 14px; font-weight: 900; flex-shrink: 0; }
+.reflection-footer button:disabled { opacity: .5; cursor: not-allowed; }
+.reflection-back:focus-visible, .reflection-footer button:focus-visible { outline: 3px solid #137b9c; outline-offset: 3px; }
+.reflection-success { display: flex; align-items: center; gap: 12px; padding: 18px; margin-top: 24px; background: #e3f1e5; border-radius: 16px; color: #285b43; font-size: 14px; }
+.reflection-success p { margin-top: 5px; font-size: 13px; }
+.reflection-error { padding: 14px; margin-top: 20px; background: #fff0dc; color: #903e22; border-radius: 12px; font-size: 14px; }
+@media (max-width: 600px) {
+  .website-reflection { padding: 16px 12px 40px; }
+  .reflection-sheet { padding: 72px 36px 88px; }
+  .reflection-question { padding: 12px 0 20px; }
+  .reflection-question legend { font-size: 14px; }
+  .reflection-options { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .reflection-footer { flex-direction: column; align-items: stretch; text-align: center; }
+}
