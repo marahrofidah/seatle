@@ -1,3 +1,4 @@
+import useScrollToTop from '../lib/useScrollToTop';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Camera, Check, ExternalLink, ImagePlus, Sparkles, Waves } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.webp';
@@ -42,6 +43,7 @@ export default function AksiPeduli({ onBack, onGallery, initialTab = 'journal' }
   const [data, setData] = useState(emptyJournal);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState(initialTab);
+  useScrollToTop(tab);
   const [day, setDay] = useState(1);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');

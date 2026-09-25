@@ -1,3 +1,4 @@
+import useScrollToTop from './lib/useScrollToTop';
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -20,6 +21,14 @@ export default function App() {
     if (!student) return hash === 'gallery' ? 'gallery' : 'home';
     return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'aksi-peduli/campaign', 'gallery', 'refleksi', 'glosarium', 'student-dashboard'].includes(hash) ? hash : 'student-dashboard';
   });
+
+  useScrollToTop(currentPage);
+
+  useEffect(() => {
+    const previous = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+    return () => { window.history.scrollRestoration = previous; };
+  }, []);
 
   useEffect(() => {
     const handleHashChange = () => {

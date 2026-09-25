@@ -1,3 +1,4 @@
+import useScrollToTop from '../lib/useScrollToTop';
 import { useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Download, Heart, Waves } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.webp';
@@ -21,6 +22,7 @@ export default function PeduliLingkungan({ onBack }) {
   const [data, setData] = useState(() => loadReflection(storageKey));
   const [step, setStep] = useState(() => Math.max(0, data.confirmed.findIndex((value) => !value)));
   const [statementIndex, setStatementIndex] = useState(0);
+  useScrollToTop(`${step}-${statementIndex}-${data.finished}`);
   const [saveError, setSaveError] = useState('');
   const [videoError, setVideoError] = useState(false);
   const heading = useRef(null);
@@ -46,7 +48,6 @@ export default function PeduliLingkungan({ onBack }) {
     setStep(next);
     window.requestAnimationFrame(() => {
       heading.current?.focus({ preventScroll: true });
-      heading.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
     });
   }
 
@@ -82,7 +83,6 @@ export default function PeduliLingkungan({ onBack }) {
       localStorage.setItem(storageKey, JSON.stringify({ ...next, version: 1 }));
       setData(next);
       setSaveError('');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
       setSaveError('Progres belum berhasil disimpan. Coba tuntaskan misi sekali lagi.');
     }

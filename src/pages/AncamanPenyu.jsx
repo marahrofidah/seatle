@@ -1,3 +1,4 @@
+import useScrollToTop from '../lib/useScrollToTop';
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Search } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.webp';
@@ -23,6 +24,7 @@ export default function AncamanPenyu({ onBack }) {
   const [answers, setAnswers] = useState({});
   const [checkedAnswers, setCheckedAnswers] = useState({});
   const [finished, setFinished] = useState(false);
+  useScrollToTop(`${step}-${questionIndex}-${finished}`);
   const allMatched = checkedMatches && causes.every((cause, index) => matches[index] === cause.effect);
   const question = actionQuestions[questionIndex];
   const answerChecked = checkedAnswers[questionIndex];
@@ -31,14 +33,12 @@ export default function AncamanPenyu({ onBack }) {
 
   function goToStep(next) {
     setStep(next);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function finishMission() {
     if (!allAnsweredCorrectly || !allMatched || !identified) return;
     completeAspect('ancaman-penyu');
     setFinished(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   return (
@@ -137,7 +137,7 @@ export default function AncamanPenyu({ onBack }) {
                   <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
                     <button type="button" disabled={questionIndex === 0} onClick={() => setQuestionIndex(questionIndex - 1)} className="px-2 py-3 text-sm font-black text-sky-700 disabled:opacity-40">Sebelumnya</button>
                     {!answerCorrect ? <button type="button" className={primaryButton} disabled={answers[questionIndex] === undefined} onClick={() => setCheckedAnswers({ ...checkedAnswers, [questionIndex]: true })}>Periksa jawaban</button>
-                      : questionIndex < actionQuestions.length - 1 ? <button type="button" className={primaryButton} onClick={() => { setQuestionIndex(questionIndex + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Situasi berikutnya <ArrowRight className="h-4 w-4" /></button>
+                      : questionIndex < actionQuestions.length - 1 ? <button type="button" className={primaryButton} onClick={() => { setQuestionIndex(questionIndex + 1); }}>Situasi berikutnya <ArrowRight className="h-4 w-4" /></button>
                         : <button type="button" className={primaryButton} disabled={!allAnsweredCorrectly} onClick={finishMission}>Tuntaskan misi <Check className="h-5 w-5" /></button>}
                   </div>
                 </>

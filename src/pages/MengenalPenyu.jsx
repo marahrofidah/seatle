@@ -1,3 +1,4 @@
+import useScrollToTop from '../lib/useScrollToTop';
 import { useState } from 'react';
 import { 
   ArrowLeft, 
@@ -381,6 +382,7 @@ export default function MengenalPenyu({ onBack }) {
   };
   // Navigation State
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  useScrollToTop(activeSectionIndex);
 
   // Section 1 State: Video & Hypothesis
   const [selectedHypotheses, setSelectedHypotheses] = useState([]);
