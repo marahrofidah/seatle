@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { canDocument } from '../lib/actionSchedule';
 import { Check, Camera } from 'lucide-react';
 import turtle from '../assets/images/senang_ingin_membantu.png';
 import { challenges } from '../lib/actionJournal';
@@ -28,8 +30,17 @@ function Hut({ gallery = false }) {
 }
 
 export default function ActionIsland({ data, busy, onChallenge, onDay, onNavigate }) {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const refresh = () => setNow(new Date());
+    const timer = setInterval(refresh, 1000);
+    window.addEventListener('focus', refresh);
+    return () => { clearInterval(timer); window.removeEventListener('focus', refresh); };
+  }, []);
   const count = Object.keys(data.days).length;
   const nextDay = Array.from({ length: 7 }, (_, i) => i + 1).find(i => !data.days[i]) || 7;
+  const available = canDocument(data, nextDay, now);
+  const waiting = count > 0 && count < 7 && !available;
   return <section className="island-experience" aria-label="Pulau Aksi Penyu interaktif">
     <div className="island-scene">
       <div className="island-location"><h2>Pulau Penyu</h2><p>{count === 7 ? 'Lihat, pantainya kembali bersih!' : 'Satu aksi darimu, satu harapan untuk laut.'}</p></div>
@@ -52,13 +63,13 @@ export default function ActionIsland({ data, busy, onChallenge, onDay, onNavigat
       </svg>
       <button className="island-building island-hut" onClick={() => onNavigate('campaign')}><Hut /><span>Pondok kreativitas</span></button>
       <button className="island-building island-board" onClick={() => onNavigate('gallery')}><Hut gallery /><span>Papan kampanye</span></button>
-      <div className="island-objects" role="group" aria-label="Pilih satu tantangan untuk tujuh hari">{objects.map((object, index) => <button key={object.name} className={`island-object ${data.challenge === challenges[index][1] ? 'is-selected' : ''}`} style={{ '--object-x': `${object.x}%`, '--object-y': `${object.y}%` }} disabled={busy || (count > 0 && data.challenge !== challenges[index][1])} aria-pressed={data.challenge === challenges[index][1]} aria-label={challenges[index][1]} onClick={() => onChallenge(challenges[index][1])}><span className="island-object-art" aria-hidden="true"><img src={object.image} alt="" draggable={false} /></span><span className="island-object-name">{object.name}{data.challenge === challenges[index][1] && <Check size={12} />}</span></button>)}</div>
+      <div className="island-objects" role="group" aria-label="Pilih satu tantangan untuk tujuh hari">{objects.map((object, index) => <button key={object.name} className={`island-object ${data.challenge === challenges[index][1] ? 'is-selected' : ''}`} style={{ '--object-x': `${object.x}%`, '--object-y': `${object.y}%` }} disabled={busy || count > 0} aria-pressed={data.challenge === challenges[index][1]} aria-label={challenges[index][1]} onClick={() => onChallenge(challenges[index][1])}><span className="island-object-art" aria-hidden="true"><img src={object.image} alt="" draggable={false} /></span><span className="island-object-name">{object.name}{data.challenge === challenges[index][1] && <Check size={12} />}</span></button>)}</div>
       <div className="island-litter" aria-hidden="true">{[[39,74,'🥤'],[52,69,'🧴'],[58,79,'🥡'],[35,85,'🥤'],[64,87,'🧴'],[44,91,'🥡'],[71,91,'🥤']].map(([x,y,icon],i) => <span key={i} className={i < count ? 'is-cleaned' : ''} style={{ left: `${x}%`, top: `${y}%`, rotate: `${i * 37 - 30}deg` }}>{icon}</span>)}</div>
       <div className={`island-turtle ${count === 7 ? 'is-swimming' : ''}`} style={{ '--turtle-x': `${43 + count * 2.2}%`, '--turtle-y': `${72 + count * 2.7}%` }}><img src={turtle} alt={count === 7 ? 'Penyu sudah mencapai laut yang bersih' : 'Penyu bergerak menuju laut seiring aksi yang kamu simpan'} /><span>{count === 7 ? 'Terima kasih, sahabat!' : count ? 'Pantainya makin bersih!' : 'Bantu jaga rumahku, yuk!'}</span></div>
       </div>
       <div className="island-clean-meter" role="progressbar" aria-label="Progres tantangan tujuh hari" aria-valuemin={0} aria-valuemax={7} aria-valuenow={count}><span><strong>{count}/7</strong> aksi tersimpan</span><div>{Array.from({ length: 7 }, (_, i) => <i key={i} className={i < count ? 'is-filled' : ''} />)}</div></div>
     </div>
-    <div className="island-action-dock"><div className="island-current-action"><span>TANTANGAN PILIHANMU</span><h3>{data.challenge || 'Mulai dari benda pilihanmu di pantai.'}</h3><p>{count ? 'Lanjutkan aksi yang sama setiap hari. Pantai berubah setelah dokumentasimu tersimpan.' : 'Pilih satu aksi yang paling sering kamu lakukan, lalu dokumentasikan selama 7 hari.'}</p></div><button className="action-primary" disabled={!data.challenge || busy} onClick={() => onDay(nextDay)}><Camera size={18} />{count === 7 ? 'Lihat dokumentasiku' : `Dokumentasi hari ke-${nextDay}`}</button></div>
+    <div className="island-action-dock"><div className="island-current-action"><span>TANTANGAN PILIHANMU</span><h3>{data.challenge || 'Mulai dari benda pilihanmu di pantai.'}</h3><p>{waiting ? 'Dokumentasi hari ini sudah tersimpan. Kamu bisa melanjutkan besok, satu kali setiap hari.' : count ? 'Lanjutkan aksi yang sama setiap hari. Pantai berubah setelah dokumentasimu tersimpan.' : 'Pilih satu aksi yang paling sering kamu lakukan, lalu dokumentasikan selama 7 hari.'}</p></div><button className="action-primary" disabled={busy || (count < 7 && !available)} onClick={() => onDay(nextDay)}><Camera size={18} />{count === 7 ? 'Lihat dokumentasiku' : waiting ? 'Lanjutkan besok' : `Dokumentasi hari ke-${nextDay}`}</button></div>
     <div className="island-days">
       <div className="island-days-heading">
         <div><span>JEJAK AKSIMU</span><h3>Satu hari, satu aksi baik.</h3></div>
@@ -68,11 +79,11 @@ export default function ActionIsland({ data, busy, onChallenge, onDay, onNavigat
         {Array.from({ length: 7 }, (_, i) => i + 1).map(day => {
           const entry = data.days[day];
           const isNext = !entry && day === nextDay;
-          return <button key={day} type="button" disabled={busy} onClick={() => onDay(day)} aria-current={isNext ? 'step' : undefined} aria-label={`Dokumentasi hari ${day}${entry ? ', tersimpan' : isNext ? ', berikutnya' : ''}`} className={entry ? 'is-done' : isNext ? 'is-next' : ''}>
+          return <button key={day} type="button" disabled={busy || (!entry && !canDocument(data, day, now))} onClick={() => onDay(day)} aria-current={isNext ? 'step' : undefined} aria-label={`Dokumentasi hari ${day}${entry ? ', tersimpan' : isNext ? ', berikutnya' : ''}`} className={entry ? 'is-done' : isNext ? 'is-next' : ''}>
             {entry && <img src={entry.photo} alt="" />}
             <span className="island-day-number">{entry ? <Check size={18} /> : isNext ? <Camera size={20} /> : String(day).padStart(2, '0')}</span>
             <span className="island-day-label">Hari {day}</span>
-            <span className="island-day-status">{entry ? 'Tersimpan' : isNext ? 'Berikutnya' : 'Belum diisi'}</span>
+            <span className="island-day-status">{entry ? 'Tersimpan' : isNext ? (waiting ? 'Besok' : 'Berikutnya') : 'Belum diisi'}</span>
           </button>;
         })}
       </nav>
