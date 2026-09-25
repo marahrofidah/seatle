@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { ArrowLeft, BookOpen, CheckCircle2, Eye, EyeOff, GraduationCap, KeyRound, LoaderCircle, UserRound, UsersRound } from 'lucide-react';
 import loginBackground from '../assets/images/login_bg.webp';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { saveStudentSession } from '../lib/studentSession';
+import { ensureStudent } from '../lib/studentRegistration';
 import BubbleEffects from '../components/BubbleEffects';
 
 const teacherEmail = import.meta.env.VITE_TEACHER_EMAIL || 'guru@seatle.local';
@@ -28,6 +30,7 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (loading) return;
     setError('');
     const cleanName = name.trim();
 
@@ -64,14 +67,15 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess }) {
       setError('Kelas wajib diisi.');
       return;
     }
-    const { error: insertError } = await supabase.from('students').insert({ nama: cleanName, kelas: cleanClass });
-    setLoading(false);
-    if (insertError) {
-      setError(`Data belum berhasil disimpan: ${insertError.message}`);
+    try {
+      await ensureStudent(supabase, cleanName, cleanClass);
+      saveStudentSession(cleanName, cleanClass);
+    } catch (err) {
+      setError(`Data belum berhasil diperiksa atau disimpan: ${err.message}`);
       return;
+    } finally {
+      setLoading(false);
     }
-    sessionStorage.setItem('seatle_student_name', cleanName);
-    sessionStorage.setItem('seatle_student_class', cleanClass);
     setStudentDone(true);
     window.setTimeout(() => onStudentSuccess?.(), 650);
   };

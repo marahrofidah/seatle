@@ -6,6 +6,12 @@ export function nextJournalDay(data) {
   return Array.from({ length: 7 }, (_, i) => i + 1).find(day => !data.days[day]);
 }
 
+export function canFinishMission(data) {
+  return Boolean(data.challenge && data.poster)
+    && Array.from({ length: 7 }, (_, i) => data.days[i + 1])
+      .every(entry => entry?.photo && entry.caption?.trim());
+}
+
 export function canDocument(data, day, now = new Date()) {
   const today = localDate(now);
   return Boolean(data.challenge) && day === nextJournalDay(data)

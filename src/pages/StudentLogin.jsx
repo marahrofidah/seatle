@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { ArrowLeft, CheckCircle2, LoaderCircle } from 'lucide-react';
 import loginBackground from '../assets/images/tanpa_penyu.webp';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { saveStudentSession } from '../lib/studentSession';
+import { ensureStudent } from '../lib/studentRegistration';
 import BubbleEffects from '../components/BubbleEffects';
 
 export default function StudentLogin({ onBack }) {
@@ -13,6 +15,7 @@ export default function StudentLogin({ onBack }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (loading) return;
     setError('');
     const cleanName = name.trim();
     const cleanClass = studentClass.trim();
@@ -27,14 +30,14 @@ export default function StudentLogin({ onBack }) {
     }
 
     setLoading(true);
-    const { error: insertError } = await supabase
-      .from('students')
-      .insert({ nama: cleanName, kelas: cleanClass });
-    setLoading(false);
-
-    if (insertError) {
-      setError(`Data belum berhasil disimpan: ${insertError.message}`);
+    try {
+      await ensureStudent(supabase, cleanName, cleanClass);
+      saveStudentSession(cleanName, cleanClass);
+    } catch (err) {
+      setError(`Data belum berhasil diperiksa atau disimpan: ${err.message}`);
       return;
+    } finally {
+      setLoading(false);
     }
     setSubmitted(true);
   };

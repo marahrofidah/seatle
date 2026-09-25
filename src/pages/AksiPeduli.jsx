@@ -3,10 +3,10 @@ import { ArrowLeft, ArrowRight, Camera, Check, ExternalLink, ImagePlus, Sparkles
 import background from '../assets/images/tanpa_penyu.webp';
 import ActionIsland from '../components/ActionIsland';
 import example from '../assets/images/poster.jpg';
-import { getPosters, journalKey, publishPoster, readImage, readJournal, saveJournalDay, writeRecord } from '../lib/actionJournal';
+import { journalKey, publishPoster, readImage, readJournal, saveJournalDay, writeRecord } from '../lib/actionJournal';
 import { isSupabaseConfigured } from '../lib/supabase';
-import { completeAspect } from '../lib/studentProgress';
-import { canDocument } from '../lib/actionSchedule';
+import { completeAspect, getCompletedAspects } from '../lib/studentProgress';
+import { canDocument, canFinishMission } from '../lib/actionSchedule';
 import './AksiPeduli.css';
 import './ActionIsland.css';
 
@@ -37,7 +37,7 @@ function DayForm({ day, entry, onSave, busy }) {
   </form>;
 }
 
-export default function AksiPeduli({ onBack, initialTab = 'journal' }) {
+export default function AksiPeduli({ onBack, onGallery, initialTab = 'journal' }) {
   const [key] = useState(journalKey);
   const [data, setData] = useState(emptyJournal);
   const [loading, setLoading] = useState(true);
@@ -46,18 +46,15 @@ export default function AksiPeduli({ onBack, initialTab = 'journal' }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const [posters, setPosters] = useState([]);
-  const [galleryLoading, setGalleryLoading] = useState(true);
-  const [galleryRefresh, setGalleryRefresh] = useState(0);
-  const [galleryError, setGalleryError] = useState('');
   const [title, setTitle] = useState('');
   const [friend, setFriend] = useState('');
   const [posterImage, setPosterImage] = useState('');
-  const [finished, setFinished] = useState(false);
+  const [finished, setFinished] = useState(() => getCompletedAspects().includes('aksi-peduli'));
   const journalDialog = useRef(null);
   const posterId = useRef(null);
   const studentName = sessionStorage.getItem('seatle_student_name') || 'Petualang';
   const count = Object.keys(data.days).length;
+  const readyToFinish = canFinishMission(data);
 
   useEffect(() => {
     let active = true;
@@ -69,31 +66,6 @@ export default function AksiPeduli({ onBack, initialTab = 'journal' }) {
     return () => { active = false; };
   }, [key]);
 
-  useEffect(() => {
-    if (tab !== 'gallery') return;
-    let active = true;
-    Promise.resolve().then(async () => {
-      if (!active) return;
-      setGalleryLoading(true);
-      setGalleryError('');
-      try {
-        const { items, warning } = await getPosters(items => {
-          if (active) setPosters(items);
-        }, key);
-        if (active) { setPosters(items); setGalleryError(warning); }
-      } catch (err) {
-        if (active) setGalleryError(err.message);
-      } finally {
-        if (active) setGalleryLoading(false);
-      }
-    });
-    return () => { active = false; };
-  }, [tab, key, galleryRefresh]);
-
-  function refreshGallery() {
-    setGalleryLoading(true);
-    setGalleryRefresh(value => value + 1);
-  }
 
   async function save(next, message) {
     setBusy(true); setError(''); setNotice('');
@@ -131,12 +103,13 @@ export default function AksiPeduli({ onBack, initialTab = 'journal' }) {
       setData(journal);
       setError(warning);
       setNotice(warning ? 'Gambar tersimpan. Kamu tidak perlu mengunggah ulang; coba kirim online lagi dari Pondok kreativitas.' : isSupabaseConfigured ? 'Poster kalian sudah tampil di galeri online!' : 'Poster kalian sudah tampil di galeri perangkat ini!');
-      setTab('gallery');
+      if (!warning) onGallery();
     } catch (err) { setError(err.message); }
     finally { setBusy(false); }
   }
 
   function finish() {
+    if (busy || !readyToFinish) return;
     try { completeAspect('aksi-peduli'); setFinished(true); setError(''); }
     catch { setError('Progres belum tersimpan. Coba tuntaskan misi kembali.'); }
   }
@@ -144,25 +117,19 @@ export default function AksiPeduli({ onBack, initialTab = 'journal' }) {
   return <main className="action-ocean island-ocean page-background" style={{ '--page-background': `url(${background})` }}><div className="action-container">
     <header className="action-header"><button onClick={onBack} aria-label="Kembali ke peta misi"><ArrowLeft size={20} /></button><span>Aksi Peduli</span><small>MISI 04 / ASPEK PERILAKU</small></header>
     <div className="island-page-heading"><div><p className="action-kicker">ASPEK PERILAKU / PRO BEHAVIOUR</p><h1>Aksi kecilmu menghidupkan pulau ini.</h1></div></div>
-    <div className="island-content"><nav className="island-navigation" aria-label="Jelajahi pulau">{[['journal', 'Pulau aksi'], ['campaign', 'Pondok kreativitas'], ['gallery', 'Papan kampanye']].map(([id, label]) => <button key={id} aria-current={tab === id ? 'page' : undefined} onClick={() => { setTab(id); setNotice(''); }}>{id === 'journal' ? <Waves size={16} /> : id === 'campaign' ? <Sparkles size={16} /> : <ImagePlus size={16} />}<span className="island-navigation-label">{label.split(' ').map(word => <span key={word}>{word}</span>)}</span></button>)}</nav>
+    <div className="island-content"><nav className="island-navigation" aria-label="Jelajahi pulau">{[['journal', 'Pulau aksi'], ['campaign', 'Pondok kreativitas']].map(([id, label]) => <button key={id} aria-current={tab === id ? 'page' : undefined} onClick={() => { setTab(id); setNotice(''); }}>{id === 'journal' ? <Waves size={16} /> : id === 'campaign' ? <Sparkles size={16} /> : <ImagePlus size={16} />}<span className="island-navigation-label">{label.split(' ').map(word => <span key={word}>{word}</span>)}</span></button>)}</nav>
     {error && <p role="alert" className="action-error">{error}</p>}{notice && <p role="status" className="action-notice"><Check size={18} />{notice}</p>}
     {loading ? <div className="action-panel" role="status">Menyiapkan pulaumu…</div> : <>
-      {tab === 'journal' && <section className="island-journal"><ActionIsland data={data} busy={busy} onChallenge={challenge => save({ ...data, challenge }, 'Tantangan dipilih! Sekarang lakukan aksimu dan dokumentasikan.')} onDay={openDay} onNavigate={setTab} />
+      {tab === 'journal' && <section className="island-journal"><ActionIsland data={data} busy={busy} onChallenge={challenge => save({ ...data, challenge }, 'Tantangan dipilih! Sekarang lakukan aksimu dan dokumentasikan.')} onDay={openDay} onNavigate={destination => destination === 'gallery' ? onGallery() : setTab(destination)} />
         <dialog ref={journalDialog} className="action-journal-dialog" aria-label={`Dokumentasi hari ke-${day}`} onCancel={event => { if (busy) event.preventDefault(); }}><div className="action-dialog-bar"><span>DOKUMENTASI HARI Ke-{day}</span><button type="button" disabled={busy} onClick={() => journalDialog.current.close()} aria-label="Tutup jurnal">×</button></div>{error && <p role="alert" className="action-error">{error}</p>}{data.challenge ? <><p className="action-dialog-challenge">{data.challenge}</p>{data.days[day] ? <div className="action-day-form"><img src={data.days[day].photo} alt={`Dokumentasi hari ke-${day}`} /><p>{data.days[day].caption}</p><p className="action-hint">Dokumentasi tersimpan. Lanjutkan aksi berikutnya pada hari berikutnya.</p></div> : <DayForm key={day} day={day} busy={busy} onSave={documentDay} />}</> : <div className="action-prompt"><Waves /><h3>Pilih tantanganmu dulu, yuk.</h3><p>Klik salah satu benda di pantai untuk memilih aksi yang ingin kamu lakukan selama tujuh hari.</p><button className="action-primary" onClick={() => journalDialog.current.close()}>Pilih tantangan<ArrowLeft size={16} /></button></div>}</dialog>
         {count === 7 && <div className="action-celebration"><Sparkles /><div><h3>Selamat! Kamu telah menyelesaikan Tantangan Sahabat Penyu.</h3><p>Tujuh jejak baikmu sudah terkumpul. Teruskan kebiasaan baik ini!</p></div><button className="action-primary" onClick={() => setTab('campaign')}>Buat kampanye<ArrowRight size={17} /></button></div>}
         <p className="action-storage">Foto dan catatan harian tersimpan pada browser dan perangkat ini.</p>
       </section>}
       {tab === 'campaign' && <section className="action-panel action-campaign-panel"><div className="action-panel-heading"><div><h2>Selamat datang di pondok kreativitas.</h2><p>Bersama satu temanmu, buat poster digital di Canva yang mengajak masyarakat menjaga penyu laut dan lingkungan sekitarnya.</p></div></div><div className="action-studio"><aside><a href={example} target="_blank" rel="noreferrer" className="action-example"><img src={example} alt="Contoh poster kampanye pelestarian penyu laut" /><span>Sedikit inspirasi untuk kalian <ExternalLink size={14} /></span></a><div className="action-recipe"><p className="action-kicker">CATATAN DARI PENYU</p><h3>Pesanmu mau bilang apa?</h3><ol><li>Tentukan satu ajakan yang jelas.</li><li>Padukan ilustrasi dan kalimat singkat.</li><li>Unduh dari Canva sebagai PNG atau JPG.</li><li>Unggah dan pamerkan karya kalian!</li></ol><a className="action-primary" href="https://www.canva.com/" target="_blank" rel="noreferrer">Buka Canva <ExternalLink size={16} /></a></div></aside>
-          {data.poster ? <div className="action-published"><Check size={36} /><h3>{data.poster.syncStatus === 'pending' ? 'Karya tersimpan, menunggu dikirim online.' : 'Karya kalian sudah dipamerkan!'}</h3><img src={data.poster.image_url} alt={data.poster.title} /><p>{data.poster.title}</p>{isSupabaseConfigured && ['pending', 'local'].includes(data.poster.syncStatus) && <button className="action-primary" disabled={busy} onClick={submitPoster}>{busy ? 'Mengirim karya?' : 'Coba kirim ke galeri online'}</button>}<button className="action-primary" onClick={() => setTab('gallery')}>Lihat di galeri<ArrowRight size={16} /></button></div> : <form onSubmit={submitPoster} className="action-poster-form"><p className="action-kicker">MEJA KREASI KALIAN</p><h3>Siap menginspirasi?</h3><label>Judul poster<input required maxLength={100} value={title} onChange={event => setTitle(event.target.value)} placeholder="Laut bersih, penyu tersenyum" disabled={busy} /></label><div className="action-author"><span>Pembuat pertama<strong>{studentName}</strong></span><span aria-hidden="true">+</span><label>Nama satu temanmu<input required maxLength={80} value={friend} onChange={event => setFriend(event.target.value)} placeholder="Nama teman" disabled={busy} /></label></div><ImageUpload value={posterImage} onChange={setPosterImage} label="Unggah poster dari Canva" disabled={busy} /><p className="action-hint">{isSupabaseConfigured ? 'Judul, nama pembuat, dan poster akan tampil di galeri website.' : 'Poster akan tampil di galeri pada perangkat ini. Galeri online belum terhubung.'}</p><button className="action-primary" disabled={busy || !title.trim() || !friend.trim() || !posterImage}>{busy ? 'Mengirim karya…' : 'Pamerkan di galeri'}<ArrowRight size={17} /></button></form>}
+          {data.poster ? <div className="action-published"><Check size={36} /><h3>{data.poster.syncStatus === 'pending' ? 'Karya tersimpan, menunggu dikirim online.' : 'Karya kalian sudah dipamerkan!'}</h3><img src={data.poster.image_url} alt={data.poster.title} /><p>{data.poster.title}</p>{isSupabaseConfigured && ['pending', 'local'].includes(data.poster.syncStatus) && <button className="action-primary" disabled={busy} onClick={submitPoster}>{busy ? 'Mengirim karya...' : 'Coba kirim ke galeri online'}</button>}<button className="action-primary" onClick={onGallery}>Lihat di galeri<ArrowRight size={16} /></button></div> : <form onSubmit={submitPoster} className="action-poster-form"><p className="action-kicker">MEJA KREASI KALIAN</p><h3>Siap menginspirasi?</h3><label>Judul poster<input required maxLength={100} value={title} onChange={event => setTitle(event.target.value)} placeholder="Laut bersih, penyu tersenyum" disabled={busy} /></label><div className="action-author"><span>Pembuat pertama<strong>{studentName}</strong></span><span aria-hidden="true">+</span><label>Nama satu temanmu<input required maxLength={80} value={friend} onChange={event => setFriend(event.target.value)} placeholder="Nama teman" disabled={busy} /></label></div><ImageUpload value={posterImage} onChange={setPosterImage} label="Unggah poster dari Canva" disabled={busy} /><p className="action-hint">{isSupabaseConfigured ? 'Judul, nama pembuat, dan poster akan tampil di galeri website.' : 'Poster akan tampil di galeri pada perangkat ini. Galeri online belum terhubung.'}</p><button className="action-primary" disabled={busy || !title.trim() || !friend.trim() || !posterImage}>{busy ? 'Mengirim karya…' : 'Pamerkan di galeri'}<ArrowRight size={17} /></button></form>}
         </div></section>}
-      {tab === 'gallery' && <section className="action-panel action-gallery-panel"><div className="action-panel-heading"><div><h2>Pesan untuk laut, dari kita.</h2><p>Ajakan baik dari Sahabat Penyu, dipamerkan di papan kampanye pulau. Klik poster untuk melihatnya lebih dekat.</p></div><button className="action-secondary" onClick={refreshGallery} disabled={galleryLoading}>{galleryLoading ? 'Memuat…' : 'Muat ulang'}</button></div><p className="action-hint">{isSupabaseConfigured ? 'Galeri bersama Sahabat Penyu' : 'Galeri perangkat ini · Karya tersimpan di browser yang kamu gunakan.'}</p>{galleryError && <p role="alert" className="action-error">{galleryError}</p>}<div className="action-gallery"><PosterCard poster={{ title: 'Lindungi penyu, jaga rumahnya', authors: 'Inspirasi untuk karya kalian', image_url: example }} exampleCard />{posters.map(poster => <PosterCard key={poster.id} poster={poster} />)}</div>{galleryLoading && <p role="status" className="action-hint">Memuat poster dari galeri online?</p>}{posters.length === 0 && !galleryLoading && !galleryError && <div className="action-prompt"><Sparkles /><p>Masih ada tempat untuk pesan kalian.</p><button className="action-secondary" onClick={() => setTab('campaign')}>Pamerkan karya pertamamu<ArrowRight size={16} /></button></div>}</section>}
-      {count === 7 && data.poster && <section className="action-finish"><div><h3>{finished ? 'Misi 4 selesai. Kamu Sahabat Penyu!' : 'Jejak lengkap. Pesan baik sudah dibagikan.'}</h3><p>{finished ? 'Progres Aksi Peduli sudah tercatat di peta petualanganmu.' : 'Tujuh dokumentasi dan satu poster bersama sudah tersimpan.'}</p></div><button className="action-primary" onClick={finished ? onBack : finish}>{finished ? 'Kembali ke peta' : 'Tuntaskan misi'}<Check size={18} /></button></section>}
+
+      <section className="action-finish"><div><h3>{finished && readyToFinish ? 'Misi 4 selesai. Kamu Sahabat Penyu!' : readyToFinish ? 'Jejak lengkap. Misi siap dituntaskan!' : 'Lengkapi misimu, satu hari satu aksi.'}</h3><p id="action-finish-progress">{finished && readyToFinish ? 'Progres Aksi Peduli sudah tercatat di peta petualanganmu.' : readyToFinish ? 'Tujuh dokumentasi dan satu poster bersama sudah tersimpan.' : `${count}/7 hari terdokumentasi. ${data.poster ? 'Poster sudah tersimpan.' : 'Poster belum tersimpan.'} Tombol tuntas terbuka setelah dokumentasi 7 hari dan poster lengkap.`}</p></div><button className="action-primary" disabled={busy || !readyToFinish} aria-describedby="action-finish-progress" onClick={finished && readyToFinish ? onBack : finish}>{finished && readyToFinish ? 'Kembali ke peta' : 'Tuntaskan misi'}<Check size={18} /></button></section>
     </>}</div>
   </div></main>;
-}
-
-function PosterCard({ poster, exampleCard = false }) {
-  const dialog = useRef(null);
-  const image = /^(data:image\/(jpeg|png|webp);base64,|https?:\/|\/)/.test(poster.image_url) ? poster.image_url : '';
-  return <article className="action-poster-card"><button onClick={() => dialog.current?.showModal()} aria-label={`Perbesar poster ${poster.title}`}><img src={image} alt={poster.title} loading="lazy" /><span>{exampleCard ? 'CONTOH POSTER' : 'KARYA SAHABAT PENYU'}</span></button><h3>{poster.title}</h3><p>{poster.authors}</p><dialog ref={dialog} className="action-lightbox" onClick={event => { if (event.target === event.currentTarget) dialog.current.close(); }}><button className="action-secondary" onClick={() => dialog.current.close()} autoFocus>Tutup poster ×</button><img src={image} alt={poster.title} /><h3>{poster.title}</h3><p>{poster.authors}</p></dialog></article>;
 }

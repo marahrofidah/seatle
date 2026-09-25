@@ -8,17 +8,22 @@ import MengenalPenyu from './pages/MengenalPenyu';
 import AncamanPenyu from './pages/AncamanPenyu';
 import PeduliLingkungan from './pages/PeduliLingkungan';
 import AksiPeduli from './pages/AksiPeduli';
+import Gallery from './pages/Gallery';
+import { clearStudentSession, restoreStudentSession } from './lib/studentSession';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
+    const student = restoreStudentSession();
     const hash = window.location.hash.slice(1);
-    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'gallery', 'student-dashboard'].includes(hash) ? hash : 'home';
+    if (!student) return hash === 'gallery' ? 'gallery' : 'home';
+    return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'aksi-peduli/campaign', 'gallery', 'student-dashboard'].includes(hash) ? hash : 'student-dashboard';
   });
 
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (hash === 'aksi-peduli' || hash === 'gallery') { setCurrentPage(hash); return; }
+      if (hash !== 'gallery' && !restoreStudentSession()) { setCurrentPage('login'); return; }
+      if (hash === 'aksi-peduli' || hash === 'aksi-peduli/campaign' || hash === 'gallery') { setCurrentPage(hash); return; }
       if (hash === 'mengenal-penyu') {
         setCurrentPage('mengenal-penyu');
       } else if (hash === 'ancaman-penyu') {
@@ -35,6 +40,12 @@ export default function App() {
   }, []);
 
   const handleStart = () => {
+    setCurrentPage(restoreStudentSession() ? 'student-dashboard' : 'login');
+  };
+
+  const handleStudentExit = () => {
+    clearStudentSession();
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
     setCurrentPage('login');
   };
 
@@ -57,7 +68,7 @@ export default function App() {
   if (currentPage === 'student-dashboard') {
     return (
       <StudentDashboard 
-        onExit={() => setCurrentPage('login')} 
+        onExit={handleStudentExit}
         onSelectModule={(slug) => {
           if (slug === 'mengenal-penyu') {
             setCurrentPage('mengenal-penyu');
@@ -85,8 +96,12 @@ export default function App() {
     return <PeduliLingkungan onBack={() => setCurrentPage('student-dashboard')} />;
   }
 
-  if (currentPage === 'aksi-peduli' || currentPage === 'gallery') {
-    return <AksiPeduli key={currentPage} initialTab={currentPage === 'gallery' ? 'gallery' : 'journal'} onBack={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} />;
+  if (currentPage === 'gallery') {
+    return <Gallery onBack={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} onCreate={() => { window.location.hash = 'aksi-peduli/campaign'; setCurrentPage('aksi-peduli/campaign'); }} />;
+  }
+
+  if (currentPage === 'aksi-peduli' || currentPage === 'aksi-peduli/campaign') {
+    return <AksiPeduli key={currentPage} initialTab={currentPage === 'aksi-peduli/campaign' ? 'campaign' : 'journal'} onGallery={() => { window.location.hash = 'gallery'; setCurrentPage('gallery'); }} onBack={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} />;
   }
 
   return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;
