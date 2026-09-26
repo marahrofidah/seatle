@@ -3,10 +3,8 @@
 .teacher-header { position: relative; isolation: isolate; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 36px 48px 40px; margin-bottom: 24px; filter: drop-shadow(0 8px 20px #07598518); }
 .teacher-header::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; clip-path: url(#teacher-wave); background: linear-gradient(120deg, #ffffffed, #e8f8fff0); }
 .teacher-header > div { min-width: 0; }
-.teacher-account { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 10px 18px; border-radius: 18px; background: #e0f2fe; color: #21647b; overflow-wrap: anywhere; }
-.teacher-account small { font-size: 11px; font-weight: 800; }
-.teacher-account strong { font-family: Fredoka, sans-serif; font-size: 26px; font-weight: 500; line-height: 1.2; }
-.teacher-title-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-bottom: 12px; }
+.teacher-account { display: block; min-width: 0; max-width: 100%; padding: 10px 18px; border-radius: 18px; background: #e0f2fe; color: #21647b; font-family: Fredoka, sans-serif; font-size: 26px; font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
+.teacher-title-row { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
 .teacher-eyebrow { font-size: 11px; letter-spacing: 1.8px; font-weight: 900; color: #0369a1; }
 .teacher-header h1 { font-size: clamp(27px, 3.3vw, 36px); font-weight: 500; margin: 9px 0; line-height: 1.2; }
 .teacher-header p, .teacher-panel-heading p { font-size: 14px; line-height: 1.7; color: #396780; }
@@ -55,8 +53,9 @@
 .teacher-photo dialog button { display: flex; align-items: center; gap: 8px; margin: 0 0 12px auto; min-height: 44px; }
 .teacher-page button:focus-visible, .teacher-page summary:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
 .teacher-login-card { width: min(100%, 460px); padding: 48px 38px; margin: auto; }
-.teacher-overview { display: block; padding: 28px 44px 38px; }
-.teacher-topline { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+.teacher-overview { display: block; padding: 40px 60px 52px; }
+.teacher-container > .teacher-panel { padding: 56px 64px 72px; }
+.teacher-topline { display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-bottom: 12px; padding: 0 12px; }
 .teacher-topline .teacher-account { margin: 0; }
 .teacher-hero-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; padding: 24px 0 30px; }
 .teacher-hero-content h1 { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.2; margin: 12px 0; }
@@ -130,12 +129,12 @@
   .teacher-answer dd { font-size: 13px; }
   .teacher-actions { width: 100%; }
   .teacher-actions button { flex: 1; font-size: 11px; padding: 10px 12px; }
-  .teacher-overview { display: block; padding: 24px; }
+  .teacher-overview { display: block; padding: 32px 30px 38px; }
+  .teacher-container > .teacher-panel { padding: 44px 30px 56px; }
   .teacher-hero-content { padding: 20px 0; }
   .teacher-hero-content h1 { font-size: 28px; }
   .teacher-title-row { gap: 8px 14px; }
-  .teacher-account { padding: 8px 14px; }
-  .teacher-account strong { font-size: 23px; }
+  .teacher-account { padding: 8px 14px; font-size: 23px; }
   .teacher-desktop-break { display: none; }
   .teacher-class-progress { padding: 16px 12px; gap: 12px; }
   .teacher-ring { width: 86px; height: 86px; padding: 7px; }

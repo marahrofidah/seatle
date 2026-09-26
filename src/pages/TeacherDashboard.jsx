@@ -91,9 +91,9 @@ export default function TeacherDashboard({ teacherName, onExit }) {
   return <main className="teacher-page page-background" style={{ '--page-background': `url(${background})` }}>
     <BubbleEffects /><TeacherWave />
     <div className="teacher-container">
+      <div className="teacher-topline"><button className="teacher-button teacher-white" onClick={onExit}><LogOut size={17} />Keluar</button></div>
       <header className="teacher-header teacher-overview">
-        <div className="teacher-topline"><button className="teacher-button teacher-white" onClick={onExit}><LogOut size={17} />Keluar</button></div>
-        <div className="teacher-hero-content"><div><div className="teacher-title-row"><h1>Ruang Guru</h1><span className="teacher-account"><small>Guru</small><strong>{teacherName || 'Guru SEATLE'}</strong></span></div><p>Temani perjalanan murid mengenal penyu<br className="teacher-desktop-break" /> hingga mengambil aksi untuk laut kita.</p></div>
+        <div className="teacher-hero-content"><div><div className="teacher-title-row"><span className="teacher-account">Nama guru : {teacherName || 'Guru SEATLE'}</span><h1>Ruang Guru</h1></div><p>Temani perjalanan murid mengenal penyu<br className="teacher-desktop-break" /> hingga mengambil aksi untuk laut kita.</p></div>
           <div className="teacher-class-progress"><div className="teacher-ring" style={{ '--progress': `${average}%` }}><span><strong>{average}%</strong><small>rata-rata misi</small></span></div><div><strong>Perjalanan kelas</strong><p>{matching.length ? `${complete} dari ${matching.length} murid menuntaskan empat misi.` : 'Perjalanan dimulai saat data murid masuk.'}</p><span>Sesuai pencarian & kelas pilihan</span></div></div>
         </div>
         <div className="teacher-stats" aria-label="Saring murid berdasarkan status">{summaries.map(([id, Icon, count, label]) => <button key={id} aria-pressed={statusFilter === id} onClick={() => setStatusFilter(id)}><Icon size={20} /><strong>{count}</strong><span>{label}</span><ArrowUpRight className="teacher-stat-arrow" size={16} /></button>)}</div>
