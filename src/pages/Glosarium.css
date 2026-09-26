@@ -1,4 +1,5 @@
 .glossary-sheet::before { clip-path: url(#glossary-wavy-card); }
+.glossary-sheet { padding-top: 52px; }
 .glossary-table { width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 15px; line-height: 1.8; text-align: left; }
 .glossary-table thead { background: #e0f2fe; color: #075985; }
 .glossary-table th, .glossary-table td { padding: 18px 20px; vertical-align: top; }
@@ -9,15 +10,64 @@
 .glossary-table tbody tr:nth-child(even) { background: #e0f2fe40; }
 .glossary-turtles { margin-top: 28px; }
 .glossary-turtles h2 { font-family: Fredoka, sans-serif; font-size: clamp(25px, 4vw, 34px); font-weight: 500; margin-top: 10px; }
-.glossary-turtle-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; margin-top: 28px; }
-.glossary-turtle-grid figure { min-width: 0; text-align: center; }
-.glossary-turtle-grid img { width: 100%; height: 160px; object-fit: contain; filter: drop-shadow(0 8px 8px #07598520); }
-.glossary-turtle-grid figcaption { display: inline-block; margin-top: 12px; border-radius: 22px; padding: 8px 14px; background: #fef3c7; color: #075985; font-size: 13px; font-weight: 800; }
+.turtle-explorer { margin-top: 28px; }
+.turtle-explorer-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; font-size: 12px; font-weight: 800; color: #367588; }
+.turtle-explorer-top > span:first-child { display: flex; gap: 7px; align-items: center; }
+.turtle-explorer-top > span:last-child { padding: 6px 11px; border-radius: 20px; background: #e0f2fe; white-space: nowrap; }
+.turtle-stage { position: relative; isolation: isolate; overflow: hidden; display: grid; place-items: center; padding: 20px 56px 45px; background: radial-gradient(ellipse at 50% 35%, #f2fffd, #c6eaf0 65%, #9dd6e5); border: 1px solid #b2dde7; border-radius: 42% 12% 14% 10% / 12% 9% 14% 13%; touch-action: pan-y; }
+.turtle-stage-ring { position: absolute; width: 60%; height: 65%; top: 7%; border: 1px solid #ffffffc0; border-radius: 50%; box-shadow: 0 0 0 22px #ffffff20, 0 0 0 44px #ffffff18; transform: rotate(-15deg); pointer-events: none; }
+.turtle-stage-number { position: absolute; right: 24px; top: 12px; color: #ffffffa0; font: 65px Fredoka, sans-serif; }
+.turtle-stage-image { position: relative; width: 100%; max-width: 420px; display: grid; justify-items: center; }
+.turtle-stage-image img { width: 100%; height: 260px; object-fit: contain; mix-blend-mode: multiply; animation: turtle-reveal .35s ease-out; }
+.turtle-stage-image > span { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; background: #ffffffb3; padding: 7px 12px; border-radius: 20px; color: #367588; }
+.turtle-stage-arrow { position: absolute; top: 45%; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #ffffffed; border: 1px solid white; box-shadow: 0 4px 12px #07598515; }
+.turtle-stage-prev { left: 14px; }
+.turtle-stage-next { right: 14px; }
+.turtle-stage-title { position: relative; text-align: center; margin-top: 18px; z-index: 1; }
+.turtle-stage-title > span { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #4e7b89; }
+.turtle-stage-title h3 { margin-top: 5px; font-size: 30px; font-weight: 500; }
+.turtle-stage-wave { position: absolute; width: 100%; height: 45px; bottom: 0; pointer-events: none; }
+.turtle-explorer-hint { text-align: center; color: #527889; font-size: 12px; line-height: 1.7; margin: 18px 0; }
+.turtle-picker { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.turtle-picker button { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; padding: 9px 5px; gap: 7px; border: 2px solid #d9eaf0; border-radius: 18px; background: #fff; }
+.turtle-picker button.is-selected { border-color: #1687a2; background: #fff3c5; box-shadow: 0 4px 0 #1687a218; }
+.turtle-picker img { width: 100%; height: 65px; object-fit: contain; mix-blend-mode: multiply; }
+.turtle-picker button > span { font-size: 10px; font-weight: 800; line-height: 1.4; }
+.turtle-seen { position: absolute; top: 5px; right: 5px; color: #16806c; }
+.turtle-explorer button:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
+.turtle-zoom { margin: auto; width: min(720px, 92vw); max-height: 90dvh; overflow: auto; padding: 20px; border: 0; border-radius: 24px; color: #075985; background: #f4fcff; }
+.turtle-zoom::backdrop { background: #063b55cc; backdrop-filter: blur(6px); }
+.turtle-zoom > button { display: flex; align-items: center; gap: 6px; margin-left: auto; min-height: 44px; padding: 8px 14px; background: #fff; border-radius: 24px; font-size: 13px; font-weight: 800; }
+.turtle-zoom > img { width: 100%; max-height: 65dvh; object-fit: contain; mix-blend-mode: multiply; }
+.turtle-zoom h3 { font-size: 26px; text-align: center; margin-top: 12px; }
+@keyframes turtle-reveal { from { opacity: .3; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+@media (max-width: 800px) { .turtle-picker { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { .turtle-stage-image img { animation: none; } }
 @media (max-width: 600px) {
+  .glossary-sheet { padding-top: 40px; }
+  .glossary-turtles { padding: 40px 24px 48px; }
+  .glossary-turtles .reflection-heading { padding-bottom: 16px; }
+  .glossary-turtles h2 { font-size: 24px; margin-top: 6px; }
+  .turtle-explorer { margin-top: 16px; }
+  .turtle-explorer-top { font-size: 10px; gap: 6px; }
+  .turtle-explorer-top > span:first-child svg { display: none; }
+  .turtle-stage { grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 14px 4px; padding: 16px 10px 25px; border-radius: 28px; }
+  .turtle-stage-image { grid-column: 1 / -1; grid-row: 1; max-width: 260px; }
+  .turtle-stage-image img { height: 155px; }
+  .turtle-stage-image > span { font-size: 10px; padding: 6px 8px; }
+  .turtle-stage-arrow { position: relative; width: 44px; height: 44px; top: auto; left: auto; right: auto; grid-row: 2; }
+  .turtle-stage-prev { grid-column: 1; }
+  .turtle-stage-next { grid-column: 3; }
+  .turtle-stage-title { grid-column: 2; grid-row: 2; margin-top: 0; min-width: 0; }
+  .turtle-stage-title > span { font-size: 9px; letter-spacing: 1px; }
+  .turtle-stage-title h3 { font-size: 19px; line-height: 1.2; }
+  .turtle-stage-number { display: none; }
+  .turtle-stage-wave { height: 25px; }
+  .turtle-picker { display: flex; gap: 9px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding: 4px 4px 10px; scrollbar-width: thin; scrollbar-color: #9bcdd9 transparent; }
+  .turtle-picker img { height: 48px; }
+  .turtle-picker button { flex: 0 0 92px; border-radius: 13px; scroll-snap-align: center; }
+  .turtle-explorer-hint { margin: 12px 0 8px; font-size: 11px; }
   .glossary-table { font-size: 13px; line-height: 1.75; }
   .glossary-table th, .glossary-table td { padding: 14px 8px; overflow-wrap: anywhere; }
   .glossary-table tbody th { width: 34%; }
-  .glossary-turtle-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
-  .glossary-turtle-grid img { height: 110px; }
-  .glossary-turtle-grid figcaption { padding: 7px 10px; font-size: 11px; }
 }

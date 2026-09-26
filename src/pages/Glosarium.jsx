@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import TurtleExplorer from '../components/TurtleExplorer';
 import BubbleEffects from '../components/BubbleEffects';
 import background from '../assets/images/tanpa_penyu.webp';
 import hijau from '../assets/images/penyu_hijau.webp';
@@ -24,6 +25,7 @@ const terms = [
   ['Ghost Fishing', 'Jaring atau alat tangkap yang ditinggalkan di laut tetapi masih dapat menangkap hewan laut.'],
   ['Migrasi', 'Perpindahan penyu dari satu tempat ke tempat lain untuk mencari makan atau bertelur.'],
 ];
+
 const turtles = [
   ['Penyu Hijau', hijau], ['Penyu Sisik', sisik], ['Penyu Belimbing', belimbing],
   ['Penyu Lekang', lekang], ['Penyu Tempayan', tempayan], ['Penyu Pipih', pipih],
@@ -44,8 +46,8 @@ export default function Glosarium({ onBack }) {
         </table>
       </section>
       <section className="reflection-sheet glossary-sheet glossary-turtles" aria-labelledby="glossary-turtles-title">
-        <header className="reflection-heading"><span className="reflection-eyebrow">SAHABAT LAUT KITA</span><h2 id="glossary-turtles-title">Kenali rupa penyu</h2></header>
-        <div className="glossary-turtle-grid">{turtles.map(([name, image]) => <figure key={name}><img src={image} alt={name} loading="lazy" width="240" height="180" /><figcaption>{name}</figcaption></figure>)}</div>
+        <header className="reflection-heading"><h1 id="glossary-turtles-title">Kenali rupa penyu</h1></header>
+        <TurtleExplorer turtles={turtles} />
       </section>
     </div>
   </main>;

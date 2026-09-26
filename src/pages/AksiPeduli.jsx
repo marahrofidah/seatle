@@ -1,3 +1,6 @@
+import useStudentReport from '../lib/useStudentReport';
+import { actionReport } from '../lib/learningReportFormats';
+import { saveStudentReport } from '../lib/studentReports';
 import useScrollToTop from '../lib/useScrollToTop';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Camera, Check, ExternalLink, ImagePlus, Sparkles, Waves } from 'lucide-react';
@@ -57,6 +60,7 @@ export default function AksiPeduli({ onBack, onGallery, initialTab = 'journal' }
   const studentName = sessionStorage.getItem('seatle_student_name') || 'Petualang';
   const count = Object.keys(data.days).length;
   const readyToFinish = canFinishMission(data);
+  const reportError = useStudentReport('aksi-peduli', actionReport(data), !loading && Boolean(data.challenge || data.poster));
 
   useEffect(() => {
     let active = true;
@@ -103,6 +107,7 @@ export default function AksiPeduli({ onBack, onGallery, initialTab = 'journal' }
     try {
       const { journal, warning } = await publishPoster(poster, key, data);
       setData(journal);
+      await saveStudentReport('aksi-peduli', actionReport(journal));
       setError(warning);
       setNotice(warning ? 'Gambar tersimpan. Kamu tidak perlu mengunggah ulang; coba kirim online lagi dari Pondok kreativitas.' : isSupabaseConfigured ? 'Poster kalian sudah tampil di galeri online!' : 'Poster kalian sudah tampil di galeri perangkat ini!');
       if (!warning) onGallery();
@@ -120,7 +125,7 @@ export default function AksiPeduli({ onBack, onGallery, initialTab = 'journal' }
     <header className="action-header"><button onClick={onBack} aria-label="Kembali ke peta misi"><ArrowLeft size={20} /></button><span>Aksi Peduli</span><small>MISI 04 / ASPEK PERILAKU</small></header>
     <div className="island-page-heading"><div><p className="action-kicker">ASPEK PERILAKU / PRO BEHAVIOUR</p><h1>Aksi kecilmu menghidupkan pulau ini.</h1></div></div>
     <div className="island-content"><nav className="island-navigation" aria-label="Jelajahi pulau">{[['journal', 'Pulau aksi'], ['campaign', 'Pondok kreativitas']].map(([id, label]) => <button key={id} aria-current={tab === id ? 'page' : undefined} onClick={() => { setTab(id); setNotice(''); }}>{id === 'journal' ? <Waves size={16} /> : id === 'campaign' ? <Sparkles size={16} /> : <ImagePlus size={16} />}<span className="island-navigation-label">{label.split(' ').map(word => <span key={word}>{word}</span>)}</span></button>)}</nav>
-    {error && <p role="alert" className="action-error">{error}</p>}{notice && <p role="status" className="action-notice"><Check size={18} />{notice}</p>}
+    {reportError && <p role="alert" className="action-error">{reportError}</p>}{error && <p role="alert" className="action-error">{error}</p>}{notice && <p role="status" className="action-notice"><Check size={18} />{notice}</p>}
     {loading ? <div className="action-panel" role="status">Menyiapkan pulaumu…</div> : <>
       {tab === 'journal' && <section className="island-journal"><ActionIsland data={data} busy={busy} onChallenge={challenge => save({ ...data, challenge }, 'Tantangan dipilih! Sekarang lakukan aksimu dan dokumentasikan.')} onDay={openDay} onNavigate={destination => destination === 'gallery' ? onGallery() : setTab(destination)} />
         <dialog ref={journalDialog} className="action-journal-dialog" aria-label={`Dokumentasi hari ke-${day}`} onCancel={event => { if (busy) event.preventDefault(); }}><div className="action-dialog-bar"><span>DOKUMENTASI HARI Ke-{day}</span><button type="button" disabled={busy} onClick={() => journalDialog.current.close()} aria-label="Tutup jurnal">×</button></div>{error && <p role="alert" className="action-error">{error}</p>}{data.challenge ? <><p className="action-dialog-challenge">{data.challenge}</p>{data.days[day] ? <div className="action-day-form"><img src={data.days[day].photo} alt={`Dokumentasi hari ke-${day}`} /><p>{data.days[day].caption}</p><p className="action-hint">Dokumentasi tersimpan. Lanjutkan aksi berikutnya pada hari berikutnya.</p></div> : <DayForm key={day} day={day} busy={busy} onSave={documentDay} />}</> : <div className="action-prompt"><Waves /><h3>Pilih tantanganmu dulu, yuk.</h3><p>Klik salah satu benda di pantai untuk memilih aksi yang ingin kamu lakukan selama tujuh hari.</p><button className="action-primary" onClick={() => journalDialog.current.close()}>Pilih tantangan<ArrowLeft size={16} /></button></div>}</dialog>

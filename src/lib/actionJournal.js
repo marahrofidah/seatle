@@ -35,6 +35,21 @@ export async function readRecord(key) {
   });
 }
 
+export async function readActionJournals() {
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('records');
+    const store = tx.objectStore('records');
+    const keys = store.getAllKeys();
+    const values = store.getAll();
+    tx.oncomplete = () => {
+      db.close();
+      resolve(keys.result.flatMap((key, index) => typeof key === 'string' && key.startsWith('action:') ? [{ key, data: values.result[index] }] : []));
+    };
+    tx.onabort = tx.onerror = () => { db.close(); reject(new Error('Dokumentasi lama belum dapat dibaca.')); };
+  });
+}
+
 export async function writeRecord(key, value) {
   const db = await database();
   return new Promise((resolve, reject) => {

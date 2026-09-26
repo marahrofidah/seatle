@@ -1,0 +1,29 @@
+<!doctype html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Teacher review fixture</title></head><body><div id="root"></div><script type="module">
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import TeacherDashboard from '/src/pages/TeacherDashboard.jsx';
+import MengenalPenyu from '/src/pages/MengenalPenyu.jsx';
+import AncamanPenyu from '/src/pages/AncamanPenyu.jsx';
+import { saveStudentReport, localReports, syncStudentReports } from '/src/lib/studentReports.js';
+import '/src/index.css';
+const nativeFetch = window.fetch;
+window.fetch = async (input, init) => {
+  const url = new URL(typeof input === 'string' ? input : input.url);
+  if (!url.pathname.startsWith('/rest/v1/')) return nativeFetch(input, init);
+  let data = [];
+  if (url.pathname.endsWith('/students')) data = [{ id: 1, nama: 'Murid Uji', kelas: 'XII' }, { id: 2, nama: 'Murid Uji', kelas: 'XII' }, { id: 3, nama: 'Murid Kedua', kelas: 'XI' }];
+  if (url.pathname.endsWith('/seatle_teachers')) data = [{ user_id: 'teacher-test' }];
+  return new Response(JSON.stringify(data), { status: 200, headers: { 'Content-Type': 'application/json' } });
+};
+const identity = { name: 'Murid Uji', studentClass: 'XII' };
+await saveStudentReport('mengenal-penyu', { submitted: true, entries: [{ question: 'Dugaan penyebab penyu terdampar', answer: 'Sampah plastik di laut' }, { question: 'Apa fungsi karapas?', answer: 'Melindungi organ dalam tubuh', correct: true }] }, identity);
+await saveStudentReport('aksi-peduli', { entries: [{ question: 'Dokumentasi hari 1', answer: 'Membersihkan pantai bersama teman.', date: '2026-09-25', image: location.origin + '/src/assets/images/penyu_hijau.webp' }] }, identity);
+await saveStudentReport('refleksi', { submitted: true, entries: [{ question: 'Website ini membantu saya memahami materi tentang penyu laut.', answer: 'Sangat Setuju' }] }, identity);
+await saveStudentReport('progress', { completed: ['mengenal-penyu'] }, identity);
+window.reportTest = { saveStudentReport, localReports, syncStudentReports };
+sessionStorage.setItem('seatle_student_name', 'Murid Aktivitas');
+sessionStorage.setItem('seatle_student_class', 'XII');
+const activity = new URLSearchParams(location.search).get('activity');
+const component = activity === 'mengenal' ? MengenalPenyu : activity === 'ancaman' ? AncamanPenyu : TeacherDashboard;
+createRoot(document.getElementById('root')).render(React.createElement(component, { teacherName: 'Guru Uji', onExit: () => {}, onBack: () => {} }));
+</script></body></html>

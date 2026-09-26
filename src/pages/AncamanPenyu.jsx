@@ -1,3 +1,4 @@
+import useStudentReport, { loadActivity } from '../lib/useStudentReport';
 import useScrollToTop from '../lib/useScrollToTop';
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Search } from 'lucide-react';
@@ -6,30 +7,41 @@ import turtle from '../assets/images/ancaman_penyu.webp';
 import BubbleEffects from '../components/BubbleEffects';
 import ThreatConnections from '../components/ThreatConnections';
 import { completeAspect } from '../lib/studentProgress';
-import { suspectedCauses, causes, actionQuestions, createEffectOrder, createActionOptionOrders } from '../lib/threatActivities';
+import { suspectedCauses, causes, effects, actionQuestions, createEffectOrder, createActionOptionOrders } from '../lib/threatActivities';
 
 const steps = ['Temukan penyebab', 'Hubungkan dampak', 'Tentukan tindakan'];
 const wavyCard = 'relative isolate before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:content-[\'\'] before:[clip-path:url(#threat-wavy-card)] before:backdrop-blur-xl [filter:drop-shadow(0_20px_30px_rgba(7,89,133,.25))]';
 const primaryButton = 'inline-flex items-center justify-center gap-2 rounded-full border-2 border-white bg-amber-300 px-6 py-3 text-sm font-black text-amber-950 shadow-md transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-4 focus-visible:outline-sky-500 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500';
 
 export default function AncamanPenyu({ onBack }) {
+  const [savedActivity] = useState(() => loadActivity('ancaman-penyu'));
   const [step, setStep] = useState(0);
-  const [suspicions, setSuspicions] = useState([]);
-  const [identified, setIdentified] = useState(false);
-  const [matches, setMatches] = useState({});
+  const [suspicions, setSuspicions] = useState(() => savedActivity.suspicions ?? []);
+  const [identified, setIdentified] = useState(() => savedActivity.identified ?? false);
+  const [matches, setMatches] = useState(() => savedActivity.matches ?? {});
   const [effectOrder] = useState(createEffectOrder);
-  const [checkedMatches, setCheckedMatches] = useState(false);
+  const [checkedMatches, setCheckedMatches] = useState(() => savedActivity.checkedMatches ?? false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [actionOptionOrders] = useState(createActionOptionOrders);
-  const [answers, setAnswers] = useState({});
-  const [checkedAnswers, setCheckedAnswers] = useState({});
-  const [finished, setFinished] = useState(false);
+  const [answers, setAnswers] = useState(() => savedActivity.answers ?? {});
+  const [checkedAnswers, setCheckedAnswers] = useState(() => savedActivity.checkedAnswers ?? {});
+  const [finished, setFinished] = useState(() => savedActivity.finished ?? false);
   useScrollToTop(`${step}-${questionIndex}-${finished}`);
   const allMatched = checkedMatches && causes.every((cause, index) => matches[index] === cause.effect);
   const question = actionQuestions[questionIndex];
   const answerChecked = checkedAnswers[questionIndex];
   const answerCorrect = answerChecked && answers[questionIndex] === 0;
   const allAnsweredCorrectly = actionQuestions.every((_, index) => checkedAnswers[index] && answers[index] === 0);
+
+  const reportError = useStudentReport('ancaman-penyu', {
+    completed: finished,
+    raw: { suspicions, identified, matches, checkedMatches, answers, checkedAnswers, finished },
+    entries: [
+      { question: 'Dugaan penyebab penyu terdampar', answer: suspicions.map(index => suspectedCauses[index]).join('; ') },
+      ...causes.map((cause, index) => ({ question: `Dampak: ${cause.title}`, answer: effects[matches[index]] || '', correct: checkedMatches && matches[index] !== undefined ? matches[index] === cause.effect : null })),
+      ...actionQuestions.map((question, index) => ({ question: question.question, answer: question.options[answers[index]] || '', correct: checkedAnswers[index] && answers[index] !== undefined ? answers[index] === 0 : null })),
+    ],
+  }, Boolean(suspicions.length || Object.keys(matches).length || Object.keys(answers).length));
 
   function goToStep(next) {
     setStep(next);
@@ -44,6 +56,7 @@ export default function AncamanPenyu({ onBack }) {
   return (
     <main className="page-background relative min-h-screen overflow-x-hidden bg-sky-800 bg-cover bg-center pb-16 text-sky-950" style={{ '--page-background': `url(${background})` }}>
       <BubbleEffects />
+      {reportError && <p role="alert" className="relative z-10 m-4 rounded-xl bg-amber-50 p-4 text-sky-950">{reportError}</p>}
       <svg className="absolute h-0 w-0" aria-hidden="true">
         <defs>
           <clipPath id="threat-wavy-card" clipPathUnits="objectBoundingBox">

@@ -1,3 +1,5 @@
+import useStudentReport from '../lib/useStudentReport';
+import { careReport } from '../lib/learningReportFormats';
 import useScrollToTop from '../lib/useScrollToTop';
 import { useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Check, Download, Heart, Waves } from 'lucide-react';
@@ -32,6 +34,7 @@ export default function PeduliLingkungan({ onBack }) {
   const selectedFeeling = feelings.find(({ id }) => id === data.feeling);
   const answeredCount = statements.filter((_, index) => agreementOptions.includes(data.answers[index])).length;
   const completedCount = data.confirmed.filter(Boolean).length;
+  const reportError = useStudentReport('peduli-lingkungan', careReport(data), Boolean(data.action || data.purpose || data.feeling || data.reason || Object.keys(data.answers).length));
 
   function update(fields) {
     const next = { ...data, ...fields, finished: false, confirmed: data.confirmed.map((value, index) => index === step ? false : value) };
@@ -114,6 +117,7 @@ export default function PeduliLingkungan({ onBack }) {
       </svg>
 
       <div className="relative z-10 mx-auto max-w-6xl px-3 sm:px-6">
+        {reportError && <p role="alert" className="action-error">{reportError}</p>}
         <header className="flex items-center gap-3 py-4">
           <button type="button" onClick={onBack} aria-label="Kembali ke peta misi" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/90 shadow-lg focus-visible:outline focus-visible:outline-4 focus-visible:outline-amber-300"><ArrowLeft className="h-5 w-5" /></button>
           <span className="rounded-full border border-white/70 bg-white/90 px-5 py-3 font-brand text-lg font-semibold shadow-lg">Peduli Lingkungan</span>

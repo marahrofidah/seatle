@@ -1,3 +1,4 @@
+import { importExistingReports, syncStudentReports } from './lib/studentReports';
 import useScrollToTop from './lib/useScrollToTop';
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
@@ -18,11 +19,20 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
     const student = restoreStudentSession();
     const hash = window.location.hash.slice(1);
+    if (hash === 'teacher-dashboard') return 'teacher-login';
     if (!student) return hash === 'gallery' ? 'gallery' : 'home';
     return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'aksi-peduli/campaign', 'gallery', 'refleksi', 'glosarium', 'student-dashboard'].includes(hash) ? hash : 'student-dashboard';
   });
 
   useScrollToTop(currentPage);
+
+  useEffect(() => {
+    const sync = () => { void syncStudentReports().catch(() => {}); };
+    void importExistingReports().then(sync).catch(() => {});
+    const timer = setInterval(sync, 30000);
+    window.addEventListener('online', sync);
+    return () => { clearInterval(timer); window.removeEventListener('online', sync); };
+  }, []);
 
   useEffect(() => {
     const previous = window.history.scrollRestoration;
@@ -33,6 +43,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
+      if (hash === 'teacher-dashboard') { setCurrentPage('teacher-login'); return; }
       if (hash !== 'gallery' && !restoreStudentSession()) { setCurrentPage('login'); return; }
       if (hash === 'aksi-peduli' || hash === 'aksi-peduli/campaign' || hash === 'gallery' || hash === 'refleksi' || hash === 'glosarium') { setCurrentPage(hash); return; }
       if (hash === 'mengenal-penyu') {
@@ -73,7 +84,7 @@ export default function App() {
   }
 
   if (currentPage === 'teacher-login') {
-    return <TeacherLogin onBack={() => setCurrentPage('login')} />;
+    return <TeacherLogin onBack={() => { window.history.replaceState(null, '', window.location.pathname + window.location.search); setCurrentPage('login'); }} />;
   }
 
   if (currentPage === 'student-dashboard') {
@@ -123,5 +134,5 @@ export default function App() {
     return <AksiPeduli key={currentPage} initialTab={currentPage === 'aksi-peduli/campaign' ? 'campaign' : 'journal'} onGallery={() => { window.location.hash = 'gallery'; setCurrentPage('gallery'); }} onBack={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} />;
   }
 
-  return <Login onBack={handleBackToHome} onTeacherSuccess={() => setCurrentPage('teacher-login')} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;
+  return <Login onBack={handleBackToHome} onTeacherSuccess={() => { window.location.hash = 'teacher-dashboard'; setCurrentPage('teacher-login'); }} onStudentSuccess={() => setCurrentPage('student-dashboard')} />;
 }

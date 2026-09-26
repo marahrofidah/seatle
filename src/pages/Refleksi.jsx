@@ -1,16 +1,13 @@
+import { websiteStatements as statements } from '../lib/websiteReflection';
+import useStudentReport from '../lib/useStudentReport';
+import { websiteReport } from '../lib/learningReportFormats';
 import { useState } from 'react';
 import { ArrowLeft, Check, Frown, Meh, Smile, SmilePlus } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.webp';
 import BubbleEffects from '../components/BubbleEffects';
 import './Refleksi.css';
 
-const statements = [
-  'Website ini membantu saya memahami materi tentang penyu laut.',
-  'Gambar, video, dan aktivitas pada website membuat saya lebih tertarik belajar.',
-  'Setelah menggunakan website ini, saya menjadi lebih peduli terhadap kelestarian penyu laut.',
-  'Aktivitas yang ada pada website mudah dipahami dan menyenangkan untuk dikerjakan.',
-  'Saya ingin menerapkan tindakan sederhana untuk membantu menjaga lingkungan setelah mengikuti pembelajaran ini.',
-];
+
 const options = [
   { label: 'Sangat Setuju', Icon: SmilePlus },
   { label: 'Setuju', Icon: Smile },
@@ -36,6 +33,7 @@ export default function Refleksi({ onBack }) {
   const [data, setData] = useState(() => readAnswers(key));
   const [error, setError] = useState('');
   const count = data.answers.filter(Boolean).length;
+  const reportError = useStudentReport('refleksi', websiteReport(data), count > 0);
 
   function choose(index, value) {
     const next = { answers: data.answers.map((answer, i) => i === index ? value : answer), submitted: false };
@@ -79,7 +77,7 @@ export default function Refleksi({ onBack }) {
               <Icon size={27} aria-hidden="true" /><span>{label}</span><Check className="reflection-option-check" size={15} aria-hidden="true" />
             </label>)}</div>
           </fieldset>)}</div>
-          {error && <p className="reflection-error" role="alert">{error}</p>}
+          {reportError && <p className="reflection-error" role="alert">{reportError}</p>}{error && <p className="reflection-error" role="alert">{error}</p>}
           {data.submitted && <div className="reflection-success" role="status"><Check size={22} /><div><strong>Terima kasih sudah berbagi pendapat!</strong><p>Refleksimu sudah tersimpan.</p></div></div>}
           <footer className="reflection-footer"><p>{data.submitted ? 'Kamu bisa mengubah pilihan dan menyimpan kembali.' : 'Isi kelima pernyataan untuk menyimpan refleksimu.'}</p><button type="submit" disabled={count !== 5 || data.submitted}><Check size={18} />{data.submitted ? 'Refleksi tersimpan' : 'Simpan refleksi'}</button></footer>
         </form>

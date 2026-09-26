@@ -1,3 +1,4 @@
+import useStudentReport, { loadActivity } from '../lib/useStudentReport';
 import useScrollToTop from '../lib/useScrollToTop';
 import { useState } from 'react';
 import { 
@@ -380,28 +381,29 @@ export default function MengenalPenyu({ onBack }) {
     completeAspect('mengenal-penyu');
     onBack();
   };
+  const [savedActivity] = useState(() => loadActivity('mengenal-penyu'));
   // Navigation State
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   useScrollToTop(activeSectionIndex);
 
   // Section 1 State: Video & Hypothesis
-  const [selectedHypotheses, setSelectedHypotheses] = useState([]);
-  const [selectedAction, setSelectedAction] = useState(null);
+  const [selectedHypotheses, setSelectedHypotheses] = useState(() => savedActivity.selectedHypotheses ?? []);
+  const [selectedAction, setSelectedAction] = useState(() => savedActivity.selectedAction ?? null);
 
   // Section 2 State: Organ Exploration
   const [selectedOrganId, setSelectedOrganId] = useState(null);
 
   // Section 3 State: Quiz
-  const [quizAnswers, setQuizAnswers] = useState({});
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [quizAnswers, setQuizAnswers] = useState(() => savedActivity.quizAnswers ?? {});
+  const [quizSubmitted, setQuizSubmitted] = useState(() => savedActivity.quizSubmitted ?? false);
 
   // Section 4 State: Species cards
   const [expandedSpecies, setExpandedSpecies] = useState(null);
 
   // Section 5 State: Life-cycle ordering activity
-  const [cycleOrder, setCycleOrder] = useState([2, 0, 3, 1]);
-  const [cycleOrderCorrect, setCycleOrderCorrect] = useState(false);
-  const [cycleOrderChecked, setCycleOrderChecked] = useState(false);
+  const [cycleOrder, setCycleOrder] = useState(() => savedActivity.cycleOrder ?? [2, 0, 3, 1]);
+  const [cycleOrderCorrect, setCycleOrderCorrect] = useState(() => savedActivity.cycleOrderCorrect ?? false);
+  const [cycleOrderChecked, setCycleOrderChecked] = useState(() => savedActivity.cycleOrderChecked ?? false);
   const [draggedCyclePosition, setDraggedCyclePosition] = useState(null);
   const [cycleDragPoint, setCycleDragPoint] = useState({ x: 0, y: 0 });
   const [cycleDragStart, setCycleDragStart] = useState({ x: 0, y: 0 });
@@ -470,6 +472,17 @@ export default function MengenalPenyu({ onBack }) {
     }
   };
 
+  const reportError = useStudentReport('mengenal-penyu', {
+    submitted: quizSubmitted,
+    raw: { selectedHypotheses, selectedAction, quizAnswers, quizSubmitted, cycleOrder, cycleOrderCorrect, cycleOrderChecked },
+    entries: [
+      { question: 'Dugaan penyebab penyu terdampar', answer: selectedHypotheses.join('; ') },
+      { question: 'Tindakan saat menemukan penyu', answer: ACTION_OPTIONS.find(item => item.id === selectedAction)?.text || '' },
+      ...QUIZ_QUESTIONS.map(question => ({ question: question.question, answer: question.options.find(option => option.key === quizAnswers[question.id])?.text || '', correct: quizSubmitted && quizAnswers[question.id] ? quizAnswers[question.id] === question.correctKey : null })),
+      { question: 'Urutan siklus hidup', answer: cycleOrderChecked ? cycleOrder.map(index => LIFE_CYCLES[index].stage).join(' > ') : '', correct: cycleOrderChecked ? cycleOrderCorrect : null },
+    ],
+  }, Boolean(selectedHypotheses.length || selectedAction || Object.keys(quizAnswers).length || cycleOrderChecked));
+
   // Handle Quiz Option Selection
   const handleSelectQuizOption = (questionId, optionKey) => {
     if (quizSubmitted) return;
@@ -485,6 +498,7 @@ export default function MengenalPenyu({ onBack }) {
       style={{ '--page-background': `url(${dashboardBackground})` }}
     >
       <BubbleEffects />
+      {reportError && <p role="alert" className="relative z-10 m-4 rounded-xl bg-amber-50 p-4 text-sky-950">{reportError}</p>}
 
       {/* DEFINISI SVG CLIP-PATH GELOMBANG ORGANIK RESMI SEATLE (SAMA DENGAN LOGIN & DASHBOARD) */}
       <svg className="absolute h-0 w-0" aria-hidden="true">

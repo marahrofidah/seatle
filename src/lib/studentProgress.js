@@ -1,3 +1,4 @@
+import { saveStudentReport, syncStudentReports } from './studentReports';
 export const learningAspects = [
   'mengenal-penyu',
   'ancaman-penyu',
@@ -27,4 +28,5 @@ export function completeAspect(aspect) {
   if (!learningAspects.includes(aspect)) return;
   const completed = [...new Set([...getCompletedAspects(), aspect])];
   localStorage.setItem(progressKey(), JSON.stringify(completed));
+  void saveStudentReport('progress', { completed }).then(() => syncStudentReports()).catch(() => {});
 }
