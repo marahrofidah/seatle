@@ -40,10 +40,11 @@
 .teacher-section-picker select { width: 100%; min-width: 0; min-height: 54px; padding: 10px 12px; border: 1px solid #b9ddf5; border-radius: 12px; color: #075985; background: #ffffffdd; font: 500 24px Fredoka, sans-serif; cursor: pointer; }
 .teacher-section-picker select option { color: #075985; background: white; }
 .teacher-filters label { min-width: 0; }
-.teacher-class-picker { min-width: 0; }
+.teacher-class-picker { position: relative; min-width: 0; align-self: start; z-index: 5; }
 .teacher-class-label { display: block; font-size: 12px; font-weight: 900; margin-bottom: 7px; }
 .teacher-class-picker .teacher-mission-trigger { min-height: 48px; padding: 12px 14px; font-size: 14px; }
-.teacher-class-picker .teacher-mission-options { max-height: 264px; overflow-y: auto; overscroll-behavior: contain; }
+.teacher-mission-picker { position: relative; min-width: 0; z-index: 5; }
+.teacher-class-picker .teacher-mission-options, .teacher-mission-picker .teacher-mission-options { position: absolute; top: calc(100% + 8px); left: 0; right: 0; margin-top: 0; max-height: 264px; overflow-y: auto; overscroll-behavior: contain; background: #fff; box-shadow: 0 12px 28px #07598526; }
 .teacher-class-picker .teacher-mission-options button { grid-template-columns: minmax(0, 1fr) 17px; width: 100%; overflow-wrap: anywhere; }
 .teacher-filters select, .teacher-section-picker select { appearance: none; box-sizing: border-box; min-width: 0; max-width: 100%; padding-left: 14px; padding-right: 44px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%230369a1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 18px; }
 .teacher-section-picker select:focus-visible { outline: 2px solid #0284c7; outline-offset: 3px; }

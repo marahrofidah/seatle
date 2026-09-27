@@ -157,8 +157,17 @@ export default function TeacherDashboard({ teacherName, onExit }) {
 function ClassPicker({ classes, selected, onSelect }) {
   const [open, setOpen] = useState(false);
   const trigger = useRef(null);
+  const container = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    function dismiss(event) {
+      if (!container.current?.contains(event.target)) setOpen(false);
+    }
+    document.addEventListener('pointerdown', dismiss);
+    return () => document.removeEventListener('pointerdown', dismiss);
+  }, [open]);
   function close() { setOpen(false); trigger.current?.focus(); }
-  return <div className="teacher-class-picker" onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); close(); } }}>
+  return <div ref={container} className="teacher-class-picker" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); close(); } }}>
     <span id="teacher-class-label" className="teacher-class-label">Kelas</span>
     <button ref={trigger} className="teacher-mission-trigger" aria-labelledby="teacher-class-label teacher-class-value" aria-expanded={open} aria-controls="teacher-class-options" onClick={() => setOpen(value => !value)}><span id="teacher-class-value">{selected || 'Semua kelas'}</span><ChevronDown size={18} /></button>
     {open && <div id="teacher-class-options" className="teacher-mission-options" aria-label="Pilih kelas">{['', ...classes].map(value => <button key={value} aria-pressed={selected === value} onClick={() => { onSelect(value); close(); }}><span>{value || 'Semua kelas'}</span>{selected === value && <Check size={17} />}</button>)}</div>}
@@ -168,8 +177,17 @@ function ClassPicker({ classes, selected, onSelect }) {
 function MissionPicker({ selected, onSelect }) {
   const [open, setOpen] = useState(false);
   const trigger = useRef(null);
+  const container = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    function dismiss(event) {
+      if (!container.current?.contains(event.target)) setOpen(false);
+    }
+    document.addEventListener('pointerdown', dismiss);
+    return () => document.removeEventListener('pointerdown', dismiss);
+  }, [open]);
   function close() { setOpen(false); trigger.current?.focus(); }
-  return <div className="teacher-mission-picker" onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); close(); } }}>
+  return <div ref={container} className="teacher-mission-picker" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); close(); } }}>
     <button ref={trigger} className="teacher-mission-trigger" aria-expanded={open} aria-controls="teacher-mission-options" onClick={() => setOpen(value => !value)}><span>{reportModules[selected][1]}</span><ChevronDown size={18} /></button>
     {open && <div id="teacher-mission-options" className="teacher-mission-options" aria-label="Pilih bagian jawaban">{reportModules.map(([id, label], index) => <button key={id} aria-pressed={selected === index} onClick={() => { close(); onSelect(index); }}><span className="teacher-option-number">{String(index + 1).padStart(2, '0')}</span><span>{label}</span>{selected === index && <Check size={17} />}</button>)}</div>}
   </div>;
