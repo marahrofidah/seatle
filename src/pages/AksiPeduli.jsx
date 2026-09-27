@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Camera, Check, ExternalLink, ImagePlus, Sparkles, Waves } from 'lucide-react';
 import background from '../assets/images/tanpa_penyu.webp';
 import ActionIsland from '../components/ActionIsland';
-import example from '../assets/images/poster.jpg';
+import example from '../assets/images/poster.webp';
 import { journalKey, publishPoster, readImage, readJournal, saveJournalDay, writeRecord } from '../lib/actionJournal';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { completeAspect, getCompletedAspects } from '../lib/studentProgress';

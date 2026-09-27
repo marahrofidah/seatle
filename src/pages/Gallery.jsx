@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { getPosters, journalKey } from '../lib/actionJournal';
 import { isSupabaseConfigured } from '../lib/supabase';
 import background from '../assets/images/tanpa_penyu.webp';
-import example from '../assets/images/poster.jpg';
+import example from '../assets/images/poster.webp';
 import './AksiPeduli.css';
 import './ActionIsland.css';
 import './Gallery.css';

@@ -1,8 +1,8 @@
-import feelingImage0 from '../assets/images/sedih.png';
-import feelingImage1 from '../assets/images/prihatin.png';
-import feelingImage2 from '../assets/images/senang_ingin_membantu.png';
-import feelingImage3 from '../assets/images/peduli.png';
-import feelingImage4 from '../assets/images/terkejut.png';
+import feelingImage0 from '../assets/images/sedih.webp';
+import feelingImage1 from '../assets/images/prihatin.webp';
+import feelingImage2 from '../assets/images/senang_ingin_membantu.webp';
+import feelingImage3 from '../assets/images/peduli.webp';
+import feelingImage4 from '../assets/images/terkejut.webp';
 
 export const feelings = [
   { id: 'sedih', image: feelingImage0, label: 'Sedih' },

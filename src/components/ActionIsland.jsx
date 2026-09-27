@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { canDocument } from '../lib/actionSchedule';
 import { Check, Camera } from 'lucide-react';
-import turtle from '../assets/images/senang_ingin_membantu.png';
+import turtle from '../assets/images/senang_ingin_membantu.webp';
 import { challenges } from '../lib/actionJournal';
-import tanpaSedotan from '../assets/images/tanpa_sedotan.png';
-import botolMinum from '../assets/images/botol_minum.png';
-import tasKain from '../assets/images/tas_kain.png';
-import tempatSampah from '../assets/images/tempat_sampah.png';
-import kurangiPlastik from '../assets/images/kurangi_plastik.png';
-import pilahSampah from '../assets/images/pilah_sampah.png';
-import bersihRumah from '../assets/images/bersih_rumah.png';
+import tanpaSedotan from '../assets/images/tanpa_sedotan.webp';
+import botolMinum from '../assets/images/botol_minum.webp';
+import tasKain from '../assets/images/tas_kain.webp';
+import tempatSampah from '../assets/images/tempat_sampah.webp';
+import kurangiPlastik from '../assets/images/kurangi_plastik.webp';
+import pilahSampah from '../assets/images/pilah_sampah.webp';
+import bersihRumah from '../assets/images/bersih_rumah.webp';
 
 const objects = [
   { name: 'Tanpa sedotan', image: tanpaSedotan, x: 15, y: 49 },
