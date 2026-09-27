@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Compass, Download, FileText, LogOut, RefreshCw, Search, Users, Waves, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { importExistingReports, localReports, remoteReports, syncStudentReports } from '../lib/studentReports';
-import { completedMissions, mergeStudentReports, reportModules, reportsCsv } from '../lib/reportModel';
+import { completedMissions, mergeStudentReports, reportModules } from '../lib/reportModel';
+import { classReports, reportsWorkbook } from '../lib/reportExcel';
 import { withGalleryTimeout } from '../lib/galleryLoader';
 import BubbleEffects from '../components/BubbleEffects';
 import TeacherWave from '../components/TeacherWave';
@@ -32,6 +33,8 @@ export default function TeacherDashboard({ teacherName, onExit }) {
   const [selectedModule, setSelectedModule] = useState(0);
   const [revision, setRevision] = useState(0);
   const [updated, setUpdated] = useState('');
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState('');
   const detail = useRef(null);
 
   useEffect(() => {
@@ -75,11 +78,25 @@ export default function TeacherDashboard({ teacherName, onExit }) {
   const average = matching.length ? Math.round(matching.reduce((sum, student) => sum + completedMissions(student), 0) / (matching.length * 4) * 100) : 0;
   const summaries = [['all', Users, matching.length, 'Semua murid'], ['ongoing', Compass, matching.length - complete, 'Belum tuntas'], ['complete', Check, complete, 'Tuntas 4 misi'], ['reflection', FileText, reflected, 'Refleksi terkirim']];
 
-  function exportCsv() {
-    const url = URL.createObjectURL(new Blob([reportsCsv(filtered)], { type: 'text/csv;charset=utf-8;' }));
-    const anchor = document.createElement('a');
-    anchor.href = url; anchor.download = 'rekap-jawaban-seatle.csv'; anchor.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const exportStudents = classReports(students, studentClass);
+  async function exportExcel() {
+    setExporting(true);
+    setExportError('');
+    try {
+      const workbook = await reportsWorkbook(exportStudents);
+      const buffer = await workbook.xlsx.writeBuffer();
+      const url = URL.createObjectURL(new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      const suffix = (studentClass || 'semua-kelas').replace(/[^a-zA-Z0-9_-]/g, '-');
+      anchor.download = `rekap-seatle-${suffix}.xlsx`;
+      anchor.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      setExportError('File Excel belum berhasil dibuat. Silakan coba unduh lagi.');
+    } finally {
+      setExporting(false);
+    }
   }
 
   function selectStudent(student, module = 0) {
@@ -99,9 +116,11 @@ export default function TeacherDashboard({ teacherName, onExit }) {
         <div className="teacher-stats" aria-label="Saring murid berdasarkan status">{summaries.map(([id, Icon, count, label]) => <button key={id} aria-pressed={statusFilter === id} onClick={() => setStatusFilter(id)}><Icon size={20} /><strong>{count}</strong><span>{label}</span><ArrowUpRight className="teacher-stat-arrow" size={16} /></button>)}</div>
       </header>
       <section className="teacher-panel" aria-labelledby="teacher-roster-title">
-        <div className="teacher-panel-heading"><div><h2 id="teacher-roster-title">Jejak Belajar Murid</h2><p>Dari dugaan awal hingga aksi nyata dan refleksi akhir.</p></div><div className="teacher-actions"><button className="teacher-button teacher-white" disabled={loading} onClick={() => { setLoading(true); setRevision(value => value + 1); }}><RefreshCw size={16} />{loading ? 'Memuat...' : 'Muat ulang'}</button><button className="teacher-button" disabled={!filtered.length} onClick={exportCsv}><Download size={16} />Unduh CSV</button></div></div>
+        <div className="teacher-panel-heading"><div><h2 id="teacher-roster-title">Jejak Belajar Murid</h2><p>Dari dugaan awal hingga aksi nyata dan refleksi akhir.</p></div><div className="teacher-actions"><button className="teacher-button teacher-white" disabled={loading} onClick={() => { setLoading(true); setRevision(value => value + 1); }}><RefreshCw size={16} />{loading ? 'Memuat...' : 'Muat ulang'}</button><button className="teacher-button" disabled={loading || exporting || !exportStudents.length} onClick={exportExcel}><Download size={16} />{exporting ? 'Menyiapkan Excel...' : 'Unduh Excel'}</button></div></div>
+        <p className="teacher-meta">Excel berisi seluruh murid {studentClass ? `kelas ${studentClass}` : 'dari semua kelas'}, termasuk yang tidak tampil karena pencarian atau filter status.</p>
+        {exportError && <p className="teacher-warning" role="alert">{exportError}</p>}
         {warnings.length > 0 && <div className="teacher-warning" role="status">{warnings.map(message => <p key={message}>{message}</p>)}<p>Data yang belum diterima tidak dianggap sebagai jawaban kosong dari murid.</p></div>}
-        <div className="teacher-filters"><label><span>Cari murid</span><div className="teacher-search"><Search size={18} /><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Nama atau kelas" /></div></label><label><span>Kelas</span><select value={studentClass} onChange={event => setStudentClass(event.target.value)}><option value="">Semua kelas</option>{classes.map(label => <option key={label}>{label}</option>)}</select></label></div>
+        <div className="teacher-filters"><label><span>Cari murid</span><div className="teacher-search"><Search size={18} /><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Nama atau kelas" /></div></label><ClassPicker classes={classes} selected={studentClass} onSelect={setStudentClass} /></div>
         <p className="teacher-meta" role="status">{loading ? 'Memuat rekap murid...' : `${filtered.length} murid ditampilkan · Diperbarui ${updated}`}</p>
         <div className="teacher-roster-caption"><span><i /> Tuntas</span><span><i /> Dalam proses</span><span><i /> Belum ada data</span><p>Klik misi untuk membaca jawaban</p></div>
         <div className="teacher-student-grid">{filtered.map(student => {
@@ -119,19 +138,54 @@ export default function TeacherDashboard({ teacherName, onExit }) {
         {!loading && !filtered.length && <div className="teacher-empty"><Waves size={32} /><h3>{students.length ? 'Murid tidak ditemukan' : 'Belum ada data murid yang diterima'}</h3><p>{students.length ? 'Coba nama atau kelas lainnya.' : 'Rekap akan tampil setelah murid masuk dan jawaban tersimpan.'}</p></div>}
       </section>
       {activeStudent && <section ref={detail} tabIndex={-1} className="teacher-panel teacher-detail" aria-labelledby="teacher-detail-title"><div className="teacher-panel-heading"><div><span className="teacher-eyebrow">RINCIAN JAWABAN</span><h2 id="teacher-detail-title">{activeStudent.name}</h2><p>Kelas {activeStudent.studentClass} · {completedMissions(activeStudent)}/4 misi tuntas</p></div><button className="teacher-button teacher-white" onClick={() => { setSelected(null); window.scrollTo({ top: 0, behavior: 'instant' }); document.body.scrollTo({ top: 0, behavior: 'instant' }); }}><ArrowLeft size={16} />Daftar murid</button></div>
-        {reportModules.map(([id, label], index) => <ModuleReport key={`${selected}:${selectedModule}:${id}`} report={activeStudent.reports[id]} label={label} number={index + 1} initiallyOpen={selectedModule === index} completed={activeStudent.reports.progress?.payload?.completed?.includes(id)} />)}
+        <div className="teacher-report-stream">
+          <div className="teacher-section-picker">
+            <div className="teacher-picker-top"><span><Compass size={17} /> JELAJAHI JAWABAN</span><span>{String(selectedModule + 1).padStart(2, '0')} / 05</span></div>
+            <MissionPicker key={selected} selected={selectedModule} onSelect={setSelectedModule} />
+            <div className="teacher-picker-bottom">
+              <div className="teacher-section-markers" aria-label="Pilih nomor bagian">{reportModules.map(([id, label], index) => <button key={id} aria-label={`Buka ${label}`} aria-pressed={selectedModule === index} onClick={() => setSelectedModule(index)}>{index + 1}</button>)}</div>
+              <div className="teacher-picker-arrows"><button aria-label="Bagian sebelumnya" disabled={selectedModule === 0} onClick={() => setSelectedModule(value => value - 1)}><ArrowLeft size={18} /></button><button aria-label="Bagian berikutnya" disabled={selectedModule === reportModules.length - 1} onClick={() => setSelectedModule(value => value + 1)}><ArrowLeft size={18} style={{ transform: 'rotate(180deg)' }} /></button></div>
+            </div>
+          </div>
+          <ModuleReport key={`${selected}:${selectedModule}`} report={activeStudent.reports[reportModules[selectedModule][0]]} label={reportModules[selectedModule][1]} completed={activeStudent.reports.progress?.payload?.completed?.includes(reportModules[selectedModule][0])} />
+        </div>
       </section>}
     </div>
   </main>;
 }
 
-function ModuleReport({ report, label, number, completed, initiallyOpen }) {
+function ClassPicker({ classes, selected, onSelect }) {
+  const [open, setOpen] = useState(false);
+  const trigger = useRef(null);
+  function close() { setOpen(false); trigger.current?.focus(); }
+  return <div className="teacher-class-picker" onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); close(); } }}>
+    <span id="teacher-class-label" className="teacher-class-label">Kelas</span>
+    <button ref={trigger} className="teacher-mission-trigger" aria-labelledby="teacher-class-label teacher-class-value" aria-expanded={open} aria-controls="teacher-class-options" onClick={() => setOpen(value => !value)}><span id="teacher-class-value">{selected || 'Semua kelas'}</span><ChevronDown size={18} /></button>
+    {open && <div id="teacher-class-options" className="teacher-mission-options" aria-label="Pilih kelas">{['', ...classes].map(value => <button key={value} aria-pressed={selected === value} onClick={() => { onSelect(value); close(); }}><span>{value || 'Semua kelas'}</span>{selected === value && <Check size={17} />}</button>)}</div>}
+  </div>;
+}
+
+function MissionPicker({ selected, onSelect }) {
+  const [open, setOpen] = useState(false);
+  const trigger = useRef(null);
+  function close() { setOpen(false); trigger.current?.focus(); }
+  return <div className="teacher-mission-picker" onKeyDown={event => { if (event.key === 'Escape' && open) { event.preventDefault(); close(); } }}>
+    <button ref={trigger} className="teacher-mission-trigger" aria-expanded={open} aria-controls="teacher-mission-options" onClick={() => setOpen(value => !value)}><span>{reportModules[selected][1]}</span><ChevronDown size={18} /></button>
+    {open && <div id="teacher-mission-options" className="teacher-mission-options" aria-label="Pilih bagian jawaban">{reportModules.map(([id, label], index) => <button key={id} aria-pressed={selected === index} onClick={() => { close(); onSelect(index); }}><span className="teacher-option-number">{String(index + 1).padStart(2, '0')}</span><span>{label}</span>{selected === index && <Check size={17} />}</button>)}</div>}
+  </div>;
+}
+
+function reportStatus(report, completed) {
+  return completed || report?.payload?.completed ? 'Tuntas' : report?.payload?.submitted ? 'Tersimpan' : report ? 'Dalam proses' : 'Belum ada data';
+}
+
+function ModuleReport({ report, label, completed }) {
   const payload = report?.payload;
-  const status = completed || payload?.completed ? 'Tuntas' : payload?.submitted ? 'Tersimpan' : report ? 'Dalam proses' : 'Belum ada data';
-  return <details className="teacher-module" open={initiallyOpen}>
-    <summary><span className="teacher-module-number">0{number}</span><h3>{label}</h3><span className={`teacher-badge ${status === 'Tuntas' || status === 'Tersimpan' ? 'is-done' : ''}`}>{status}</span><ChevronDown size={18} /></summary>
-    <div className="teacher-module-body">{report ? <><p className="teacher-meta">{new Date(report.updated_at).toLocaleString('id-ID')}{report.pending ? ' · Salinan perangkat; belum tersinkron' : ' · Tersinkron'}</p><dl>{(payload.entries || []).map((entry, index) => <div className="teacher-answer" key={`${index}:${entry.question}`}><dt>{entry.question}</dt><dd>{entry.answer || <span className="teacher-unanswered">Belum ada jawaban tersimpan</span>}{typeof entry.correct === 'boolean' && <span className={`teacher-result ${entry.correct ? 'is-correct' : ''}`}>{entry.correct ? 'Benar' : 'Belum tepat'}</span>}{entry.date && <small>Tanggal dokumentasi: {entry.date}</small>}{entry.note && <small>{entry.note}</small>}{entry.image && <ReportImage src={entry.image} label={entry.question} />}</dd></div>)}</dl></> : <p className="teacher-unanswered">Belum ada jawaban yang diterima untuk bagian ini. Jawaban lama yang tidak pernah disimpan tidak dapat ditampilkan.</p>}</div>
-  </details>;
+  const status = reportStatus(report, completed);
+  return <section className="teacher-module" aria-labelledby="teacher-chapter-title">
+    <header className="teacher-chapter-heading"><h3 id="teacher-chapter-title">Catatan jawaban</h3><span className={`teacher-badge ${status === 'Tuntas' || status === 'Tersimpan' ? 'is-done' : ''}`}>{status}</span><span className="sr-only">{label}</span></header>
+    <div className="teacher-module-body">{report ? <><p className="teacher-meta">{new Date(report.updated_at).toLocaleString('id-ID')}{report.pending ? ' · Salinan perangkat; belum tersinkron' : ' · Tersinkron'}</p><dl>{(payload.entries || []).map((entry, index) => <div className="teacher-answer" key={`${index}:${entry.question}`}><dt><span className="teacher-answer-number">{String(index + 1).padStart(2, '0')}</span><span>{entry.question}</span></dt><dd>{entry.answer || <span className="teacher-unanswered">Belum ada jawaban tersimpan</span>}{typeof entry.correct === 'boolean' && <span className={`teacher-result ${entry.correct ? 'is-correct' : ''}`}>{entry.correct ? 'Benar' : 'Belum tepat'}</span>}{entry.date && <small>Tanggal dokumentasi: {entry.date}</small>}{entry.note && <small>{entry.note}</small>}{entry.image && <ReportImage src={entry.image} label={entry.question} />}</dd></div>)}</dl></> : <div className="teacher-chapter-empty"><Waves size={36} /><h4>Belum ada jawaban di bagian ini</h4><p>Jawaban akan tampil setelah data murid diterima. Pilih bagian lain melalui menu di atas.</p></div>}</div>
+  </section>;
 }
 
 function ReportImage({ src, label }) {
