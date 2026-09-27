@@ -7,9 +7,15 @@ import AncamanPenyu from '/src/pages/AncamanPenyu.jsx';
 import { saveStudentReport, localReports, syncStudentReports } from '/src/lib/studentReports.js';
 import '/src/index.css';
 const nativeFetch = window.fetch;
+window.deleteTest = { calls: [], fail: false };
 window.fetch = async (input, init) => {
   const url = new URL(typeof input === 'string' ? input : input.url);
   if (!url.pathname.startsWith('/rest/v1/')) return nativeFetch(input, init);
+  if (url.pathname.endsWith('/rpc/teacher_delete_student')) {
+    window.deleteTest.calls.push(JSON.parse(init.body));
+    if (window.deleteTest.fail) return new Response(JSON.stringify({code:'42501',message:'Denied test'}), {status:403,headers:{'Content-Type':'application/json'}});
+    return new Response('null', {status:200,headers:{'Content-Type':'application/json'}});
+  }
   let data = [];
   if (url.pathname.endsWith('/students')) data = [{ id: 1, nama: 'Murid Uji', kelas: 'XII' }, { id: 2, nama: 'Murid Uji', kelas: 'XII' }, { id: 3, nama: 'Murid Kedua', kelas: 'XI' }];
   if (url.pathname.endsWith('/seatle_teachers')) data = [{ user_id: 'teacher-test' }];

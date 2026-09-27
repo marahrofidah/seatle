@@ -1,6 +1,29 @@
 import { isSupabaseConfigured, supabase } from './supabase';
 import { canDocument, dateLegacyEntries, localDate } from './actionSchedule';
 import { loadGallery, withGalleryTimeout } from './galleryLoader';
+import { studentIdentity } from './reportModel';
+
+export async function deleteStudentJournal(name, studentClass) {
+  const identity = studentIdentity(name, studentClass);
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('records', 'readwrite');
+    const cursor = tx.objectStore('records').openCursor();
+    cursor.onsuccess = () => {
+      const item = cursor.result;
+      if (!item) return;
+      if (typeof item.key === 'string' && item.key.startsWith('action:')) {
+        try {
+          const pair = JSON.parse(item.key.slice(7));
+          if (studentIdentity(...pair) === identity) item.delete();
+        } catch { /* Unrelated legacy keys remain untouched. */ }
+      }
+      item.continue();
+    };
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onabort = tx.onerror = () => { db.close(); reject(new Error('Jurnal perangkat belum dapat dibersihkan.')); };
+  });
+}
 
 export const challenges = [
   ['🥤', 'Tidak menggunakan sedotan plastik'],

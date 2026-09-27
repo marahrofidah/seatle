@@ -3,6 +3,7 @@ import { withGalleryTimeout } from './galleryLoader';
 import { studentIdentity } from './reportModel';
 import { readActionJournals } from './actionJournal';
 import { actionReport, careReport, websiteReport } from './learningReportFormats';
+import { deletedIdentities, rememberDeleted } from './studentDeletion';
 
 function database() {
   return new Promise((resolve, reject) => {
@@ -22,13 +23,14 @@ export async function localReports() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction('reports');
     const request = tx.objectStore('reports').getAll();
-    tx.oncomplete = () => { db.close(); resolve(request.result); };
+    tx.oncomplete = () => { db.close(); const deleted = deletedIdentities(); resolve(request.result.filter(row => !deleted.has(studentIdentity(row.student_name, row.student_class)))); };
     tx.onabort = tx.onerror = () => { db.close(); reject(new Error('Rekap perangkat belum dapat dibaca.')); };
   });
 }
 
 export async function saveStudentReport(module, payload, identity = currentStudent()) {
   if (!identity.name || !identity.studentClass) return;
+  if (deletedIdentities().has(studentIdentity(identity.name, identity.studentClass))) return;
   const key = `${studentIdentity(identity.name, identity.studentClass)}:${module}`;
   const db = await database();
   return new Promise((resolve, reject) => {
@@ -66,12 +68,34 @@ export function syncStudentReports() {
     for (const row of rows.filter(item => item.pending)) {
       const record = { id: row.id, student_name: row.student_name, student_class: row.student_class, module: row.module, payload: row.payload, updated_at: row.updated_at };
       const { error } = await withGalleryTimeout(signal => supabase.from('student_learning_reports').insert(record).abortSignal(signal));
+      if (error?.message?.includes('SEATLE_STUDENT_DELETED')) {
+        rememberDeleted(row.student_name, row.student_class);
+        await purgeDeletedReports();
+        continue;
+      }
       // A timed-out successful insert may be retried with the same UUID.
       if (error && error.code !== '23505') throw new Error('Rekap tersimpan di perangkat. Sinkronisasi ke guru belum tersedia.');
       await markSynced(row);
     }
   })().finally(() => { syncing = undefined; });
   return syncing;
+}
+
+export async function purgeDeletedReports() {
+  const deleted = deletedIdentities();
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('reports', 'readwrite');
+    const cursor = tx.objectStore('reports').openCursor();
+    cursor.onsuccess = () => {
+      const item = cursor.result;
+      if (!item) return;
+      if (deleted.has(studentIdentity(item.value.student_name, item.value.student_class))) item.delete();
+      item.continue();
+    };
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onabort = tx.onerror = () => { db.close(); reject(new Error('Salinan rekap perangkat belum terhapus.')); };
+  });
 }
 
 export async function remoteReports() {

@@ -14,6 +14,7 @@ import Gallery from './pages/Gallery';
 import Refleksi from './pages/Refleksi';
 import Glosarium from './pages/Glosarium';
 import { clearStudentSession, restoreStudentSession } from './lib/studentSession';
+import { isStudentDeleted } from './lib/studentDeletion';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(() => {
@@ -25,6 +26,28 @@ export default function App() {
   });
 
   useScrollToTop(currentPage);
+
+  useEffect(() => {
+    let active = true;
+    async function checkAccount() {
+      const student = restoreStudentSession();
+      if (!student) return;
+      try {
+        if (await isStudentDeleted(student.name, student.studentClass)) {
+          if (!active) return;
+          clearStudentSession();
+          if (!currentPage.startsWith('teacher')) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            setCurrentPage('student-login');
+          }
+        }
+      } catch { /* Retry account checks when connectivity returns. */ }
+    }
+    void checkAccount();
+    const timer = setInterval(checkAccount, 30000);
+    window.addEventListener('online', checkAccount);
+    return () => { active = false; clearInterval(timer); window.removeEventListener('online', checkAccount); };
+  }, [currentPage]);
 
   useEffect(() => {
     const sync = () => { void syncStudentReports().catch(() => {}); };

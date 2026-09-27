@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Compass, Download, FileText, LogOut, RefreshCw, Search, Users, Waves, X } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Compass, Download, FileText, LogOut, RefreshCw, Search, Trash2, Users, Waves, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { importExistingReports, localReports, remoteReports, syncStudentReports } from '../lib/studentReports';
+import { importExistingReports, purgeDeletedReports, localReports, remoteReports, syncStudentReports } from '../lib/studentReports';
 import { completedMissions, mergeStudentReports, reportModules } from '../lib/reportModel';
+import { deleteStudent, deletedIdentities, refreshDeletedStudents } from '../lib/studentDeletion';
 import { classReports, reportsWorkbook } from '../lib/reportExcel';
 import { withGalleryTimeout } from '../lib/galleryLoader';
 import BubbleEffects from '../components/BubbleEffects';
@@ -24,6 +25,10 @@ async function readStudents() {
 
 export default function TeacherDashboard({ teacherName, onExit }) {
   const [students, setStudents] = useState([]);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+  const [deleteNotice, setDeleteNotice] = useState('');
   const [loading, setLoading] = useState(true);
   const [warnings, setWarnings] = useState([]);
   const [query, setQuery] = useState('');
@@ -42,6 +47,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
     async function load() {
       setLoading(true);
       const messages = [];
+      try { await refreshDeletedStudents(); await purgeDeletedReports(); } catch (error) { messages.push(error.message); }
       try { await importExistingReports(); } catch { messages.push('Sebagian jawaban lama di perangkat belum dapat dibaca.'); }
       let local = [];
       try {
@@ -54,7 +60,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
       const remote = results[1].status === 'fulfilled' ? results[1].value : [];
       results.forEach(result => { if (result.status === 'rejected') messages.push(result.reason.message); });
       if (!active) return;
-      setStudents(mergeStudentReports(roster, [...local, ...remote]));
+      setStudents(mergeStudentReports(roster, [...local, ...remote]).filter(student => !deletedIdentities().has(student.key)));
       setWarnings(messages);
       setUpdated(new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
       setLoading(false);
@@ -107,6 +113,18 @@ export default function TeacherDashboard({ teacherName, onExit }) {
 
   return <main className="teacher-page page-background" style={{ '--page-background': `url(${background})` }}>
     <BubbleEffects /><TeacherWave />
+    {deleteTarget && <DeleteStudentDialog student={deleteTarget} busy={deleting} error={deleteError} onCancel={() => { if (!deleting) setDeleteTarget(null); }} onConfirm={async () => {
+      setDeleting(true); setDeleteError('');
+      try {
+        await deleteStudent(deleteTarget.name, deleteTarget.studentClass);
+        setStudents(previous => previous.filter(student => student.key !== deleteTarget.key));
+        if (selected === deleteTarget.key) setSelected(null);
+        setDeleteNotice(`Data ${deleteTarget.name}, kelas ${deleteTarget.studentClass}, telah dihapus.`);
+        await purgeDeletedReports().catch(() => {});
+        setDeleteTarget(null);
+      } catch (error) { setDeleteError(error.message); }
+      finally { setDeleting(false); }
+    }} />}
     <div className="teacher-container">
       <div className="teacher-topline"><button className="teacher-button teacher-white" onClick={onExit}><LogOut size={17} />Keluar</button></div>
       <header className="teacher-header teacher-overview">
@@ -116,6 +134,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
         <div className="teacher-stats" aria-label="Saring murid berdasarkan status">{summaries.map(([id, Icon, count, label]) => <button key={id} aria-pressed={statusFilter === id} onClick={() => setStatusFilter(id)}><Icon size={20} /><strong>{count}</strong><span>{label}</span><ArrowUpRight className="teacher-stat-arrow" size={16} /></button>)}</div>
       </header>
       <section className="teacher-panel" aria-labelledby="teacher-roster-title">
+        {deleteNotice && <p className="teacher-meta" role="status">{deleteNotice}</p>}
         <div className="teacher-panel-heading"><div><h2 id="teacher-roster-title">Jejak Belajar Murid</h2><p>Dari dugaan awal hingga aksi nyata dan refleksi akhir.</p></div><div className="teacher-actions"><button className="teacher-button teacher-white" disabled={loading} onClick={() => { setLoading(true); setRevision(value => value + 1); }}><RefreshCw size={16} />{loading ? 'Memuat...' : 'Muat ulang'}</button><button className="teacher-button" disabled={loading || exporting || !exportStudents.length} onClick={exportExcel}><Download size={16} />{exporting ? 'Menyiapkan Excel...' : 'Unduh Excel'}</button></div></div>
         <p className="teacher-meta">Excel berisi seluruh murid {studentClass ? `kelas ${studentClass}` : 'dari semua kelas'}, termasuk yang tidak tampil karena pencarian atau filter status.</p>
         {exportError && <p className="teacher-warning" role="alert">{exportError}</p>}
@@ -133,6 +152,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
               return <button key={id} className={`is-${state}`} onClick={() => selectStudent(student, index)} aria-label={`${label}: ${done ? 'Tuntas' : state === 'started' ? 'Dalam proses' : 'Belum ada data'}. Lihat jawaban`}><span>{done ? <Check size={17} /> : `0${index + 1}`}</span><small>{['Mengenal', 'Ancaman', 'Peduli', 'Aksi'][index]}</small></button>;
             })}</div>
             <div className="teacher-student-footer"><button className="teacher-reflection" onClick={() => selectStudent(student, 4)}><FileText size={15} /><span>Refleksi<strong>{student.reports.refleksi?.payload?.submitted ? 'Terkirim' : student.reports.refleksi ? 'Masih draf' : 'Belum ada data'}</strong></span></button><button className="teacher-open" onClick={() => selectStudent(student)}>Lihat rekap <ArrowUpRight size={17} /></button></div>
+            <div className="teacher-delete-row"><button className="teacher-delete-button" disabled={loading || deleting} onClick={() => { setDeleteError(''); setDeleteTarget(student); }} aria-label={`Hapus data ${student.name}, kelas ${student.studentClass}`}><Trash2 size={15} />Hapus data murid</button></div>
           </article>;
         })}</div>
         {!loading && !filtered.length && <div className="teacher-empty"><Waves size={32} /><h3>{students.length ? 'Murid tidak ditemukan' : 'Belum ada data murid yang diterima'}</h3><p>{students.length ? 'Coba nama atau kelas lainnya.' : 'Rekap akan tampil setelah murid masuk dan jawaban tersimpan.'}</p></div>}
@@ -152,6 +172,19 @@ export default function TeacherDashboard({ teacherName, onExit }) {
       </section>}
     </div>
   </main>;
+}
+
+function DeleteStudentDialog({ student, busy, error, onCancel, onConfirm }) {
+  const dialog = useRef(null);
+  useEffect(() => { dialog.current?.showModal(); }, []);
+  return <dialog ref={dialog} className="teacher-delete-dialog" aria-labelledby="delete-student-title" onCancel={event => { event.preventDefault(); onCancel(); }}>
+    <h2 id="delete-student-title">Hapus data murid?</h2>
+    <p className="teacher-delete-identity">{student.name}<span>Kelas {student.studentClass}</span></p>
+    <p>Akun, progres, dan seluruh rekap jawaban murid ini akan dihapus permanen. Nama dan kelas ini tidak bisa digunakan kembali sampai diaktifkan oleh pengelola.</p>
+    <p>Poster yang sudah dipublikasikan di galeri tidak ikut dihapus.</p>
+    {error && <p role="alert" className="teacher-warning">{error}</p>}
+    <div className="teacher-actions"><button autoFocus className="teacher-button teacher-white" disabled={busy} onClick={onCancel}>Batal</button><button className="teacher-button teacher-danger" disabled={busy} onClick={onConfirm}>{busy ? 'Menghapus...' : 'Ya, hapus data'}</button></div>
+  </dialog>;
 }
 
 function ClassPicker({ classes, selected, onSelect }) {

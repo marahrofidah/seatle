@@ -4,6 +4,7 @@ import loginBackground from '../assets/images/tanpa_penyu.webp';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import { saveStudentSession } from '../lib/studentSession';
 import { ensureStudent } from '../lib/studentRegistration';
+import { isStudentDeleted } from '../lib/studentDeletion';
 import BubbleEffects from '../components/BubbleEffects';
 
 export default function StudentLogin({ onBack }) {
@@ -31,6 +32,7 @@ export default function StudentLogin({ onBack }) {
 
     setLoading(true);
     try {
+      if (await isStudentDeleted(cleanName, cleanClass)) throw new Error('Akun ini sudah dihapus oleh guru. Hubungi guru untuk melanjutkan.');
       await ensureStudent(supabase, cleanName, cleanClass);
       saveStudentSession(cleanName, cleanClass);
     } catch (err) {
