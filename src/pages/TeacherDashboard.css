@@ -3,8 +3,10 @@
 .teacher-header { position: relative; isolation: isolate; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 36px 48px 40px; margin-bottom: 24px; filter: drop-shadow(0 8px 20px #07598518); }
 .teacher-header::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; clip-path: url(#teacher-wave); background: linear-gradient(120deg, #ffffffed, #e8f8fff0); }
 .teacher-header > div { min-width: 0; }
-.teacher-account { display: block; min-width: 0; max-width: 100%; padding: 10px 18px; border-radius: 18px; background: #e0f2fe; color: #21647b; font-family: Fredoka, sans-serif; font-size: 26px; font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
-.teacher-title-row { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.teacher-account { display: block; min-width: 0; max-width: 100%; color: #396f80; font-size: 18px; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
+.teacher-account strong { color: #125971; font-weight: 900; }
+.teacher-title-row { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+.teacher-intro::after { content: ''; display: block; width: 48px; height: 4px; border-radius: 4px; background: #62bbb9; margin-top: 20px; }
 .teacher-eyebrow { font-size: 11px; letter-spacing: 1.8px; font-weight: 900; color: #0369a1; }
 .teacher-header h1 { font-size: clamp(27px, 3.3vw, 36px); font-weight: 500; margin: 9px 0; line-height: 1.2; }
 .teacher-header p, .teacher-panel-heading p { font-size: 14px; line-height: 1.7; color: #396780; }
@@ -58,7 +60,7 @@
 .teacher-topline { display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-bottom: 12px; padding: 0 12px; }
 .teacher-topline .teacher-account { margin: 0; }
 .teacher-hero-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; padding: 24px 0 30px; }
-.teacher-hero-content h1 { font-size: clamp(28px, 3.2vw, 40px); line-height: 1.2; margin: 12px 0; }
+.teacher-hero-content h1 { font-size: clamp(30px, 3.2vw, 40px); line-height: 1.2; margin: 0; }
 .teacher-class-progress { display: flex; align-items: center; gap: 22px; padding: 24px; border-radius: 42% 25% 35% 20% / 20% 25% 20% 25%; background: #d8f2f0; border: 1px solid #c0e7e6; }
 .teacher-class-progress > div:last-child { flex: 1; min-width: 0; }
 .teacher-class-progress strong { font-size: 16px; }
@@ -132,9 +134,10 @@
   .teacher-overview { display: block; padding: 32px 30px 38px; }
   .teacher-container > .teacher-panel { padding: 44px 30px 56px; }
   .teacher-hero-content { padding: 20px 0; }
-  .teacher-hero-content h1 { font-size: 28px; }
+  .teacher-hero-content h1 { font-size: 32px; }
   .teacher-title-row { gap: 8px 14px; }
-  .teacher-account { padding: 8px 14px; font-size: 23px; }
+  .teacher-account { font-size: 18px; }
+  .teacher-intro > p { font-size: 14px; line-height: 1.65; max-width: 30ch; }
   .teacher-desktop-break { display: none; }
   .teacher-class-progress { padding: 16px 12px; gap: 12px; }
   .teacher-ring { width: 86px; height: 86px; padding: 7px; }
