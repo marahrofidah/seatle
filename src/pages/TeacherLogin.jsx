@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 const teacherEmail = import.meta.env.VITE_TEACHER_EMAIL || 'guru@seatle.local';
 
 export default function TeacherLogin({ onBack, onStudentSuccess }) {
+  const [teacherName, setTeacherName] = useState(() => (sessionStorage.getItem('seatle_teacher_name') || '').trim());
   const [loggedIn, setLoggedIn] = useState(false);
   const [checkingSession, setCheckingSession] = useState(Boolean(supabase));
 
@@ -13,7 +14,8 @@ export default function TeacherLogin({ onBack, onStudentSuccess }) {
     if (!supabase) return;
     let active = true;
     supabase.auth.getSession().then(({ data }) => {
-      if (active) setLoggedIn(data.session?.user?.email?.toLowerCase() === teacherEmail.toLowerCase());
+      if (active) setLoggedIn(Boolean(sessionStorage.getItem('seatle_teacher_name')?.trim())
+        && data.session?.user?.email?.toLowerCase() === teacherEmail.toLowerCase());
     }).catch(() => {}).finally(() => {
       if (active) setCheckingSession(false);
     });
@@ -22,10 +24,13 @@ export default function TeacherLogin({ onBack, onStudentSuccess }) {
 
   const handleExit = async () => {
     if (supabase) await supabase.auth.signOut();
+    sessionStorage.removeItem('seatle_teacher_name');
+    setTeacherName('');
+    setLoggedIn(false);
     onBack();
   };
 
   if (checkingSession) return <main className="flex min-h-screen items-center justify-center bg-sky-50 text-sky-800" role="status">Memuat...</main>;
-  if (loggedIn) return <TeacherDashboard teacherName={sessionStorage.getItem('seatle_teacher_name') || ''} onExit={handleExit} />;
-  return <Login initialRole="guru" onBack={onBack} onTeacherSuccess={() => setLoggedIn(true)} onStudentSuccess={onStudentSuccess} />;
+  if (loggedIn && teacherName) return <TeacherDashboard teacherName={teacherName} onExit={handleExit} />;
+  return <Login initialRole="guru" onBack={onBack} onTeacherSuccess={name => { setTeacherName(name); setLoggedIn(true); }} onStudentSuccess={onStudentSuccess} />;
 }

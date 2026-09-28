@@ -58,7 +58,7 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess, init
         return;
       }
       sessionStorage.setItem('seatle_teacher_name', cleanName);
-      onTeacherSuccess?.();
+      onTeacherSuccess?.(cleanName);
       return;
     }
 
