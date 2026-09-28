@@ -1,3 +1,4 @@
+import BackgroundMusic from './components/BackgroundMusic';
 import { importExistingReports, syncStudentReports } from './lib/studentReports';
 import useScrollToTop from './lib/useScrollToTop';
 import { lazy, Suspense, useState, useEffect } from 'react';
@@ -183,5 +184,5 @@ function AppContent() {
 }
 
 export default function App() {
-  return <Suspense fallback={<main className="flex min-h-screen items-center justify-center bg-sky-50 text-sky-900" role="status">Memuat halaman...</main>}><AppContent /></Suspense>;
+  return <><BackgroundMusic /><Suspense fallback={<main className="flex min-h-screen items-center justify-center bg-sky-50 text-sky-900" role="status">Memuat halaman...</main>}><AppContent /></Suspense></>;
 }
