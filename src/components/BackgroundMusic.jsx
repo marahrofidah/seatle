@@ -12,6 +12,23 @@ function savedVolume() {
   } catch { return 0.3; }
 }
 
+async function playMusic(element, graph, volume) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!graph.current && AudioContext) {
+    const context = new AudioContext();
+    const source = context.createMediaElementSource(element);
+    const gain = context.createGain();
+    source.connect(gain).connect(context.destination);
+    graph.current = { context, gain };
+  }
+  if (graph.current) {
+    element.volume = 1;
+    graph.current.gain.gain.value = volume;
+  } else element.volume = volume;
+  // Start both operations during the click gesture for mobile browsers.
+  await Promise.all([graph.current?.context.resume(), element.play()]);
+}
+
 export default function BackgroundMusic() {
   const audio = useRef(null);
   const container = useRef(null);
@@ -20,10 +37,12 @@ export default function BackgroundMusic() {
   const graph = useRef(null);
   const requested = useRef(false);
   const operation = useRef(0);
+  const autoStart = useRef(true);
   const [volume, setVolume] = useState(savedVolume);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const currentVolume = useRef(volume);
 
   useEffect(() => {
     const element = audio.current;
@@ -40,6 +59,47 @@ export default function BackgroundMusic() {
   }, []);
 
   useEffect(() => {
+    const element = audio.current;
+    let active = true;
+    let starting = false;
+    const removeListeners = () => {
+      document.removeEventListener('click', startOnInteraction);
+      document.removeEventListener('keydown', startOnInteraction);
+    };
+    async function startOnInteraction(event) {
+      if (!active || !autoStart.current || starting) return;
+      if (event && container.current?.contains(event.target)) return;
+      if (event?.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
+      starting = true;
+      const id = ++operation.current;
+      requested.current = true;
+      try {
+        // Use the media element on load; create Web Audio only after a gesture.
+        if (event) await playMusic(element, graph, currentVolume.current);
+        else {
+          element.volume = currentVolume.current;
+          await element.play();
+        }
+        if (active && operation.current === id) {
+          autoStart.current = false;
+          setPlaying(true);
+          removeListeners();
+        }
+      } catch (err) {
+        if (!active || operation.current !== id) return;
+        requested.current = false;
+        if (err.name !== 'NotAllowedError' && err.name !== 'AbortError') {
+          setError('Musik belum bisa dimuat. Coba nyalakan kembali.');
+        }
+      } finally { starting = false; }
+    }
+    document.addEventListener('click', startOnInteraction);
+    document.addEventListener('keydown', startOnInteraction);
+    void startOnInteraction();
+    return () => { active = false; removeListeners(); };
+  }, []);
+
+  useEffect(() => {
     if (!expanded) return;
     const dismiss = event => {
       if (!container.current?.contains(event.target)) setExpanded(false);
@@ -51,12 +111,14 @@ export default function BackgroundMusic() {
   function changeVolume(event) {
     const next = Number(event.target.value) / 100;
     setVolume(next);
+    currentVolume.current = next;
     if (graph.current) graph.current.gain.gain.value = next;
     else if (audio.current) audio.current.volume = next;
     try { localStorage.setItem(volumeKey, String(next)); } catch { /* Controls still work without storage. */ }
   }
 
   async function toggleMusic() {
+    autoStart.current = false;
     const element = audio.current;
     const id = ++operation.current;
     if (requested.current && (loading || !element.paused)) {
@@ -70,20 +132,7 @@ export default function BackgroundMusic() {
     setLoading(true);
     setError('');
     try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!graph.current && AudioContext) {
-        const context = new AudioContext();
-        const source = context.createMediaElementSource(element);
-        const gain = context.createGain();
-        source.connect(gain).connect(context.destination);
-        graph.current = { context, gain };
-      }
-      if (graph.current) {
-        element.volume = 1;
-        graph.current.gain.gain.value = volume;
-      } else element.volume = volume;
-      // Start both operations during the click gesture for mobile browsers.
-      await Promise.all([graph.current?.context.resume(), element.play()]);
+      await playMusic(element, graph, volume);
       if (operation.current !== id) return;
       setPlaying(true);
     } catch {
@@ -99,7 +148,7 @@ export default function BackgroundMusic() {
 
   const active = playing || loading;
   return <aside ref={container} className="music-control" aria-label="Kontrol musik latar" data-no-bubbles onKeyDown={event => { if (event.key === 'Escape') { setExpanded(false); trigger.current?.focus(); } }}>
-    <audio ref={audio} src={musicUrl} loop preload="none" playsInline
+    <audio ref={audio} src={musicUrl} loop preload="auto" playsInline
       onPlaying={() => setPlaying(true)}
       onPause={() => setPlaying(false)}
       onError={() => { requested.current = false; setPlaying(false); setLoading(false); setError('Musik belum bisa dimuat. Coba nyalakan kembali.'); }} />
