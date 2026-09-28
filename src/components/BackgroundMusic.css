@@ -1,29 +1,26 @@
 .music-control {
-  position: fixed;
+  position: sticky;
+  top: 0;
   z-index: 100;
-  right: max(14px, env(safe-area-inset-right));
-  bottom: max(14px, env(safe-area-inset-bottom));
-  max-width: calc(100vw - 28px);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: var(--music-bar-height);
+  padding: calc(14px + env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 14px max(14px, env(safe-area-inset-left));
+  background: #e0f2fef5;
+  border-bottom: 1px solid #bae6fd;
   color: #0c4a6e;
   font-family: 'Nunito', sans-serif;
 }
-.music-buttons { display: flex; align-items: center; border: 1px solid #bae6fd; border-radius: 999px; background: #fffffff5; box-shadow: 0 5px 20px #07598530; }
-.music-buttons button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; font-size: 12px; font-weight: 800; }
-.music-toggle { padding: 0 14px; border-radius: 999px 0 0 999px; }
-.music-toggle[aria-pressed=true] { background: #e0f2fe; }
-.music-settings-toggle { width: 44px; border-left: 1px solid #bae6fd; border-radius: 0 999px 999px 0; }
-.music-buttons button:hover { background: #e0f2fe; }
+.music-buttons { display: flex; align-items: center; gap: 4px; padding-right: 14px; border: 1px solid #bae6fd; border-radius: 999px; background: #fffffff5; box-shadow: 0 5px 20px #07598530; }
+.music-toggle { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; }
+.music-toggle[aria-pressed=true], .music-toggle:hover { background: #e0f2fe; }
 .music-control button:focus-visible, .music-control input:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
-.music-settings { position: absolute; bottom: calc(100% + 10px); right: 0; width: min(260px, calc(100vw - 28px)); padding: 18px; border: 1px solid #bae6fd; border-radius: 20px; background: #fff; box-shadow: 0 8px 28px #07598530; }
-.music-settings-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 15px; }
-.music-settings label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
-.music-volume-row { display: flex; align-items: center; gap: 10px; }
-.music-volume-row svg { flex-shrink: 0; }
-.music-volume-row input { width: 100%; min-width: 0; height: 44px; accent-color: #0284c7; cursor: pointer; touch-action: pan-y; }
-.music-settings p { font-size: 12px; line-height: 1.6; color: #476b86; }
-.music-error { max-width: 260px; margin-bottom: 8px; padding: 12px; border-radius: 12px; background: #fff; color: #9f1239; font-size: 12px; box-shadow: 0 5px 20px #07598530; }
+.music-volume { width: 80px; min-width: 0; height: 44px; accent-color: #0284c7; cursor: pointer; touch-action: pan-y; }
+.music-error { position: absolute; top: calc(100% + 8px); right: max(14px, env(safe-area-inset-right)); max-width: min(260px, calc(100vw - 28px)); padding: 12px; border-radius: 12px; background: #fff; color: #9f1239; font-size: 12px; box-shadow: 0 5px 20px #07598530; }
 .music-spinner { animation: music-spin 1s linear infinite; }
 @keyframes music-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .music-spinner { animation: none; } }
-/* Leave room to scroll the last page actions above the floating controls. */
-#root { padding-bottom: calc(74px + env(safe-area-inset-bottom)); background: #075985; }
+/* The music bar occupies its own row so page navigation remains unobstructed. */
+#root { --music-bar-height: calc(75px + env(safe-area-inset-top)); background: #075985; }
+.entry-page { min-height: calc(100vh - var(--music-bar-height)); min-height: calc(100svh - var(--music-bar-height)); }
