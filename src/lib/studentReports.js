@@ -1,3 +1,4 @@
+import { deliverReport } from './reportDelivery';
 import { supabase } from './supabase';
 import { withGalleryTimeout } from './galleryLoader';
 import { studentIdentity } from './reportModel';
@@ -83,6 +84,14 @@ export function syncStudentReports() {
     }
   })().finally(() => { syncing = undefined; });
   return syncing;
+}
+
+export async function submitStudentReport(module, payload) {
+  const identity = currentStudent();
+  if (!identity.name || !identity.studentClass) throw new Error('Masuk sebagai murid sebelum mengirim refleksi.');
+  if (!supabase) throw new Error('Jawaban tersimpan di perangkat. Koneksi ke guru belum tersedia.');
+  if (await isStudentDeleted(identity.name, identity.studentClass)) throw new Error('Akun ini sudah dihapus oleh guru.');
+  await deliverReport(module, payload, identity, { save: saveStudentReport, sync: syncStudentReports, read: localReports });
 }
 
 export async function purgeDeletedReports() {

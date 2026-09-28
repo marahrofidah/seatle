@@ -71,7 +71,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
     return () => { active = false; };
   }, [revision]);
 
-  // Read enrollment independently of mission reports, including while reports load.
+  // Refresh enrollment and report contents while the dashboard remains open.
   useEffect(() => {
     let active = true;
     let reading = false;
@@ -79,11 +79,13 @@ export default function TeacherDashboard({ teacherName, onExit }) {
       if (reading || document.visibilityState === 'hidden') return;
       reading = true;
       try {
-        const roster = await readStudents();
+        const results = await Promise.allSettled([readStudents(), remoteReports()]);
         if (!active) return;
+        const roster = results[0].status === 'fulfilled' ? results[0].value : null;
+        const reports = results[1].status === 'fulfilled' ? results[1].value : [];
         setStudents(previous => mergeStudentReports(
-          roster,
-          previous.flatMap(student => Object.values(student.reports)),
+          roster ?? previous.map(student => ({ nama: student.name, kelas: student.studentClass })),
+          [...previous.flatMap(student => Object.values(student.reports)), ...reports],
         ).filter(student => !deletedIdentities().has(student.key)));
       } catch { /* The full dashboard loader displays connection errors. */ }
       finally { reading = false; }

@@ -1,5 +1,5 @@
 import { websiteStatements as statements } from '../lib/websiteReflection';
-import useStudentReport from '../lib/useStudentReport';
+import { submitStudentReport } from '../lib/studentReports';
 import { websiteReport } from '../lib/learningReportFormats';
 import { useState } from 'react';
 import { ArrowLeft, Check, Frown, Meh, Smile, SmilePlus } from 'lucide-react';
@@ -33,9 +33,11 @@ export default function Refleksi({ onBack }) {
   const [data, setData] = useState(() => readAnswers(key));
   const [error, setError] = useState('');
   const count = data.answers.filter(Boolean).length;
-  const reportError = useStudentReport('refleksi', websiteReport(data), count > 0);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   function choose(index, value) {
+    setSent(false);
     const next = { answers: data.answers.map((answer, i) => i === index ? value : answer), submitted: false };
     setData(next);
     try {
@@ -44,15 +46,20 @@ export default function Refleksi({ onBack }) {
     } catch { setError('Jawaban belum tersimpan. Coba simpan kembali sebelum meninggalkan halaman.'); }
   }
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
-    if (count !== statements.length) return;
+    if (sending || count !== statements.length) return;
+    setSending(true);
+    setSent(false);
     const next = { ...data, submitted: true };
     try {
       localStorage.setItem(key, JSON.stringify(next));
       setData(next);
       setError('');
-    } catch { setError('Refleksi belum tersimpan. Periksa ruang penyimpanan perangkat lalu coba lagi.'); }
+      await submitStudentReport('refleksi', websiteReport(next));
+      setSent(true);
+    } catch (err) { setError(err.message || 'Refleksi belum terkirim. Coba kirim lagi.'); }
+    finally { setSending(false); }
   }
 
   return <main className="website-reflection page-background" style={{ '--page-background': `url(${background})` }}>
@@ -65,21 +72,21 @@ export default function Refleksi({ onBack }) {
         </defs>
       </svg>
     <div className="reflection-container">
-      <button className="reflection-back" onClick={onBack}><ArrowLeft size={18} /> Kembali ke halaman utama</button>
+      <button className="reflection-back" onClick={onBack} disabled={sending}><ArrowLeft size={18} /> Kembali ke halaman utama</button>
       <section className="reflection-sheet" aria-labelledby="reflection-title">
         <header className="reflection-heading"><h1 id="reflection-title">REFLEKSI</h1><p>Yuk berikan pendapatmu setelah menggunakan website ini</p><span className="reflection-count" aria-live="polite">{count} dari 5 pernyataan terisi</span></header>
         <form onSubmit={submit}>
           <p className="reflection-instruction">Pilih satu jawaban yang paling sesuai dengan pendapatmu. Tidak ada jawaban benar atau salah.</p>
-          <div className="reflection-questions">{statements.map((statement, index) => <fieldset key={statement} className="reflection-question">
+          <div className="reflection-questions">{statements.map((statement, index) => <fieldset key={statement} className="reflection-question" disabled={sending}>
             <legend><span className="reflection-number">{index + 1}</span>{statement}</legend>
             <div className="reflection-options">{options.map(({ label, Icon }) => <label key={label} className={`reflection-option ${data.answers[index] === label ? 'is-selected' : ''}`}>
               <input type="radio" name={`reflection-${index}`} value={label} checked={data.answers[index] === label} onChange={() => choose(index, label)} required />
               <Icon size={27} aria-hidden="true" /><span>{label}</span><Check className="reflection-option-check" size={15} aria-hidden="true" />
             </label>)}</div>
           </fieldset>)}</div>
-          {reportError && <p className="reflection-error" role="alert">{reportError}</p>}{error && <p className="reflection-error" role="alert">{error}</p>}
-          {data.submitted && <div className="reflection-success" role="status"><Check size={22} /><div><strong>Terima kasih sudah berbagi pendapat!</strong><p>Refleksimu sudah tersimpan.</p></div></div>}
-          <footer className="reflection-footer"><p>{data.submitted ? 'Kamu bisa mengubah pilihan dan menyimpan kembali.' : 'Isi kelima pernyataan untuk menyimpan refleksimu.'}</p><button type="submit" disabled={count !== 5 || data.submitted}><Check size={18} />{data.submitted ? 'Refleksi tersimpan' : 'Simpan refleksi'}</button></footer>
+          {error && <p className="reflection-error" role="alert">{error}</p>}
+          {sent && <div className="reflection-success" role="status"><Check size={22} /><div><strong>Terima kasih sudah berbagi pendapat!</strong><p>Refleksimu sudah terkirim ke guru.</p></div></div>}
+          <footer className="reflection-footer"><p>{sent ? 'Kamu bisa mengubah pilihan dan mengirim kembali.' : 'Isi kelima pernyataan, lalu kirim refleksimu ke guru.'}</p><button type="submit" disabled={count !== statements.length || sending || sent}><Check size={18} />{sending ? 'Mengirim...' : sent ? 'Terkirim ke guru' : data.submitted ? 'Kirim ulang refleksi' : 'Kirim refleksi'}</button></footer>
         </form>
       </section>
     </div>
