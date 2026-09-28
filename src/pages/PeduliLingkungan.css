@@ -10,7 +10,7 @@
 .care-activity { max-width: 1040px; margin: auto; }
 .care-water-panel { position: relative; isolation: isolate; min-width: 0; color: var(--care-ink); filter: drop-shadow(0 20px 30px #07598540); }
 .care-water-panel::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; clip-path: url(#care-wavy-card); background: linear-gradient(130deg, #ffffff 15%, #f0f9fff5 65%, #e0f2fef5); backdrop-filter: blur(14px); }
-.care-activity-panel { padding: 5rem 5rem 8rem; }
+.care-activity-panel { padding: 6rem 5.5rem 9rem; }
 .care-section-nav { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; border-bottom: 1px solid #bae6fd; }
 .care-section-nav button { display: flex; align-items: center; gap: .5rem; min-height: 48px; padding: .6rem 0 1rem; color: #476b86; font-size: .8rem; font-weight: 800; border-bottom: 2px solid transparent; }
 .care-section-nav button > span { display: grid; place-items: center; width: 21px; height: 21px; border: 1px solid #bae6fd; border-radius: 50%; font-size: .65rem; }
@@ -57,7 +57,6 @@
   .care-completion { padding-left: .7rem; }
   .care-completion strong { font-size: 1.8rem; }
   .care-completion small { display: block; max-width: 65px; line-height: 1.4; }
-  .care-activity-panel { padding: 4rem 2rem 7rem; }
   .care-section-nav { gap: .8rem; justify-content: space-between; margin-bottom: 1.5rem; }
   .care-section-nav button { font-size: .7rem; gap: .35rem; }
   .care-feelings { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
@@ -160,7 +159,7 @@
 .care-ocean textarea { max-width: 100%; }
 .care-hold-button { touch-action: manipulation; }
 @media (max-width: 767px) {
-  .care-activity-panel { padding: 3rem clamp(1.25rem, 5vw, 2rem) 4rem; }
+  .care-activity-panel { padding: 5rem clamp(2rem, 8vw, 3rem) 7rem; }
   .care-section-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
   .care-section-nav button { min-width: 0; justify-content: center; flex-wrap: wrap; gap: .3rem; font-size: .7rem; }
   .care-section-nav button > span { flex-shrink: 0; }
