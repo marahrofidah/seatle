@@ -3,7 +3,7 @@ import { withGalleryTimeout } from './galleryLoader';
 import { studentIdentity } from './reportModel';
 import { readActionJournals } from './actionJournal';
 import { actionReport, careReport, websiteReport } from './learningReportFormats';
-import { deletedIdentities, rememberDeleted } from './studentDeletion';
+import { deletedIdentities, rememberDeleted, isStudentDeleted } from './studentDeletion';
 
 function database() {
   return new Promise((resolve, reject) => {
@@ -65,7 +65,11 @@ export function syncStudentReports() {
   if (syncing) return syncing;
   syncing = (async () => {
     const rows = await localReports();
+    const checked = new Map();
     for (const row of rows.filter(item => item.pending)) {
+      const identity = studentIdentity(row.student_name, row.student_class);
+      if (!checked.has(identity)) checked.set(identity, await isStudentDeleted(row.student_name, row.student_class));
+      if (checked.get(identity) || deletedIdentities().has(identity)) continue;
       const record = { id: row.id, student_name: row.student_name, student_class: row.student_class, module: row.module, payload: row.payload, updated_at: row.updated_at };
       const { error } = await withGalleryTimeout(signal => supabase.from('student_learning_reports').insert(record).abortSignal(signal));
       if (error?.message?.includes('SEATLE_STUDENT_DELETED')) {

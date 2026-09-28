@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 import { withGalleryTimeout } from './galleryLoader';
 import { studentIdentity } from './reportModel';
 import { deleteStudentJournal } from './actionJournal';
+import { clearStudentDevice } from './clearStudentDevice';
 
 const cacheKey = 'seatle_deleted_students';
 export function deletedIdentities() {
@@ -14,19 +15,10 @@ export function rememberDeleted(name, studentClass) {
   localStorage.setItem(cacheKey, JSON.stringify([...keys]));
 }
 async function clearDeviceAnswers(name, studentClass) {
-  const identity = studentIdentity(name, studentClass);
-  for (const key of Object.keys(localStorage)) {
-    const prefix = ['seatle_care_', 'seatle_website_reflection:', 'seatle_progress_', 'seatle_activity:', 'seatle_registered_student:'].find(value => key.startsWith(value));
-    if (!prefix) continue;
-    try {
-      let raw = key.slice(prefix.length);
-      if (prefix === 'seatle_activity:') raw = raw.slice(0, raw.lastIndexOf(':'));
-      if (prefix === 'seatle_registered_student:') raw = raw.slice(raw.indexOf('['));
-      const pair = JSON.parse(raw);
-      if (studentIdentity(...pair) === identity) localStorage.removeItem(key);
-    } catch { /* Keep unrelated storage entries. */ }
-  }
+  clearStudentDevice(name, studentClass);
   await deleteStudentJournal(name, studentClass);
+  const { purgeDeletedReports } = await import('./studentReports');
+  await purgeDeletedReports();
 }
 export async function refreshDeletedStudents() {
   if (!supabase) return;
@@ -62,7 +54,7 @@ export async function isStudentDeleted(name, studentClass) {
   if (!supabase) return false;
   const { data, error } = await withGalleryTimeout(signal => supabase.rpc('seatle_student_deleted', { p_name: name, p_class: studentClass }).abortSignal(signal));
   if (error) {
-    if (['PGRST202', '42883'].includes(error.code)) return false;
+    if (['PGRST202', '42883'].includes(error.code)) throw new Error('Pemeriksaan penghapusan akun belum tersedia. Hubungi guru untuk mengaktifkannya.');
     throw new Error('Status akun belum dapat diperiksa. Periksa koneksi lalu coba lagi.');
   }
   if (data === true) {

@@ -25,13 +25,21 @@ export default function App() {
     return ['mengenal-penyu', 'ancaman-penyu', 'peduli-lingkungan', 'aksi-peduli', 'aksi-peduli/campaign', 'gallery', 'refleksi', 'glosarium', 'student-dashboard'].includes(hash) ? hash : 'student-dashboard';
   });
 
+  const [verifiedPage, setVerifiedPage] = useState(null);
+  const [accountError, setAccountError] = useState('');
+  const studentPage = !['home', 'login', 'student-login', 'teacher-login', 'gallery'].includes(currentPage);
+
   useScrollToTop(currentPage);
 
   useEffect(() => {
     let active = true;
     async function checkAccount() {
+      if (!studentPage) { setVerifiedPage(null); setAccountError(''); return; }
       const student = restoreStudentSession();
-      if (!student) return;
+      if (!student) {
+        if (active) setCurrentPage('student-login');
+        return;
+      }
       try {
         if (await isStudentDeleted(student.name, student.studentClass)) {
           if (!active) return;
@@ -40,14 +48,21 @@ export default function App() {
             window.history.replaceState(null, '', window.location.pathname + window.location.search);
             setCurrentPage('student-login');
           }
+        } else if (active) {
+          setVerifiedPage(currentPage);
+          setAccountError('');
         }
-      } catch { /* Retry account checks when connectivity returns. */ }
+      } catch (error) {
+        if (active) { setVerifiedPage(null); setAccountError(error.message); }
+      }
     }
     void checkAccount();
     const timer = setInterval(checkAccount, 30000);
     window.addEventListener('online', checkAccount);
-    return () => { active = false; clearInterval(timer); window.removeEventListener('online', checkAccount); };
-  }, [currentPage]);
+    window.addEventListener('focus', checkAccount);
+    window.addEventListener('storage', checkAccount);
+    return () => { active = false; clearInterval(timer); window.removeEventListener('online', checkAccount); window.removeEventListener('focus', checkAccount); window.removeEventListener('storage', checkAccount); };
+  }, [currentPage, studentPage]);
 
   useEffect(() => {
     const sync = () => { void syncStudentReports().catch(() => {}); };
@@ -97,6 +112,10 @@ export default function App() {
   const handleBackToHome = () => {
     setCurrentPage('home');
   };
+
+  if (studentPage && verifiedPage !== currentPage) {
+    return <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-sky-50 p-6 text-center text-sky-900"><p role={accountError ? 'alert' : 'status'}>{accountError || 'Memeriksa akun murid...'}</p>{accountError && <button type="button" onClick={() => window.location.reload()} className="rounded-full bg-sky-800 px-6 py-3 font-bold text-white">Coba lagi</button>}</main>;
+  }
 
   if (currentPage === 'home') {
     return <Home onStart={handleStart} />;
