@@ -26,7 +26,7 @@ const bubbles = [
 export default function Home({ onStart }) {
   return (
     <div 
-      className="page-background relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden select-none bg-sky-600"
+      className="entry-page page-background relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 select-none bg-sky-600"
       style={{
         '--page-background': `url(${bgSeatle})`,
       }}
@@ -82,7 +82,7 @@ export default function Home({ onStart }) {
               <span
                 key={`${letter}-${index}`}
                 aria-hidden="true"
-                className="playful-letter inline-block cursor-default text-[4rem] font-black transition-transform duration-300 hover:scale-110 sm:text-[6.5rem] md:text-[8rem] lg:text-[9.2rem]"
+                className="playful-letter inline-block cursor-default text-[clamp(2.75rem,15vw,4rem)] font-black transition-transform duration-300 hover:scale-110 sm:text-[6.5rem] md:text-[8rem] lg:text-[9.2rem]"
                 style={{
                   '--letter-rotate': rotate,
                   color,

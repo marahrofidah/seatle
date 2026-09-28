@@ -84,7 +84,7 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess, init
 
   return (
     <main
-      className="page-background relative flex min-h-screen items-center justify-center overflow-hidden bg-sky-600 bg-cover bg-center px-4 py-8"
+      className="entry-page page-background relative flex min-h-screen items-center justify-center bg-sky-600 bg-cover bg-center px-4 pb-8 pt-20 sm:py-8"
       style={{ '--page-background': `url(${loginBackground})` }}
     >
       <BubbleEffects />

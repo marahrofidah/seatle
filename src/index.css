@@ -49,3 +49,19 @@
 .font-body {
   font-family: 'Nunito', sans-serif;
 }
+
+/* Use the visible mobile screen with browser toolbars expanded on first load. */
+.entry-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+@media (max-width: 767px) {
+  .entry-page input,
+  .entry-page textarea,
+  .entry-page select {
+    font-size: 16px;
+  }
+}
