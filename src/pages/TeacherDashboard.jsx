@@ -161,7 +161,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
     <div className="teacher-container">
       <div className="teacher-topline"><button className="teacher-button teacher-white" onClick={onExit}><LogOut size={17} />Keluar</button></div>
       <header className="teacher-header teacher-overview">
-        <div className="teacher-hero-content"><div className="teacher-intro"><div className="teacher-title-row"><span className="teacher-account">Nama guru : <strong>{teacherName || 'Guru SEATLE'}</strong></span><h1>Ruang Guru</h1></div><p>Pantau progres dan jelajahi cerita belajar murid.</p></div>
+        <div className="teacher-hero-content"><div className="teacher-intro"><div className="teacher-title-row"><span className="teacher-account">Nama guru : <strong>{teacherName || 'Guru'}</strong></span><h1>Ruang Guru</h1></div><p>Pantau progres dan jelajahi cerita belajar murid.</p></div>
           <div className="teacher-class-progress"><div className="teacher-ring" style={{ '--progress': `${average}%` }}><span><strong>{average}%</strong><small>rata-rata misi</small></span></div><div><strong>Perjalanan kelas</strong><p>{matching.length ? `${complete} dari ${matching.length} murid menuntaskan empat misi.` : 'Perjalanan dimulai saat data murid masuk.'}</p><span>Sesuai pencarian & kelas pilihan</span></div></div>
         </div>
         <div className="teacher-stats" aria-label="Saring murid berdasarkan status">{summaries.map(([id, Icon, count, label]) => <button key={id} aria-pressed={statusFilter === id} onClick={() => setStatusFilter(id)}><Icon size={20} /><strong>{count}</strong><span>{label}</span><ArrowUpRight className="teacher-stat-arrow" size={16} /></button>)}</div>
