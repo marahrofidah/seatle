@@ -30,3 +30,11 @@ test('pending, missing, outdated and other-student reports cannot confirm delive
     }), /belum terkirim/);
   }
 });
+
+test('confirmed submission does not run an unnecessary second sync', async () => {
+  let calls = 0;
+  await deliverReport('refleksi', payload, identity, {
+    save: async () => {}, sync: async () => { calls++; }, read: async () => [record],
+  });
+  assert.equal(calls, 1);
+});

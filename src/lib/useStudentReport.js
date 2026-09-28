@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { currentStudent, saveStudentReport, syncStudentReports } from './studentReports';
 
+let syncTimer;
+function scheduleSync() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    void syncStudentReports().catch(() => {});
+  }, 400);
+}
+
 export function activityKey(module) {
   const { name, studentClass } = currentStudent();
   return `seatle_activity:${JSON.stringify([name, studentClass])}:${module}`;
@@ -26,11 +34,10 @@ export default function useStudentReport(module, payload, enabled = true) {
     } catch { /* The IndexedDB report below still provides a second copy. */ }
     saveStudentReport(module, parsed).then(() => {
       if (active) setError('');
+      scheduleSync();
     }).catch(err => { if (active) setError(err.message); });
-    const timer = setTimeout(() => {
-      syncStudentReports().catch(() => { /* Pending records retry on the next connection. */ });
-    }, 1500);
-    return () => { active = false; clearTimeout(timer); };
+    // Let saved answers sync even if the student immediately moves to another page.
+    return () => { active = false; };
   }, [module, serialized, enabled]);
   return error;
 }

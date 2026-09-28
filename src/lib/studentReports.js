@@ -29,6 +29,17 @@ export async function localReports() {
   });
 }
 
+async function readStudentReport(module, identity) {
+  if (deletedIdentities().has(studentIdentity(identity.name, identity.studentClass))) return null;
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('reports');
+    const request = tx.objectStore('reports').get(`${studentIdentity(identity.name, identity.studentClass)}:${module}`);
+    tx.oncomplete = () => { db.close(); resolve(request.result); };
+    tx.onabort = tx.onerror = () => { db.close(); reject(new Error('Jawaban belum dapat dibaca.')); };
+  });
+}
+
 export async function saveStudentReport(module, payload, identity = currentStudent()) {
   if (!identity.name || !identity.studentClass) return;
   if (deletedIdentities().has(studentIdentity(identity.name, identity.studentClass))) return;
@@ -60,28 +71,42 @@ async function markSynced(row) {
   });
 }
 
+const uploads = new Map();
+function uploadReport(row) {
+  if (uploads.has(row.id)) return uploads.get(row.id);
+  const request = (async () => {
+      const record = { id: row.id, student_name: row.student_name, student_class: row.student_class, module: row.module, payload: row.payload, updated_at: row.updated_at };
+      const { error } = await withGalleryTimeout(signal => supabase.from('student_learning_reports').insert(record).abortSignal(signal));
+      if (error?.message?.includes('SEATLE_STUDENT_DELETED')) {
+        rememberDeleted(row.student_name, row.student_class);
+        await purgeDeletedReports();
+        throw new Error('Akun ini sudah dihapus oleh guru.');
+      }
+      // A timed-out successful insert may be retried with the same UUID.
+      if (error && error.code !== '23505') throw new Error('Rekap tersimpan di perangkat. Sinkronisasi ke guru belum tersedia.');
+      await markSynced(row);
+  })().finally(() => uploads.delete(row.id));
+  uploads.set(row.id, request);
+  return request;
+}
+
 let syncing;
+let syncRequested = false;
 export function syncStudentReports() {
   if (!supabase) return Promise.resolve();
-  if (syncing) return syncing;
+  if (syncing) { syncRequested = true; return syncing; }
   syncing = (async () => {
+    do {
+      syncRequested = false;
     const rows = await localReports();
     const checked = new Map();
     for (const row of rows.filter(item => item.pending)) {
       const identity = studentIdentity(row.student_name, row.student_class);
       if (!checked.has(identity)) checked.set(identity, await isStudentDeleted(row.student_name, row.student_class));
       if (checked.get(identity) || deletedIdentities().has(identity)) continue;
-      const record = { id: row.id, student_name: row.student_name, student_class: row.student_class, module: row.module, payload: row.payload, updated_at: row.updated_at };
-      const { error } = await withGalleryTimeout(signal => supabase.from('student_learning_reports').insert(record).abortSignal(signal));
-      if (error?.message?.includes('SEATLE_STUDENT_DELETED')) {
-        rememberDeleted(row.student_name, row.student_class);
-        await purgeDeletedReports();
-        continue;
-      }
-      // A timed-out successful insert may be retried with the same UUID.
-      if (error && error.code !== '23505') throw new Error('Rekap tersimpan di perangkat. Sinkronisasi ke guru belum tersedia.');
-      await markSynced(row);
+      await uploadReport(row);
     }
+    } while (syncRequested);
   })().finally(() => { syncing = undefined; });
   return syncing;
 }
@@ -91,7 +116,14 @@ export async function submitStudentReport(module, payload) {
   if (!identity.name || !identity.studentClass) throw new Error('Masuk sebagai murid sebelum mengirim refleksi.');
   if (!supabase) throw new Error('Jawaban tersimpan di perangkat. Koneksi ke guru belum tersedia.');
   if (await isStudentDeleted(identity.name, identity.studentClass)) throw new Error('Akun ini sudah dihapus oleh guru.');
-  await deliverReport(module, payload, identity, { save: saveStudentReport, sync: syncStudentReports, read: localReports });
+  await deliverReport(module, payload, identity, {
+    save: saveStudentReport,
+    read: async () => { const row = await readStudentReport(module, identity); return row ? [row] : []; },
+    sync: async () => {
+      const row = await readStudentReport(module, identity);
+      if (row?.pending) await uploadReport(row);
+    },
+  });
 }
 
 export async function purgeDeletedReports() {

@@ -79,7 +79,7 @@ export default function Login({ onBack, onTeacherSuccess, onStudentSuccess, init
       setLoading(false);
     }
     setStudentDone(true);
-    window.setTimeout(() => onStudentSuccess?.(), 650);
+    onStudentSuccess?.();
   };
 
   return (

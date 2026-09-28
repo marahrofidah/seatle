@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import TeacherDashboard from './TeacherDashboard';
+import { lazy, useEffect, useState } from 'react';
+const TeacherDashboard = lazy(() => import('./TeacherDashboard'));
 import Login from './Login';
 import { supabase } from '../lib/supabase';
 

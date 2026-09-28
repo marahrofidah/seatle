@@ -65,3 +65,6 @@
     font-size: 16px;
   }
 }
+
+/* Respond to a tap without delaying for a double-tap gesture. */
+button, a, input, select, textarea, label { touch-action: manipulation; }

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowUpRight, Check, ChevronDown, Compass, Download, FileText, LogOut, RefreshCw, Search, Trash2, Users, Waves, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import { importExistingReports, purgeDeletedReports, localReports, remoteReports, syncStudentReports } from '../lib/studentReports';
+import { purgeDeletedReports, localReports, remoteReports } from '../lib/studentReports';
 import { completedMissions, mergeStudentReports, reportModules } from '../lib/reportModel';
 import { deleteStudent, deletedIdentities, refreshDeletedStudents } from '../lib/studentDeletion';
 import { classReports, reportsWorkbook } from '../lib/reportExcel';
@@ -44,65 +44,48 @@ export default function TeacherDashboard({ teacherName, onExit }) {
 
   useEffect(() => {
     let active = true;
-    async function load() {
-      setLoading(true);
-      const messages = [];
-      try { await refreshDeletedStudents(); await purgeDeletedReports(); } catch (error) { messages.push(error.message); }
-      try { await importExistingReports(); } catch { messages.push('Sebagian jawaban lama di perangkat belum dapat dibaca.'); }
-      let local = [];
-      try {
-        local = await localReports();
-        if (active) setStudents(previous => mergeStudentReports(previous.map(item => ({ nama: item.name, kelas: item.studentClass })), local));
-      } catch { messages.push('Rekap perangkat belum dapat dibaca.'); }
-      try { await syncStudentReports(); local = await localReports(); } catch { messages.push('Ada jawaban perangkat ini yang belum tersinkron ke server.'); }
-      const results = await Promise.allSettled([readStudents(), remoteReports()]);
-      const roster = results[0].status === 'fulfilled' ? results[0].value : [];
-      const remote = results[1].status === 'fulfilled' ? results[1].value : [];
-      results.forEach(result => { if (result.status === 'rejected') messages.push(result.reason.message); });
-      if (!active) return;
-      setStudents(mergeStudentReports(roster, [...local, ...remote]).filter(student => !deletedIdentities().has(student.key)));
-      setWarnings(messages);
-      setUpdated(new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
-      setLoading(false);
-    }
-    void load().catch(() => {
-      if (active) { setWarnings(['Rekap belum dapat dimuat. Silakan coba lagi.']); setLoading(false); }
-    });
-    return () => { active = false; };
-  }, [revision]);
-
-  // Refresh enrollment and report contents while the dashboard remains open.
-  useEffect(() => {
-    let active = true;
     let reading = false;
-    async function refreshRoster() {
+    let timer;
+    async function load() {
       if (reading || document.visibilityState === 'hidden') return;
       reading = true;
+      window.clearTimeout(timer);
       try {
-        const results = await Promise.allSettled([readStudents(), remoteReports()]);
+        // Fetch current server data without waiting for this device's upload queue.
+        const results = await Promise.allSettled([
+          readStudents(), remoteReports(), localReports(),
+          refreshDeletedStudents().then(() => purgeDeletedReports()),
+        ]);
         if (!active) return;
         const roster = results[0].status === 'fulfilled' ? results[0].value : null;
-        const reports = results[1].status === 'fulfilled' ? results[1].value : [];
+        const remote = results[1].status === 'fulfilled' ? results[1].value : [];
+        const local = results[2].status === 'fulfilled' ? results[2].value : [];
         setStudents(previous => mergeStudentReports(
           roster ?? previous.map(student => ({ nama: student.name, kelas: student.studentClass })),
-          [...previous.flatMap(student => Object.values(student.reports)), ...reports],
+          [...previous.flatMap(student => Object.values(student.reports)), ...local, ...remote],
         ).filter(student => !deletedIdentities().has(student.key)));
-      } catch { /* The full dashboard loader displays connection errors. */ }
-      finally { reading = false; }
+        setWarnings(results.filter(result => result.status === 'rejected').map(result => result.reason.message));
+        setUpdated(new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }));
+      } finally {
+        reading = false;
+        if (active) {
+          setLoading(false);
+          timer = window.setTimeout(load, 3000);
+        }
+      }
     }
-    void refreshRoster();
-    const timer = window.setInterval(refreshRoster, 3000);
-    window.addEventListener('focus', refreshRoster);
-    window.addEventListener('online', refreshRoster);
-    document.addEventListener('visibilitychange', refreshRoster);
+    void load();
+    window.addEventListener('focus', load);
+    window.addEventListener('online', load);
+    document.addEventListener('visibilitychange', load);
     return () => {
       active = false;
-      window.clearInterval(timer);
-      window.removeEventListener('focus', refreshRoster);
-      window.removeEventListener('online', refreshRoster);
-      document.removeEventListener('visibilitychange', refreshRoster);
+      window.clearTimeout(timer);
+      window.removeEventListener('focus', load);
+      window.removeEventListener('online', load);
+      document.removeEventListener('visibilitychange', load);
     };
-  }, []);
+  }, [revision]);
 
   const classes = [...new Set(students.map(student => student.studentClass))].sort();
   const matching = students.filter(student => (!studentClass || student.studentClass === studentClass)
