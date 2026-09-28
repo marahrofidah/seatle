@@ -2,7 +2,6 @@ const pending = new Map();
 
 export function ensureStudent(client, name, studentClass, {
   storage = globalThis.localStorage,
-  session = globalThis.sessionStorage,
   locks = globalThis.navigator?.locks,
 } = {}) {
   const nama = name.trim();
@@ -14,15 +13,6 @@ export function ensureStudent(client, name, studentClass, {
 
   const register = async () => {
     if (storage?.getItem(key) === '1') return;
-    // Older successful logins already stored this identity in sessionStorage.
-    // Promote that receipt so it survives closing and reopening the browser.
-    const previousName = session?.getItem('seatle_student_name');
-    const previousClass = session?.getItem('seatle_student_class');
-    if (previousName && previousClass
-      && JSON.stringify([normalize(previousName), normalize(previousClass)]) === identity) {
-      storage?.setItem(key, '1');
-      return;
-    }
     const { data, error } = await client.from('students').select('id')
       .eq('nama', nama).eq('kelas', kelas).limit(1);
     // Do not insert if checking existing students failed.

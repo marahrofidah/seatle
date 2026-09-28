@@ -70,13 +70,13 @@ test('repeat login does not insert when RLS hides all existing students', async 
   assert.equal(nextVisit.inserts, 0);
 });
 
-test('existing successful session is remembered after the session ends', async () => {
+test('a browser session alone does not skip database registration', async () => {
   const storage = browserStorage();
   const session = browserStorage({ seatle_student_name: 'PIDA', seatle_student_class: 'XII' });
   const db = database();
   await ensureStudent(db, 'PIDA', 'XII', { storage, session });
   await ensureStudent(db, 'PIDA', 'XII', { storage, session: browserStorage() });
-  assert.equal(db.inserts, 0);
+  assert.equal(db.inserts, 1);
 });
 
 test('failed insert is not remembered as a successful registration', async () => {

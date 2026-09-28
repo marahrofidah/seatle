@@ -71,6 +71,37 @@ export default function TeacherDashboard({ teacherName, onExit }) {
     return () => { active = false; };
   }, [revision]);
 
+  // Read enrollment independently of mission reports, including while reports load.
+  useEffect(() => {
+    let active = true;
+    let reading = false;
+    async function refreshRoster() {
+      if (reading || document.visibilityState === 'hidden') return;
+      reading = true;
+      try {
+        const roster = await readStudents();
+        if (!active) return;
+        setStudents(previous => mergeStudentReports(
+          roster,
+          previous.flatMap(student => Object.values(student.reports)),
+        ).filter(student => !deletedIdentities().has(student.key)));
+      } catch { /* The full dashboard loader displays connection errors. */ }
+      finally { reading = false; }
+    }
+    void refreshRoster();
+    const timer = window.setInterval(refreshRoster, 3000);
+    window.addEventListener('focus', refreshRoster);
+    window.addEventListener('online', refreshRoster);
+    document.addEventListener('visibilitychange', refreshRoster);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+      window.removeEventListener('focus', refreshRoster);
+      window.removeEventListener('online', refreshRoster);
+      document.removeEventListener('visibilitychange', refreshRoster);
+    };
+  }, []);
+
   const classes = [...new Set(students.map(student => student.studentClass))].sort();
   const matching = students.filter(student => (!studentClass || student.studentClass === studentClass)
     && `${student.name} ${student.studentClass}`.toLocaleLowerCase('id').includes(query.trim().toLocaleLowerCase('id')));
@@ -155,7 +186,7 @@ export default function TeacherDashboard({ teacherName, onExit }) {
             <div className="teacher-delete-row"><button className="teacher-delete-button" disabled={loading || deleting} onClick={() => { setDeleteError(''); setDeleteTarget(student); }} aria-label={`Hapus data ${student.name}, kelas ${student.studentClass}`}><Trash2 size={15} />Hapus data murid</button></div>
           </article>;
         })}</div>
-        {!loading && !filtered.length && <div className="teacher-empty"><Waves size={32} /><h3>{students.length ? 'Murid tidak ditemukan' : 'Belum ada data murid yang diterima'}</h3><p>{students.length ? 'Coba nama atau kelas lainnya.' : 'Rekap akan tampil setelah murid masuk dan jawaban tersimpan.'}</p></div>}
+        {!loading && !filtered.length && <div className="teacher-empty"><Waves size={32} /><h3>{students.length ? 'Murid tidak ditemukan' : 'Belum ada data murid yang diterima'}</h3><p>{students.length ? 'Coba nama atau kelas lainnya.' : 'Murid akan tampil otomatis setelah berhasil masuk, meskipun belum mengerjakan misi.'}</p></div>}
       </section>
       {activeStudent && <section ref={detail} tabIndex={-1} className="teacher-panel teacher-detail" aria-labelledby="teacher-detail-title"><div className="teacher-panel-heading"><div><span className="teacher-eyebrow">RINCIAN JAWABAN</span><h2 id="teacher-detail-title">{activeStudent.name}</h2><p>Kelas {activeStudent.studentClass} · {completedMissions(activeStudent)}/4 misi tuntas</p></div><button className="teacher-button teacher-white" onClick={() => { setSelected(null); window.scrollTo({ top: 0, behavior: 'instant' }); document.body.scrollTo({ top: 0, behavior: 'instant' }); }}><ArrowLeft size={16} />Daftar murid</button></div>
         <div className="teacher-report-stream">
