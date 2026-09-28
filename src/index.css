@@ -58,12 +58,16 @@
   overflow-x: clip;
 }
 
-@media (max-width: 767px) {
-  .entry-page input,
-  .entry-page textarea,
-  .entry-page select {
-    font-size: 16px;
+/* Keep form text readable on touch screens across every page and dialog. */
+@media (max-width: 767px), (pointer: coarse) {
+  #root :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]), textarea, select) {
+    font-size: max(16px, 1rem);
   }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Respond to a tap without delaying for a double-tap gesture. */

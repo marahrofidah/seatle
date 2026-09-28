@@ -18,7 +18,7 @@
 .care-section-nav .is-active > span { background: #fcd34d; color: #78350f; border-color: #fcd34d; }
 .care-section-nav button:focus-visible, .care-question-dots button:focus-visible, .care-question-controls button:focus-visible { outline: 3px solid #0284c7; outline-offset: 3px; }
 .care-activity-panel h2 { font-size: 1.8rem; font-weight: 500; }
-.care-commitment-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 2rem; }
+.care-commitment-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 2rem; }
 .care-answer { background: #ffffffb0; border: 1px solid #bae6fd; border-radius: 12px; box-shadow: none; }
 .care-feelings { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; margin: 1rem 0; }
 .care-feeling { min-width: 0; }
@@ -151,3 +151,23 @@
   .care-feeling > span { min-height: 80px; }
 }
 @media (prefers-reduced-motion: reduce) { .care-feeling-orbit > span { animation: none; } }
+
+/* Let mobile content wrap instead of widening the page's layout viewport. */
+.care-ocean fieldset,
+.care-heading > div,
+.care-section-heading > div,
+.care-commitment-grid > * { min-width: 0; }
+.care-ocean textarea { max-width: 100%; }
+.care-hold-button { touch-action: manipulation; }
+@media (max-width: 767px) {
+  .care-activity-panel { padding: 3rem clamp(1.25rem, 5vw, 2rem) 4rem; }
+  .care-section-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
+  .care-section-nav button { min-width: 0; justify-content: center; flex-wrap: wrap; gap: .3rem; font-size: .7rem; }
+  .care-section-nav button > span { flex-shrink: 0; }
+  .care-heading h1, .care-section-heading h2, .care-promise-preview { overflow-wrap: anywhere; }
+}
+@media (max-width: 380px) {
+  .care-feeling > span { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .care-feeling > span > span:nth-child(2) { overflow-wrap: anywhere; }
+  .care-agreement-options { grid-template-columns: minmax(0, 1fr); }
+}
