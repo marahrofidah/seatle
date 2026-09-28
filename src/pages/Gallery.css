@@ -20,3 +20,9 @@
   .gallery-page .action-lightbox { width: min(92vw, 500px); padding: 16px; }
   .gallery-page .action-lightbox h3 { font-size: 20px; }
 }
+
+.gallery-image-placeholder { display: grid; place-items: center; height: 280px; padding: 16px; background: #e0f2fe; color: #075985; font-size: 13px; text-align: center; }
+.gallery-image-error { margin-top: 10px; font-size: 12px; }
+.gallery-image-error button { margin-top: 8px; font-size: 12px; }
+.gallery-page .action-gallery + .action-secondary { margin-top: 24px; }
+@media (max-width: 767px) { .gallery-image-placeholder { height: clamp(130px, 37vw, 200px); font-size: 11px; } }
