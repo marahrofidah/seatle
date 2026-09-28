@@ -103,11 +103,11 @@ export default function App() {
   }
 
   if (currentPage === 'student-login') {
-    return <StudentLogin onBack={() => setCurrentPage('login')} />;
+    return <StudentLogin onBack={handleBackToHome} onStudentSuccess={() => setCurrentPage('student-dashboard')} onTeacherSuccess={() => { window.location.hash = 'teacher-dashboard'; setCurrentPage('teacher-login'); }} />;
   }
 
   if (currentPage === 'teacher-login') {
-    return <TeacherLogin onBack={() => { window.history.replaceState(null, '', window.location.pathname + window.location.search); setCurrentPage('login'); }} />;
+    return <TeacherLogin onStudentSuccess={() => { window.location.hash = 'student-dashboard'; setCurrentPage('student-dashboard'); }} onBack={() => { window.history.replaceState(null, '', window.location.pathname + window.location.search); setCurrentPage('login'); }} />;
   }
 
   if (currentPage === 'student-dashboard') {
