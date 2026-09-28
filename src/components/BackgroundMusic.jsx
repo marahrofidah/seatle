@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { LoaderCircle, Volume2, VolumeX } from 'lucide-react';
+import { LoaderCircle, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import musicUrl from '../assets/music/musik_bg.mp3';
 import './BackgroundMusic.css';
 
@@ -14,6 +14,9 @@ function savedVolume() {
 
 export default function BackgroundMusic() {
   const audio = useRef(null);
+  const container = useRef(null);
+  const trigger = useRef(null);
+  const [expanded, setExpanded] = useState(false);
   const graph = useRef(null);
   const requested = useRef(false);
   const operation = useRef(0);
@@ -35,6 +38,15 @@ export default function BackgroundMusic() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const dismiss = event => {
+      if (!container.current?.contains(event.target)) setExpanded(false);
+    };
+    document.addEventListener('pointerdown', dismiss);
+    return () => document.removeEventListener('pointerdown', dismiss);
+  }, [expanded]);
 
   function changeVolume(event) {
     const next = Number(event.target.value) / 100;
@@ -86,17 +98,22 @@ export default function BackgroundMusic() {
   }
 
   const active = playing || loading;
-  return <aside className="music-control" aria-label="Kontrol musik latar" data-no-bubbles>
+  return <aside ref={container} className="music-control" aria-label="Kontrol musik latar" data-no-bubbles onKeyDown={event => { if (event.key === 'Escape') { setExpanded(false); trigger.current?.focus(); } }}>
     <audio ref={audio} src={musicUrl} loop preload="none" playsInline
       onPlaying={() => setPlaying(true)}
       onPause={() => setPlaying(false)}
       onError={() => { requested.current = false; setPlaying(false); setLoading(false); setError('Musik belum bisa dimuat. Coba nyalakan kembali.'); }} />
-    {error && <p className="music-error" role="alert">{error}</p>}
-    <div className="music-buttons">
-      <button type="button" className="music-toggle" onClick={toggleMusic} aria-pressed={playing} aria-label={active ? 'Matikan musik latar' : 'Nyalakan musik latar'} title={active ? 'Matikan musik' : 'Nyalakan musik'}>
-        {loading ? <LoaderCircle size={18} className="music-spinner" /> : playing && volume > 0 ? <Volume2 size={20} /> : <VolumeX size={20} />}
-      </button>
-      <input className="music-volume" type="range" min="0" max="100" step="1" value={Math.round(volume * 100)} onChange={changeVolume} aria-label="Volume musik" aria-valuetext={`${Math.round(volume * 100)} persen`} />
-    </div>
+    <button ref={trigger} type="button" className="music-trigger" onClick={() => setExpanded(value => !value)} aria-expanded={expanded} aria-controls="music-popover" aria-label="Atur suara musik">
+      {playing && volume > 0 ? <Volume2 size={20} /> : <VolumeX size={20} />}
+    </button>
+    {expanded && <div className="music-popover" id="music-popover">
+      <div className="music-buttons">
+        <button type="button" className="music-toggle" onClick={toggleMusic} aria-pressed={playing} aria-label={active ? 'Matikan musik' : 'Nyalakan musik'}>
+          {loading ? <LoaderCircle size={18} className="music-spinner" /> : playing ? <Pause size={18} /> : <Play size={18} />}
+        </button>
+        <input className="music-volume" type="range" min="0" max="100" step="1" value={Math.round(volume * 100)} onChange={changeVolume} aria-label="Volume musik" aria-valuetext={`${Math.round(volume * 100)} persen`} />
+      </div>
+      {error && <p className="music-error" role="alert">{error}</p>}
+    </div>}
   </aside>;
 }

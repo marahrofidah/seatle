@@ -111,7 +111,7 @@ export default function StudentDashboard({ onExit, onSelectModule }) {
       </svg>
 
       {/* HEADER SIMPEL & ELEGAN */}
-      <header className="relative z-20 mx-auto flex w-full max-w-[96%] sm:max-w-7xl flex-wrap items-center justify-between gap-3 px-2 py-4 sm:px-4">
+      <header style={{ paddingRight: 64 }} className="relative z-20 mx-auto flex w-full max-w-[96%] sm:max-w-7xl flex-wrap items-center justify-between gap-3 px-2 py-4 sm:px-4">
         {/* LOGO SEATLE */}
         <div aria-label="SEATLE" className="flex items-end px-2 py-2 font-brand leading-none">
           {logoLetters.map(({ letter, color, rotate }, index) => (
