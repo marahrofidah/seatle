@@ -81,7 +81,7 @@ const extraMenus = [
   },
   { 
     label: 'GALLERY', 
-    description: 'Jelajahi poster kampanye karya Sahabat Penyu',
+    description: 'Lihat dokumentasi konservasi dan poster kampanye',
     image: galleryImg, 
     href: '#gallery', 
   },
